@@ -258,7 +258,8 @@ namespace big
 
 		std::vector<ped_item> peds;
 		std::vector<vehicle_item> vehicles;
-		std::vector<weapon_item> weapons;
+		//std::vector<weapon_item> weapons;
+		std::unordered_map<Hash, weapon_item> weapons;
 		std::vector<weapon_component> weapon_components;
 
 		constexpr auto exists = [](const hash_array& arr, uint32_t val) -> bool {
@@ -358,9 +359,8 @@ namespace big
 						if (hash == "WEAPON_BIRD_CRAP"_J)
 							continue;
 
-						if (exists(mapped_weapons, hash))
-							continue;
-						mapped_weapons.emplace_back(hash);
+						if (!exists(mapped_weapons, hash))
+							mapped_weapons.emplace_back(hash);
 
 						const auto human_name_hash = item.child("HumanNameHash").text().as_string();
 						if (std::strcmp(human_name_hash, "WT_INVALID") == 0 || std::strcmp(human_name_hash, "WT_VEHMINE") == 0)
@@ -435,7 +435,7 @@ namespace big
 
 						weapon.m_hash = hash;
 
-						weapons.emplace_back(std::move(weapon));
+						weapons[hash] = weapon;
 					skip:
 						continue;
 					}
@@ -488,7 +488,7 @@ namespace big
 			}
 			for (auto& item : weapons)
 			{
-				item.m_display_name = HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(item.m_display_name.c_str());
+				item.second.m_display_name = HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(item.second.m_display_name.c_str());
 			}
 			for (auto& item : weapon_components)
 			{
@@ -555,8 +555,8 @@ namespace big
 				m_weapons_cache.weapon_map.clear();
 				for (auto weapon : weapons)
 				{
-					add_if_not_exists(m_weapon_types, weapon.m_weapon_type);
-					m_weapons_cache.weapon_map.insert({weapon.m_name, weapon});
+					add_if_not_exists(m_weapon_types, weapon.second.m_weapon_type);
+					m_weapons_cache.weapon_map.insert({weapon.second.m_name, weapon.second});
 				}
 
 				m_weapons_cache.weapon_components.clear();
