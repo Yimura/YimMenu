@@ -330,9 +330,25 @@ namespace big
 						std::string LocName = item.child("LocName").text().as_string();
 						std::string LocDesc = item.child("LocDesc").text().as_string();
 
-						if (LocName.ends_with("INVALID") || LocName.ends_with("RAIL"))
-						{
+						if (LocName.ends_with("RAIL"))
 							continue;
+
+						if (LocName.ends_with("INVALID"))
+						{
+							while (!SCRIPT::HAS_SCRIPT_LOADED("achievement_controller"))
+								script::get_current()->yield();
+
+							Hash weapon_hash = 0;
+							if (name.starts_with("COMPONENT_KNIFE"))
+								weapon_hash = "WEAPON_KNIFE"_J;
+							if (name.starts_with("COMPONENT_KNUCKLE"))
+								weapon_hash = "WEAPON_KNUCKLE"_J;
+							if (name.starts_with("COMPONENT_BAT"))
+								weapon_hash = "WEAPON_BAT"_J;
+							const auto display_string = scr_functions::get_component_display_string.call<const char*>(hash, weapon_hash);
+							if (display_string == nullptr)
+								continue;
+							LocName = display_string;
 						}
 
 						weapon_component component;
