@@ -70,6 +70,7 @@ namespace big
 		inline script_function reset_session_data("RSD", "main_persistent"_J, "2D 02 7D 00 00");
 		inline script_function add_clan_logo_to_vehicle("ACLTV", "main_persistent"_J, "2D 02 04 00 00 5D ? ? ? 61");
 		inline script_function vehicle_cannot_accept_clan_logo("CVACL", "main_persistent"_J, "2D 01 03 00 00 2C 01 00 A1 06 ? 04");
-		inline script_function get_component_display_string("GCDS", "achievement_controller"_J, "2D 02 43 00 00");
+		inline script_function get_component_name_string("GCNS", "mp_weapons"_J, "2D 02 43 00 00 38 01");
+		inline script_function get_component_desc_string("GCDS", "mp_weapons"_J, "2D 02 43 00 00 38 00");
 	}
 }
