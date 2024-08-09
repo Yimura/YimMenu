@@ -30,10 +30,18 @@ namespace big
 		{
 			auto thread  = gta_util::find_script_thread(m_script);
 			auto program = gta_util::find_script_program(m_script);
-			auto ip      = get_ip(program);
 
-			if (!thread || !program || !ip)
+			if (!thread || !program)
+			{
+				LOG(FATAL) << m_name << " failed to find its associated script running.";
 				return Ret();
+			}
+
+			auto ip = get_ip(program);
+			if (!ip)
+			{
+				return Ret();
+			}
 
 			auto tls_ctx                       = rage::tlsContext::get();
 			auto stack                         = (uint64_t*)thread->m_stack;
