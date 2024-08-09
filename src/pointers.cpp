@@ -1941,13 +1941,13 @@ namespace big
                 g_pointers->m_gta.m_begin_scaleform = ptr.as<functions::begin_scaleform>();
             }
         },
-        // Get Ped Fear Percentage
+        // Is Ped Enemies With
         {
-            "GPFP",
-            "48 89 5C 24 ? 57 48 83 EC ? 48 8B DA 0F B6 52",
+            "IPEW",
+            "E8 ? ? ? ? 45 8A FE 84 C0",
             [](memory::handle ptr)
             {
-                g_pointers->m_gta.m_get_ped_fear_percentage = ptr.as<functions::get_ped_fear_percentage>();
+                g_pointers->m_gta.m_is_ped_enemies_with = ptr.add(1).rip().as<functions::is_ped_enemies_with>();
             }
         },
         // Can Do Damage

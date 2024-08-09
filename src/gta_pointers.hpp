@@ -409,7 +409,7 @@ namespace big
 
 		functions::begin_scaleform m_begin_scaleform;
 
-		functions::get_ped_fear_percentage m_get_ped_fear_percentage;
+		functions::is_ped_enemies_with m_is_ped_enemies_with;
 		functions::can_do_damage_to_ped m_can_do_damage_to_ped;
 	};
 #pragma pack(pop)

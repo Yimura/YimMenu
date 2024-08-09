@@ -184,23 +184,12 @@ namespace big::ped
 
 	bool is_ped_a_friend(Ped ped, CPed* ped_ptr)
 	{
-		bool is_hated_relationship = false;
-		bool is_in_combat          = PED::IS_PED_IN_COMBAT(ped, self::ped);
-		auto blip_id               = HUD::GET_BLIP_FROM_ENTITY(ped);
-		auto blip_color            = HUD::GET_BLIP_HUD_COLOUR(blip_id);
-		/*bool is_enemy              = (PED::GET_PED_CONFIG_FLAG(ped, 38, TRUE) == TRUE);*/
-		bool does_ped_fear_us      = g_pointers->m_gta.m_get_ped_fear_percentage(g_local_player, ped_ptr) >= 0.75f;
+		if (PED::GET_PED_CONFIG_FLAG(ped, 38, TRUE) == TRUE)
+			return false;
 
-		switch (PED::GET_RELATIONSHIP_BETWEEN_PEDS(ped, self::ped))
-		{
-			case Dislike:
-			case Wanted:
-			case Hate: is_hated_relationship = blip_color != HUD_COLOUR_BLUE;
-		}
+		if (PED::IS_PED_IN_COMBAT(ped, self::ped))
+			return false;
 
-		/*if (PED::GET_PED_TYPE(ped) != PED_TYPE_ANIMAL && testing)
-			LOG(INFO) << " PED_TYPE " << PED::GET_PED_TYPE(ped) << " hated " << is_hated_relationship << " combat " << is_in_combat << " enemy " << is_enemy << " blip_color " << blip_color << " does_ped_fear_us " << does_ped_fear_us;*/
-
-		return (!is_hated_relationship && !is_in_combat && !does_ped_fear_us);
+		return !g_pointers->m_gta.m_is_ped_enemies_with(ped_ptr->m_ped_intelligence, g_local_player, true, false, false);
 	}
 }
