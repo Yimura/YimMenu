@@ -256,7 +256,7 @@ namespace big
 		hash_array mapped_weapons;
 		hash_array mapped_components;
 
-		int thread_id = 0;
+		int mp_weapons_thread_id = 0;
 
 		std::vector<ped_item> peds;
 		std::vector<vehicle_item> vehicles;
@@ -310,7 +310,7 @@ namespace big
 			}
 			else if (const auto file_str = path.string(); file_str.find("weaponcomponents") != std::string::npos && path.extension() == ".meta")
 			{
-				rpf_wrapper.read_xml_file(path, [&exists, &weapon_components, &mapped_components, &thread_id](pugi::xml_document& doc) {
+				rpf_wrapper.read_xml_file(path, [&exists, &weapon_components, &mapped_components, &mp_weapons_thread_id](pugi::xml_document& doc) {
 					const auto& items = doc.select_nodes("/CWeaponComponentInfoBlob/Infos/*[self::Item[@type='CWeaponComponentInfo'] or self::Item[@type='CWeaponComponentFlashLightInfo'] or self::Item[@type='CWeaponComponentScopeInfo'] or self::Item[@type='CWeaponComponentSuppressorInfo'] or self::Item[@type='CWeaponComponentVariantModelInfo'] or self::Item[@type='CWeaponComponentClipInfo']]");
 					for (const auto& item_node : items)
 					{
@@ -337,7 +337,7 @@ namespace big
 
 						if (LocName.ends_with("INVALID"))
 						{
-							Hash script_hash = "MP_Weapons"_J;
+							constexpr Hash script_hash = "MP_Weapons"_J;
 							if (!SCRIPT::GET_NUMBER_OF_THREADS_RUNNING_THE_SCRIPT_WITH_THIS_HASH(script_hash))
 							{
 								while (!SCRIPT::HAS_SCRIPT_WITH_NAME_HASH_LOADED(script_hash))
@@ -345,20 +345,21 @@ namespace big
 									SCRIPT::REQUEST_SCRIPT_WITH_NAME_HASH(script_hash);
 									script::get_current()->yield(10ms);
 								}
-								thread_id = SYSTEM::START_NEW_SCRIPT_WITH_NAME_HASH(script_hash, 1424);
+								mp_weapons_thread_id = SYSTEM::START_NEW_SCRIPT_WITH_NAME_HASH(script_hash, 1424);
+								auto thread          = gta_util::find_script_thread_by_id(mp_weapons_thread_id);
+								if (thread)
+									thread->m_context.m_state = rage::eThreadState::unk_3;
+								else
+									LOG(FATAL) << "Failed to find MP_Weapons script!";
 								SCRIPT::SET_SCRIPT_WITH_NAME_HASH_AS_NO_LONGER_NEEDED(script_hash);
-								while (!SCRIPT::GET_NUMBER_OF_THREADS_RUNNING_THE_SCRIPT_WITH_THIS_HASH(script_hash))
-								{
-									script::get_current()->yield(10ms);
-								}
 							}
 
 							Hash weapon_hash = 0;
 							if (name.starts_with("COMPONENT_KNIFE"))
 								weapon_hash = "WEAPON_KNIFE"_J;
-							if (name.starts_with("COMPONENT_KNUCKLE"))
+							else if (name.starts_with("COMPONENT_KNUCKLE"))
 								weapon_hash = "WEAPON_KNUCKLE"_J;
-							if (name.starts_with("COMPONENT_BAT"))
+							else if (name.starts_with("COMPONENT_BAT"))
 								weapon_hash = "WEAPON_BAT"_J;
 							const auto display_string = scr_functions::get_component_name_string.call<const char*>(hash, weapon_hash);
 							if (display_string == nullptr)
@@ -516,9 +517,9 @@ namespace big
 			yim_fipackfile::for_each_fipackfile();
 		}
 
-		if (thread_id != 0)
+		if (mp_weapons_thread_id != 0)
 		{
-			SCRIPT::TERMINATE_THREAD(thread_id);
+			SCRIPT::TERMINATE_THREAD(mp_weapons_thread_id);
 		}
 
 		static bool translate_label = false;
