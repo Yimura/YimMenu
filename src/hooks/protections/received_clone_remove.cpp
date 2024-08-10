@@ -13,7 +13,8 @@ namespace big
 		}
 
 		if (g_local_player && g_local_player->m_vehicle && g_local_player->m_vehicle->m_net_object
-		    && object_id == g_local_player->m_vehicle->m_net_object->m_object_id) [[unlikely]]
+		    && object_id == g_local_player->m_vehicle->m_net_object->m_object_id
+		    && !g_local_player->m_vehicle->m_net_object->m_is_remote) [[unlikely]]
 		{
 			if (!NETWORK::NETWORK_IS_ACTIVITY_SESSION()) //If we're in Freemode.
 			{
