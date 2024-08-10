@@ -1,4 +1,5 @@
 #pragma once
+#include "imgui.h"
 
 namespace lua::imgui
 {
@@ -416,6 +417,10 @@ namespace lua::imgui
 	inline void Separator()
 	{
 		ImGui::Separator();
+	}
+	inline void SeparatorText(const char* label)
+	{
+		ImGui::SeparatorText(label);
 	}
 	inline void SameLine()
 	{
@@ -3338,6 +3343,7 @@ namespace lua::imgui
 
 #pragma region Cursor / Layout
 		ImGui.set_function("Separator", Separator);
+		ImGui.set_function("SeparatorText", SeparatorText);
 		ImGui.set_function("SameLine", sol::overload(sol::resolve<void()>(SameLine), sol::resolve<void(float)>(SameLine)));
 		ImGui.set_function("NewLine", NewLine);
 		ImGui.set_function("Spacing", Spacing);
