@@ -331,6 +331,10 @@ You can find all the supported functions and overloads below.
   -- ImGui.Separator()
   ImGui.Separator
 
+  -- ImGui.SeparatorText(...)
+  -- Parameters: text (text)
+  ImGui.SeparatorText("some text")
+
   -- ImGui.SameLine(...)
   -- Parameters: float (offset_from_start_x) [O], float (spacing) [O]
   -- Overloads
