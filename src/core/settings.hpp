@@ -897,6 +897,7 @@ namespace big
 				bool only_on_player      = false;
 				bool exclude_friends     = false;
 				bool only_on_enemy       = false;
+				bool only_on_threats     = false;
 				bool has_target          = false;
 				bool use_weapon_range    = false;
 				float fov                = 60.f;

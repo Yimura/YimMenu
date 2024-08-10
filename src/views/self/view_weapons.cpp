@@ -194,6 +194,8 @@ namespace big
 			ImGui::Checkbox("TRUST_FRIENDS"_T.data(), &g.weapons.aimbot.exclude_friends);
 			ImGui::SameLine();
 			components::command_checkbox<"aimonlyatenemy">();
+			ImGui::SameLine();
+			components::command_checkbox<"aimonlyatthreats">();
 
 			ImGui::CheckboxFlags("PLAYERS"_T.data(), &g.weapons.aimbot.only_on_ped_type, (int64_t)ePedTypeFlag::PED_TYPE_NETWORK_PLAYER);
 			ImGui::SameLine();

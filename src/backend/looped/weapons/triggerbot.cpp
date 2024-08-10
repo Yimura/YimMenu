@@ -58,6 +58,11 @@ namespace big
 							return;
 						}
 
+						if (g.weapons.aimbot.only_on_threats && WEAPON::HAS_PED_GOT_WEAPON(ped, 1, 1) == FALSE)
+						{
+							return;
+						}
+
 						bool is_a_ped_type_we_dont_care_about;
 						const auto ped_type = PED::GET_PED_TYPE(ped);
 

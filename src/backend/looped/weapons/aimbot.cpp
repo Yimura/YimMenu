@@ -16,6 +16,9 @@ namespace big
 	bool_command g_aimbot_only_on_enemy("aimonlyatenemy", "BACKEND_LOOPED_WEAPONS_AIM_ONLY_AT_ENEMY", "BACKEND_LOOPED_WEAPONS_AIM_ONLY_AT_ENEMY_DESC",
 	    g.weapons.aimbot.only_on_enemy);
 
+	bool_command g_aimbot_only_on_threat("aimonlyatthreats", "BACKEND_LOOPED_WEAPONS_AIM_ONLY_AT_THREATS", "BACKEND_LOOPED_WEAPONS_AIM_ONLY_AT_THREATS_DESC",
+	    g.weapons.aimbot.only_on_enemy);
+
 	class aimbot : looped_command
 	{
 		using looped_command::looped_command;
@@ -169,6 +172,11 @@ namespace big
 				}
 
 				if (g_aimbot_only_on_enemy.is_enabled() && ped::is_ped_a_friend(ped_handle, ped))
+				{
+					continue;
+				}
+
+				if (g.weapons.aimbot.only_on_threats && WEAPON::HAS_PED_GOT_WEAPON(ped_handle, 1, 1) == FALSE)
 				{
 					continue;
 				}
