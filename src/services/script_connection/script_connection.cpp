@@ -35,7 +35,7 @@ namespace big
 		if (!m_thread)
 			return false;
 
-		m_thread->m_context.m_state = rage::eThreadState::unk_3;
+		m_thread->m_context.m_state = rage::eThreadState::paused;
 		return true;
 	}
 
