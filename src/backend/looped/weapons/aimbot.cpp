@@ -17,7 +17,7 @@ namespace big
 	    g.weapons.aimbot.only_on_enemy);
 
 	bool_command g_aimbot_only_on_threat("aimonlyatthreats", "BACKEND_LOOPED_WEAPONS_AIM_ONLY_AT_THREATS", "BACKEND_LOOPED_WEAPONS_AIM_ONLY_AT_THREATS_DESC",
-	    g.weapons.aimbot.only_on_enemy);
+	    g.weapons.aimbot.only_on_threats);
 
 	class aimbot : looped_command
 	{
