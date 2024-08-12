@@ -408,7 +408,11 @@ namespace big
 						if (std::strcmp(human_name_hash, "WT_INVALID") == 0 || std::strcmp(human_name_hash, "WT_VEHMINE") == 0)
 							continue;
 
-						auto weapon = weapon_item{};
+						weapon_item weapon;
+						if (weapons.contains(hash))
+							weapon = weapons[hash];
+						else
+							weapon = weapon_item{};
 
 						weapon.m_name = name;
 
@@ -471,7 +475,12 @@ namespace big
 						{
 							for (pugi::xml_node component : attach_point.child("Components").children("Item"))
 							{
-								weapon.m_attachments.push_back(component.child_value("Name"));
+								auto component_name = component.child_value("Name");
+								auto it = std::find(weapon.m_attachments.begin(), weapon.m_attachments.end(), component_name);
+								if (it == weapon.m_attachments.end())
+								{
+									weapon.m_attachments.push_back(component_name);
+								}
 							}
 						}
 
