@@ -47,6 +47,7 @@ namespace big
 		std::weak_ptr<lua_module> get_disabled_module(rage::joaat_t module_id);
 
 		bool has_gui_to_draw(rage::joaat_t tab_hash);
+		void draw_less_dependent_gui();
 		void draw_independent_gui();
 		void draw_gui(rage::joaat_t tab_hash);
 
