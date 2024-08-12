@@ -11,7 +11,7 @@ namespace lua::vector
 	// Param: x: float: x component of the vector.
 	// Param: y: float: y component of the vector.
 	// Param: z: float: z component of the vector.
-	// Returns a vector that contains the x, y, and z values.
+	// Returns: vec3: a vector that contains the x, y, and z values.
 
 	// Lua API: Field
 	// Class: vec3

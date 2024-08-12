@@ -13,7 +13,7 @@ namespace big
 		debug::main();
 
 		if (g_lua_manager)
-			g_lua_manager->draw_independent_gui();
+			g_lua_manager->draw_less_dependent_gui();
 
 		if (g.window.demo) // It is not the YimMenu way.
 			ImGui::ShowDemoWindow(&g.window.demo);

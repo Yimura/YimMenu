@@ -1260,7 +1260,7 @@ namespace lua::imgui
 		float value[3] = {static_cast<float>(v1), static_cast<float>(v2), static_cast<float>(v3)};
 		bool used      = ImGui::SliderFloat3(label.c_str(), value, v_min, v_max);
 
-		sol::as_table_t float3 = sol::as_table(std::vector<float>{value[0], value[1], value[3]});
+		sol::as_table_t float3 = sol::as_table(std::vector<float>{value[0], value[1], value[2]});
 
 		return std::make_tuple(float3, used);
 	}
@@ -1272,7 +1272,7 @@ namespace lua::imgui
 		float value[3] = {static_cast<float>(v1), static_cast<float>(v2), static_cast<float>(v3)};
 		bool used      = ImGui::SliderFloat3(label.c_str(), value, v_min, v_max, format.c_str());
 
-		sol::as_table_t float3 = sol::as_table(std::vector<float>{value[0], value[1], value[3]});
+		sol::as_table_t float3 = sol::as_table(std::vector<float>{value[0], value[1], value[2]});
 
 		return std::make_tuple(float3, used);
 	}
@@ -1284,7 +1284,7 @@ namespace lua::imgui
 		float value[3] = {static_cast<float>(v1), static_cast<float>(v2), static_cast<float>(v3)};
 		bool used      = ImGui::SliderFloat3(label.c_str(), value, v_min, v_max, format.c_str(), flags);
 
-		sol::as_table_t float3 = sol::as_table(std::vector<float>{value[0], value[1], value[3]});
+		sol::as_table_t float3 = sol::as_table(std::vector<float>{value[0], value[1], value[2]});
 
 		return std::make_tuple(float3, used);
 	}

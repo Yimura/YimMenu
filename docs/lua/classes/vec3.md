@@ -26,7 +26,7 @@ z component of the vector.
 
 ### `new(x, y, z)`
 
-Returns a vector that contains the x, y, and z values.
+Returns: vec3: a vector that contains the x, y, and z values.
 
 - **Parameters:**
   - `x` (float): x component of the vector.

@@ -137,6 +137,19 @@ namespace big
 		return false;
 	}
 
+	void lua_manager::draw_less_dependent_gui()
+	{
+		std::lock_guard guard(m_module_lock);
+
+		for (const auto& module : m_modules)
+		{
+			for (const auto& element : module->m_less_dependent_gui)
+			{
+				element->draw();
+			}
+		}
+	}
+
 	void lua_manager::draw_independent_gui()
 	{
 		std::lock_guard guard(m_module_lock);
@@ -302,6 +315,9 @@ namespace big
 			LOG(WARNING) << reinterpret_cast<const char*>(module_path.u8string().c_str()) << " does not exist in the filesystem. Not loading it.";
 			return {};
 		}
+
+		if(std::filesystem::relative(module_path.parent_path(), m_scripts_folder.get_path()).string().contains("includes"))
+			return {};
 
 		const auto module_name = module_path.filename().string();
 		const auto id          = rage::joaat(module_name);

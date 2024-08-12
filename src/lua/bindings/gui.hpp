@@ -50,6 +50,8 @@ namespace lua::gui
 		// Lua API: Function
 		// Class: tab
 		// Name: add_tab
+		// Param: tab_name: string: Name of the tab to add.
+		// Returns: tab: A tab instance which corresponds to the new tab in the GUI.
 		// Add a sub tab to this tab.
 		tab add_tab(const std::string& name, sol::this_state state);
 
