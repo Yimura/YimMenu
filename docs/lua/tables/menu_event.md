@@ -105,7 +105,7 @@ end)
 
 ### `Wndproc`
 
-Event that is triggered when we reload the Lua scripts.
+Event that is triggered when Wndproc is called
 **Example Usage:**
 ```lua
 event.register_handler(menu_event.Wndproc, function (hwnd, msg, wparam, lparam)

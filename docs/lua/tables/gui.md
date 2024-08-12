@@ -150,12 +150,12 @@ end)
 gui.add_imgui(imgui_rendering)
 ```
 
-### `add_independent_imgui(imgui_rendering)`
+### `add_always_draw_imgui(imgui_rendering)`
 
 Registers a function that will be called every rendering frame, you can call ImGui functions in it, please check the ImGui.md documentation file for more info. This function will be called even when the menu is closed.
 **Example Usage:**
 ```lua
-gui.add_independent_imgui(function()
+gui.add_always_draw_imgui(function()
    if ImGui.Begin("My Custom Window") then
        if ImGui.Button("Label") then
          script.run_in_fiber(function(script)
@@ -173,7 +173,7 @@ end)
 
 **Example Usage:**
 ```lua
-gui.add_independent_imgui(imgui_rendering)
+gui.add_always_draw_imgui(imgui_rendering)
 ```
 
 

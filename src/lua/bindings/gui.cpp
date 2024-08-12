@@ -4,18 +4,18 @@
 
 namespace lua::gui
 {
-	static void add_less_dependent_element(lua_State* state, std::unique_ptr<lua::gui::gui_element> element)
-	{
-		big::lua_module* module = sol::state_view(state)["!this"];
-
-		module->m_less_dependent_gui.push_back(std::move(element));
-	}
-
 	static void add_independent_element(lua_State* state, std::unique_ptr<lua::gui::gui_element> element)
 	{
 		big::lua_module* module = sol::state_view(state)["!this"];
 
 		module->m_independent_gui.push_back(std::move(element));
+	}
+
+	static void add_always_draw_element(lua_State* state, std::unique_ptr<lua::gui::gui_element> element)
+	{
+		big::lua_module* module = sol::state_view(state)["!this"];
+
+		module->m_always_draw_gui.push_back(std::move(element));
 	}
 
 	static void add_element(lua_State* state, uint32_t hash, std::unique_ptr<lua::gui::gui_element> element)
@@ -355,18 +355,18 @@ namespace lua::gui
 	{
 		auto element = std::make_unique<lua::gui::raw_imgui_callback>(imgui_rendering);
 		auto el_ptr  = element.get();
-		add_less_dependent_element(state, std::move(element));
+		add_independent_element(state, std::move(element));
 		return el_ptr;
 	}
 
 	// Lua API: Function
 	// Table: gui
-	// Name: add_independent_imgui
+	// Name: add_always_draw_imgui
 	// Param: imgui_rendering: function: Function that will be called every rendering frame, you can call ImGui functions in it, please check the ImGui.md documentation file for more info.
 	// Registers a function that will be called every rendering frame, you can call ImGui functions in it, please check the ImGui.md documentation file for more info. This function will be called even when the menu is closed.
 	// **Example Usage:**
 	// ```lua
-	// gui.add_independent_imgui(function()
+	// gui.add_always_draw_imgui(function()
 	//   if ImGui.Begin("My Custom Window") then
 	//       if ImGui.Button("Label") then
 	//         script.run_in_fiber(function(script)
@@ -378,11 +378,11 @@ namespace lua::gui
 	//   end
 	// end)
 	// ``
-	static lua::gui::raw_imgui_callback* add_independent_imgui(sol::protected_function imgui_rendering, sol::this_state state)
+	static lua::gui::raw_imgui_callback* add_always_draw_imgui(sol::protected_function imgui_rendering, sol::this_state state)
 	{
 		auto element = std::make_unique<lua::gui::raw_imgui_callback>(imgui_rendering);
 		auto el_ptr  = element.get();
-		add_independent_element(state, std::move(element));
+		add_always_draw_element(state, std::move(element));
 		return el_ptr;
 	}
 
@@ -400,7 +400,7 @@ namespace lua::gui
 		ns["mouse_override"]        = mouse_override;
 		ns["override_mouse"]        = override_mouse;
 		ns["add_imgui"]             = add_imgui;
-		ns["add_independent_imgui"] = add_independent_imgui;
+		ns["add_always_draw_imgui"] = add_always_draw_imgui;
 
 		auto button_ut        = ns.new_usertype<lua::gui::button>("button");
 		button_ut["get_text"] = &lua::gui::button::get_text;

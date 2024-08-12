@@ -57,7 +57,7 @@ namespace big
 
 		g_renderer.add_dx_callback(
 		    [] {
-			    g_lua_manager->draw_independent_gui();
+			    g_lua_manager->draw_always_draw_gui();
 		    },
 		    eRenderPriority::LUA);
 
