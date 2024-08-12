@@ -218,6 +218,27 @@ namespace big
 		std::sort(m_weapon_types.begin(), m_weapon_types.end());
 	}
 
+	static RPFDatafileSource determine_file_type(std::string file_path, std::string_view rpf_filename)
+	{
+		if (file_path.contains("/dlc_patch/"))
+		{
+			return RPFDatafileSource::DLCUPDATE;
+		}
+		else if (rpf_filename == "dlc.rpf")
+		{
+			return RPFDatafileSource::DLC;
+		}
+		else if (rpf_filename == "update.rpf")
+		{
+			return RPFDatafileSource::UPDATE;
+		}
+		else if (rpf_filename == "common.rpf")
+		{
+			return RPFDatafileSource::BASE;
+		}
+		return RPFDatafileSource::UNKNOWN;
+	}
+
 	inline void parse_ped(std::vector<ped_item>& peds, std::vector<uint32_t>& mapped_peds, pugi::xml_document& doc)
 	{
 		const auto& items = doc.select_nodes("/CPedModelInfo__InitDataList/InitDatas/Item");
@@ -261,7 +282,7 @@ namespace big
 		std::vector<ped_item> peds;
 		std::vector<vehicle_item> vehicles;
 		//std::vector<weapon_item> weapons;
-		std::unordered_map<Hash, weapon_item> weapons;
+		std::unordered_map<Hash, weapon_item_parsed> weapons;
 		std::vector<weapon_component> weapon_components;
 
 		constexpr auto exists = [](const hash_array& arr, uint32_t val) -> bool {
@@ -388,9 +409,9 @@ namespace big
 					}
 				});
 			}
-			else if (const auto file_str = path.string(); file_str.find("weapon") != std::string::npos && path.extension() == ".meta")
+			else if (const auto file_str = path.string(); file_str.contains("weapon") && !file_str.contains("vehicle") && path.extension() == ".meta")
 			{
-				rpf_wrapper.read_xml_file(path, [&exists, &weapons, &mapped_weapons](pugi::xml_document& doc) {
+				rpf_wrapper.read_xml_file(path, [&exists, &weapons, &mapped_weapons, file_str, &rpf_wrapper](pugi::xml_document& doc) {
 					const auto& items = doc.select_nodes("/CWeaponInfoBlob/Infos/Item/Infos/Item[@type='CWeaponInfo']");
 					for (const auto& item_node : items)
 					{
@@ -408,11 +429,11 @@ namespace big
 						if (std::strcmp(human_name_hash, "WT_INVALID") == 0 || std::strcmp(human_name_hash, "WT_VEHMINE") == 0)
 							continue;
 
-						auto weapon = weapon_item{};
+						auto weapon = weapon_item_parsed{};
 
 						weapon.m_name = name;
-
 						weapon.m_display_name = human_name_hash;
+						weapon.rpf_file_type  = determine_file_type(file_str, rpf_wrapper.get_name());
 
 						auto weapon_flags = std::string(item.child("WeaponFlags").text().as_string());
 
@@ -476,6 +497,14 @@ namespace big
 						}
 
 						weapon.m_hash = hash;
+
+						if (weapons.contains(hash))
+						{
+							if (weapons[hash].rpf_file_type > weapon.rpf_file_type)
+							{
+								continue;
+							}
+						}
 
 						weapons[hash] = weapon;
 					skip:

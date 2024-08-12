@@ -2,7 +2,16 @@
 
 namespace big
 {
-	class weapon_item final
+	enum RPFDatafileSource : std::uint8_t
+	{
+		UNKNOWN,
+		BASE,
+		UPDATE,
+		DLC,
+		DLCUPDATE
+	};
+
+	class weapon_item
 	{
 	public:
 		std::string m_name;
@@ -15,5 +24,11 @@ namespace big
 		bool m_throwable;
 
 		NLOHMANN_DEFINE_TYPE_INTRUSIVE(weapon_item, m_name, m_display_name, m_weapon_type, m_hash, m_reward_hash, m_reward_ammo_hash, m_attachments, m_throwable)
+	};
+
+	class weapon_item_parsed : public weapon_item
+	{
+	public:
+		RPFDatafileSource rpf_file_type = RPFDatafileSource::UNKNOWN;
 	};
 }
