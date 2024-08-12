@@ -292,19 +292,20 @@ namespace big
 						{
 							continue;
 						}
+						ImGui::PushID(attachment_hash);
 						bool is_selected         = attachment_hash == selected_weapon_attachment_hash;
-						std::string display_name = attachment_name.append("##").append(std::to_string(attachment_hash));
-						if (ImGui::Selectable(display_name.c_str(), is_selected, ImGuiSelectableFlags_None))
+						if (ImGui::Selectable(attachment_name.c_str(), is_selected, ImGuiSelectableFlags_None))
 						{
 							selected_weapon_attachment      = attachment_name;
 							selected_weapon_attachment_hash = attachment_hash;
 						}
-						if (ImGui::IsItemHovered())
+						if (ImGui::IsItemHovered() && !attachment_component.m_display_desc.empty())
 							ImGui::SetTooltip(attachment_component.m_display_desc.c_str());
 						if (is_selected)
 						{
 							ImGui::SetItemDefaultFocus();
 						}
+						ImGui::PopID();
 					}
 				}
 

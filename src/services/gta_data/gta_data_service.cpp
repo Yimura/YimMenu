@@ -398,6 +398,9 @@ namespace big
 								LocDesc = display_string;
 						}
 
+						if (LocDesc.ends_with("INVALID"))
+							LocDesc.clear();
+
 						weapon_component component;
 
 						component.m_name         = name;
@@ -569,7 +572,8 @@ namespace big
 			for (auto& item : weapon_components)
 			{
 				item.m_display_name = HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(item.m_display_name.c_str());
-				item.m_display_desc = HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(item.m_display_desc.c_str());
+				if (!item.m_display_desc.empty())
+					item.m_display_desc = HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(item.m_display_desc.c_str());
 			}
 			for (auto it = peds.begin(); it != peds.end();)
 			{
