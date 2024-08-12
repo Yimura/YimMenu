@@ -573,7 +573,11 @@ namespace big
 			{
 				item.m_display_name = HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(item.m_display_name.c_str());
 				if (!item.m_display_desc.empty())
+				{
 					item.m_display_desc = HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(item.m_display_desc.c_str());
+					if (item.m_display_desc == "NULL")
+						item.m_display_desc.clear();
+				}
 			}
 			for (auto it = peds.begin(); it != peds.end();)
 			{
