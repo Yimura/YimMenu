@@ -102,7 +102,7 @@ script.is_active(script_name)
 script.execute_as_script(script_name, func)
 ```
 
-### `add_patch(script_name, name, pattern, integer, table)`
+### `add_patch(script_name, name, pattern, offset, _patch)`
 
 Adds a patch for the specified script.
 **Example Usage:**
@@ -114,12 +114,12 @@ script.add_patch("fm_content_xmas_truck", "Flickering Fix", "56 ? ? 4F ? ? 40 ? 
   - `script_name` (string): The name of the script.
   - `name` (string): The name of the patch.
   - `pattern` (string): The pattern to scan for within the script.
-  - `integer` (The position within the pattern.)
-  - `table` (The bytes to be written into the script's bytecode.)
+  - `offset` (integer): The position within the pattern.
+  - `_patch` (table): The bytes to be written into the script's bytecode.
 
 **Example Usage:**
 ```lua
-script.add_patch(script_name, name, pattern, integer, table)
+script.add_patch(script_name, name, pattern, offset, _patch)
 ```
 
 ### `start_launcher_script(script_name)`

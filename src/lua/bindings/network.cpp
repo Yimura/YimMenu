@@ -192,7 +192,7 @@ namespace lua::network
 	// Name: force_script_on_player
 	// Param: player_idx: integer: Index of the player.
 	// Param: script_name: string: Name of the script.
-	// Param: script_name: integer: Instance ID of the script.
+	// Param: instance_id: integer: Instance ID of the script.
 	// Forces the given GTA script to be started on a player. Needs to be called in the fiber pool or a loop.
 	static void force_script_on_player(int player_idx, const std::string& script_name, int instance_id)
 	{

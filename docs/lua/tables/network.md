@@ -153,18 +153,18 @@ Try to force ourself to be host for the given GTA Script. Needs to be called in 
 network.force_script_host(script_name)
 ```
 
-### `force_script_on_player(player_idx, script_name, script_name)`
+### `force_script_on_player(player_idx, script_name, instance_id)`
 
 Forces the given GTA script to be started on a player. Needs to be called in the fiber pool or a loop.
 
 - **Parameters:**
   - `player_idx` (integer): Index of the player.
   - `script_name` (string): Name of the script.
-  - `script_name` (integer): Instance ID of the script.
+  - `instance_id` (integer): Instance ID of the script.
 
 **Example Usage:**
 ```lua
-network.force_script_on_player(player_idx, script_name, script_name)
+network.force_script_on_player(player_idx, script_name, instance_id)
 ```
 
 ### `send_chat_message(msg, team_only)`
