@@ -1633,6 +1633,15 @@ namespace big
                 g_pointers->m_gta.m_decal_manager_remove = ptr.add(0xC).rip().as<functions::decal_manager_remove>();
             }
         },
+        // Mark Vehicle Damage Synctree Dirty
+        {
+            "MVDSTD",
+            "E8 ? ? ? ? 41 0F 28 C4 4C 8D 9C 24",
+            [](memory::handle ptr)
+            {
+                g_pointers->m_gta.m_set_vehicle_damage_sync_tree = ptr.add(1).rip().as<functions::set_vehicle_damage_sync_tree>();
+            }
+        },
         // Is Social Club Overlay Active
         {
             "ISCOA",

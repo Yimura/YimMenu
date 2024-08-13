@@ -46,6 +46,12 @@ namespace big
 
 				vehicle::repair_engine_from_water(veh);
 
+				auto net_obj = g_local_player->m_vehicle->m_net_object;
+				if (net_obj && !net_obj->m_next_owner_id)
+				{
+					g_pointers->m_gta.m_set_vehicle_damage_sync_tree(net_obj);
+				}
+
 				const auto door_count = VEHICLE::GET_NUMBER_OF_VEHICLE_DOORS(veh);
 				for (int i = 0; i < door_count; i++)
 				{

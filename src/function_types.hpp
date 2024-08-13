@@ -202,6 +202,7 @@ namespace big::functions
 	using delete_object  = bool (*)(CObject* object, bool unk);
 
 	using decal_manager_remove = void (*)(PVOID manager, rage::fwEntity*, DWORD a3, DWORD64 a4, DWORD ignore_bitset);
+	using set_vehicle_damage_sync_tree = void (*)(rage::netObject* thisptr);
 
 	using remove_player_from_sender_list = bool (*)(void* list, uint64_t* rockstar_id);
 

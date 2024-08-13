@@ -348,6 +348,7 @@ namespace big
 		functions::delete_object m_delete_object;
 
 		functions::decal_manager_remove m_decal_manager_remove;
+		functions::set_vehicle_damage_sync_tree m_set_vehicle_damage_sync_tree;
 		PVOID m_decal_manager;
 
 		bool* m_is_social_club_overlay_active;
