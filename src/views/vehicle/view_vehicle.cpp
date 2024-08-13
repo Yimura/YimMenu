@@ -23,12 +23,28 @@ namespace big
 				TASK::CLEAR_PED_TASKS_IMMEDIATELY(self::ped), entity::delete_entity(handle);
 		});
 
-		ImGui::SameLine();
+		/*ImGui::SameLine();*/
 		components::button("REPAIR"_T, [] {
 			vehicle::repair(self::veh);
 		});
-
 		ImGui::SameLine();
+		components::button("SET_VEHICLE_DEFORMATION_FIXED"_T, [] {
+			VEHICLE::SET_VEHICLE_DEFORMATION_FIXED(self::veh);
+		});
+		ImGui::SameLine();
+		components::button("SYNC_DAMAGES"_T, [] {
+			if (self::veh == 0)
+				return;
+
+			auto net_obj = g_local_player->m_vehicle->m_net_object;
+			if (net_obj /*&& !net_obj->m_is_remote*/) //There shouldn't be a scenario where we are driving and don't have ownership of the netObj.
+			{
+				g_pointers->m_gta.m_set_vehicle_damage_sync_tree(net_obj);
+			}
+		});
+
+
+		/*ImGui::SameLine();*/
 		components::command_checkbox<"keepfixed">();
 
 		ImGui::Separator();
