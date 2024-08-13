@@ -316,7 +316,8 @@ namespace big
 			return {};
 		}
 
-		if(std::filesystem::relative(module_path.parent_path(), m_scripts_folder.get_path()).string().contains("includes"))
+		// Some scripts are library scripts, they do nothing on their own and are intended to be used with require, they take up space in the script list for no reason.
+		if (std::filesystem::relative(module_path.parent_path(), m_scripts_folder.get_path()).wstring().contains(L"includes"))
 			return {};
 
 		const auto module_name = module_path.filename().string();
