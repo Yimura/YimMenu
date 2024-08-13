@@ -47,7 +47,7 @@ namespace big
 				vehicle::repair_engine_from_water(veh);
 
 				auto net_obj = g_local_player->m_vehicle->m_net_object;
-				if (net_obj && !net_obj->m_next_owner_id)
+				if (net_obj /*&& !net_obj->m_is_remote*/) //There shouldn't be a scenario where we are driving and don't have ownership of the netObj.
 				{
 					g_pointers->m_gta.m_set_vehicle_damage_sync_tree(net_obj);
 				}
