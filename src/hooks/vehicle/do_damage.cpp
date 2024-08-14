@@ -64,6 +64,8 @@ namespace big
 		{
 			if (thisptr->m_vehicle->m_driver == g_local_player)
 			{
+				DWORD64 v13                 = (DWORD64)thisptr->m_vehicle->m_driver->m_net_object;
+				*(__int16*)(v13 + 0x52A) = 500;
 				//LOG(INFO) << "is_vehicle_invincible spoofed";
 				return true;
 			}
