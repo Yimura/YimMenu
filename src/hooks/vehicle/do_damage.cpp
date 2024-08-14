@@ -6,7 +6,7 @@ namespace big
 {
 	float hooks::damage_vehicle(CVehicleDamage* thisptr, rage::CEntity* source, eDamageType damage_type, Hash weapon, float damage, rage::fvector3* position, rage::fvector3* dot_product, rage::fvector3* unk, std::uint32_t body_part, std::uint64_t damage_material, std::int32_t wheel_index, bool unk1, bool unk2, float radius, bool unk3, bool unk4, bool source_is_melee, bool unk5, bool max_damage)
 	{
-		if (g.vehicle.god_mode)
+		/*if (g.vehicle.god_mode)
 		{
 			if (self::veh != 0)
 			{
@@ -27,13 +27,13 @@ namespace big
 					return 0.f;
 				}
 			}
-		}
+		}*/
 		return g_hooking->get_original<hooks::damage_vehicle>()(thisptr, source, damage_type, weapon, damage, position, dot_product, unk, body_part, damage_material, wheel_index, unk1, unk2, radius, unk3, unk4, source_is_melee, unk5, max_damage);
 	}
 
 	bool hooks::apply_deformation(CDeformation* thisptr, rage::fvector3* unk, rage::fvector3* unk2, rage::CEntity* source, bool set_all_deformations, bool break_glass)
 	{
-		if (g.vehicle.proof_collision)
+		/*if (g.vehicle.proof_collision)
 		{
 			if (self::veh != 0)
 			{
@@ -54,7 +54,7 @@ namespace big
 					return false;
 				}
 			}
-		}
+		}*/
 		return g_hooking->get_original<hooks::apply_deformation>()(thisptr, unk, unk2, source, set_all_deformations, break_glass);
 	}
 
