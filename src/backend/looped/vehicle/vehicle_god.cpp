@@ -104,6 +104,8 @@ namespace big
 
 		virtual void on_tick() override
 		{
+			return;
+
 			if (g_local_player)
 			{
 				const auto personal_vehicle = get_personal_vehicle();
@@ -114,6 +116,8 @@ namespace big
 
 		virtual void on_disable() override
 		{
+			return;
+
 			if (g_local_player)
 			{
 				if (g_local_player->m_vehicle)

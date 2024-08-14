@@ -11,6 +11,8 @@ namespace big
 
 		virtual void on_tick() override
 		{
+			return;
+
 			Vehicle veh = self::veh;
 
 			if (veh == 0 || VEHICLE::GET_PED_IN_VEHICLE_SEAT(self::veh, SEAT_DRIVER, FALSE) != self::ped)

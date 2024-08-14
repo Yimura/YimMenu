@@ -1,6 +1,7 @@
 #include "backend/looped/looped.hpp"
 #include "natives.hpp"
 #include "pointers.hpp"
+#include "gta_util.hpp"
 
 #include <network/CNetworkPlayerMgr.hpp>
 
@@ -15,6 +16,7 @@ namespace big
 			self::id = (*g_pointers->m_gta.m_network_player_mgr)->m_local_net_player->m_player_id;
 
 		self::ped = PLAYER::PLAYER_PED_ID();
+		g_local_player = gta_util::get_local_ped();
 
 		STATS::STAT_GET_INT("MPPLY_LAST_MP_CHAR"_J, &self::char_index, true);
 

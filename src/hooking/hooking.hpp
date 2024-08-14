@@ -213,6 +213,10 @@ namespace big
 		static void error_packet_memmove(void* dst, void* src, int size);
 
 		static void* create_pool_item(GenericPool* pool);
+
+		static float damage_vehicle(CVehicleDamage* thisptr, rage::CEntity* source, eDamageType damage_type, Hash weapon, float damage, rage::fvector3* position, rage::fvector3* dot_product, rage::fvector3* unk, std::uint32_t body_part, std::uint64_t damage_material, std::int32_t wheel_index, bool unk1, bool unk2, float radius, bool unk3, bool unk4, bool source_is_melee, const bool unk5, bool max_damage);
+		static bool apply_deformation(CDeformation* thisptr, rage::fvector3* unk, rage::fvector3* unk2, rage::CEntity* source, bool set_all_deformations, bool break_glass);
+		static bool is_vehicle_invincible(CVehicleDamage* thisptr);
 	};
 
 	class minhook_keepalive

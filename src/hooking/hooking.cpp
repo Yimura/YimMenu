@@ -156,6 +156,10 @@ namespace big
 
 		detour_hook_helper::add<hooks::create_pool_item>("CPI", g_pointers->m_gta.m_create_pool_item);
 
+		detour_hook_helper::add<hooks::damage_vehicle>("VDF", g_pointers->m_gta.m_damage_vehicle);
+		detour_hook_helper::add<hooks::apply_deformation>("ADFV", g_pointers->m_gta.m_deform_vehicle);
+		detour_hook_helper::add<hooks::is_vehicle_invincible>("ISDINV", g_pointers->m_gta.m_is_driver_invincible);
+
 		g_hooking = this;
 	}
 

@@ -411,6 +411,10 @@ namespace big
 
 		functions::is_ped_enemies_with m_is_ped_enemies_with;
 		functions::can_do_damage_to_ped m_can_do_damage_to_ped;
+
+		PVOID m_damage_vehicle;
+		PVOID m_deform_vehicle;
+		PVOID m_is_driver_invincible;
 	};
 #pragma pack(pop)
 	static_assert(sizeof(gta_pointers) % 8 == 0, "Pointers are not properly aligned");

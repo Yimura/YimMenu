@@ -1958,6 +1958,33 @@ namespace big
             {
                 g_pointers->m_gta.m_can_do_damage_to_ped = ptr.add(1).rip().as<functions::can_do_damage_to_ped>();
             }
+        },
+        // Damage vehicle.
+        {
+            "DVF",
+            "E8 ? ? ? ? 32 D2 32 C9",
+            [](memory::handle ptr)
+            {
+                g_pointers->m_gta.m_damage_vehicle = ptr.add(1).rip().as<PVOID>();
+            }
+        },
+        // Deform vehicle.
+        {
+            "DEFV",
+            "E8 ? ? ? ? 33 D2 38 96",
+            [](memory::handle ptr)
+            {
+                g_pointers->m_gta.m_deform_vehicle = ptr.add(1).rip().as<PVOID>();
+            }
+        },
+        // Is Driver Invincible 
+        {
+            "ISDINV",
+            "E8 ? ? ? ? 49 8B 56 ? 84 C0",
+            [](memory::handle ptr)
+            {
+                g_pointers->m_gta.m_is_driver_invincible = ptr.add(1).rip().as<PVOID>();
+            }
         }
         >(); // don't leave a trailing comma at the end
 

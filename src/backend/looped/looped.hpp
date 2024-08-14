@@ -39,7 +39,6 @@ namespace big
 		static void session_modder_detection();
 
 		static void system_self_globals();
-		static void system_update_pointers();
 		static void system_update_desync_kick();
 		static void system_spoofing();
 		static void system_mission_creator();

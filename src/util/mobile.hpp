@@ -139,6 +139,17 @@ namespace big::mobile
 			return *scr_globals::freemode_global.at(301).as<Vehicle*>();
 		}
 
+		inline CVehicle* get_personal_cvehicle()
+		{
+			Vehicle personal_vehicle = get_personal_vehicle();
+			if (personal_vehicle != -1 && ENTITY::DOES_ENTITY_EXIST(personal_vehicle))
+			{
+				return reinterpret_cast<CVehicle*>(g_pointers->m_gta.m_handle_to_ptr(personal_vehicle));
+			}
+
+			return nullptr;
+		}
+
 		inline void summon_vehicle_by_index(int veh_idx)
 		{
 			if (*scr_globals::freemode_global.at(1000).as<int*>() != -1)
