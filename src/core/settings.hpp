@@ -42,7 +42,7 @@ namespace big
 
 	struct remote_player_teleport
 	{
-		std::int32_t m_player_net_id;
+		std::int16_t m_player_net_id;
 		rage::fvector3 m_position;
 	};
 
@@ -76,7 +76,7 @@ namespace big
 		int m_remote_controller_vehicle = -1;
 		int m_remote_controlled_vehicle = -1;
 
-		std::unordered_map<int32_t, remote_player_teleport> m_remote_player_teleports;
+		std::unordered_map<uint16_t, remote_player_teleport> m_remote_player_teleports;
 
 		rage::scrThread* m_hunt_the_beast_thread = nullptr;
 
