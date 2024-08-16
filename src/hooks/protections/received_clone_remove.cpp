@@ -19,9 +19,9 @@ namespace big
 			{
 				if (object_id == net_obj->m_object_id && entity::network_has_control_of_entity(net_obj))
 				{
-					LOG(VERBOSE) << "DELETION ORDER FOR PERSONAL VEHICLE: " << net_obj->m_object_id << " m_is_remote: " << net_obj->m_is_remote
+					/*LOG(VERBOSE) << "DELETION ORDER FOR PERSONAL VEHICLE: " << net_obj->m_object_id << " m_is_remote: " << net_obj->m_is_remote
 					             << " m_bubble: " << net_obj->m_bubble << " m_owner_id: " << net_obj->m_owner_id
-					             << " m_wants_to_be_owner: " << net_obj->m_wants_to_be_owner;
+					             << " m_wants_to_be_owner: " << net_obj->m_wants_to_be_owner;*/
 					if (auto plyr = g_player_service->get_by_id(src->m_player_id))
 					{
 						g.reactions.delete_vehicle.process(plyr);
@@ -33,14 +33,14 @@ namespace big
 
 		if (self::veh != 0)
 		{
-			if (const auto current_vehicle = reinterpret_cast<CVehicle*>(g_pointers->m_gta.m_handle_to_ptr(self::veh)))
+			if (const auto current_vehicle = g_local_player->m_vehicle)
 			{
 				auto net_obj = current_vehicle->m_net_object;
 				if (object_id == net_obj->m_object_id && entity::network_has_control_of_entity(net_obj))
 				{
-					LOG(VERBOSE) << "DELETION ORDER FOR CURRENT VEHICLE: " << net_obj->m_object_id
+					/*LOG(VERBOSE) << "DELETION ORDER FOR CURRENT VEHICLE: " << net_obj->m_object_id
 					             << " m_is_remote: " << net_obj->m_is_remote << " m_bubble: " << net_obj->m_bubble
-					             << " m_owner_id: " << net_obj->m_owner_id << " m_wants_to_be_owner: " << net_obj->m_wants_to_be_owner;
+					             << " m_owner_id: " << net_obj->m_owner_id << " m_wants_to_be_owner: " << net_obj->m_wants_to_be_owner;*/
 					if (auto plyr = g_player_service->get_by_id(src->m_player_id))
 					{
 						g.reactions.delete_vehicle.process(plyr);
