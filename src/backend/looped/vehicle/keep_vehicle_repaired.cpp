@@ -1,6 +1,7 @@
 #include "backend/looped_command.hpp"
 #include "natives.hpp"
 #include "util/vehicle.hpp"
+#include "gta/vehicle_values.hpp"
 
 namespace big
 {
@@ -10,8 +11,14 @@ namespace big
 
 		virtual void on_tick() override
 		{
-			const auto veh = self::veh;
-			if (!ENTITY::IS_ENTITY_A_VEHICLE(veh) || !entity::take_control_of(veh, 0))
+			Vehicle veh = self::veh;
+
+			if (veh == 0 || VEHICLE::GET_PED_IN_VEHICLE_SEAT(self::veh, SEAT_DRIVER, FALSE) != self::ped)
+			{
+				return;
+			}
+
+			if (!entity::take_control_of(veh, 0))
 			{
 				return;
 			}
@@ -30,7 +37,7 @@ namespace big
 					VEHICLE::FIX_VEHICLE_WINDOW(veh, rear_window_index);
 				}
 
-				g_pointers->m_gta.m_decal_manager_remove(g_pointers->m_gta.m_decal_manager, g_pointers->m_gta.m_handle_to_ptr(veh), -1, 0, 0x00'01'E0'00);
+				g_pointers->m_gta.m_decal_manager_remove(g_pointers->m_gta.m_decal_manager, g_pointers->m_gta.m_handle_to_ptr(veh), -1, 0, 0x0001E000);
 
 				if (!g.vehicle.god_mode)
 				{

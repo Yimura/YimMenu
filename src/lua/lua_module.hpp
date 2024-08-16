@@ -34,6 +34,7 @@ namespace big
 		std::unordered_map<big::tabs, std::vector<big::tabs>> m_tab_to_sub_tabs;
 
 		std::vector<std::unique_ptr<lua::gui::gui_element>> m_independent_gui;
+		std::vector<std::unique_ptr<lua::gui::gui_element>> m_always_draw_gui;
 		std::unordered_map<rage::joaat_t, std::vector<std::unique_ptr<lua::gui::gui_element>>> m_gui;
 		std::unordered_map<menu_event, std::vector<sol::protected_function>> m_event_callbacks;
 		std::vector<void*> m_allocated_memory;

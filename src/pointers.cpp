@@ -1940,6 +1940,24 @@ namespace big
             {
                 g_pointers->m_gta.m_begin_scaleform = ptr.as<functions::begin_scaleform>();
             }
+        },
+        // Is Ped Enemies With
+        {
+            "IPEW",
+            "E8 ? ? ? ? 45 8A FE 84 C0",
+            [](memory::handle ptr)
+            {
+                g_pointers->m_gta.m_is_ped_enemies_with = ptr.add(1).rip().as<functions::is_ped_enemies_with>();
+            }
+        },
+        // Can Do Damage
+        {
+            "CDD",
+            "E8 ? ? ? ? 45 8A C4 84 C0",
+            [](memory::handle ptr)
+            {
+                g_pointers->m_gta.m_can_do_damage_to_ped = ptr.add(1).rip().as<functions::can_do_damage_to_ped>();
+            }
         }
         >(); // don't leave a trailing comma at the end
 

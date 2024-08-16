@@ -1,5 +1,6 @@
 #include "backend/looped_command.hpp"
 #include "natives.hpp"
+#include "gta/vehicle_values.hpp"
 
 namespace big
 {
@@ -9,7 +10,7 @@ namespace big
 
 		virtual void on_tick() override
 		{
-			if (ENTITY::DOES_ENTITY_EXIST(self::veh))
+			if (self::veh != 0 && VEHICLE::GET_PED_IN_VEHICLE_SEAT(self::veh, SEAT_DRIVER, FALSE) == self::ped)
 			{
 				VEHICLE::SET_VEHICLE_DIRT_LEVEL(self::veh, 0.0f);
 			}

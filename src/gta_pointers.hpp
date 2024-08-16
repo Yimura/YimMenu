@@ -408,6 +408,9 @@ namespace big
 		uint32_t* m_game_lifetime;
 
 		functions::begin_scaleform m_begin_scaleform;
+
+		functions::is_ped_enemies_with m_is_ped_enemies_with;
+		functions::can_do_damage_to_ped m_can_do_damage_to_ped;
 	};
 #pragma pack(pop)
 	static_assert(sizeof(gta_pointers) % 8 == 0, "Pointers are not properly aligned");

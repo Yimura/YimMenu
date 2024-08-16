@@ -16,7 +16,7 @@ Returns a memory instance, with the given address.
 myInstance = pointer:new(address)
 ```
 
-## Functions (23)
+## Functions (26)
 
 ### `add(offset)`
 
@@ -63,18 +63,6 @@ Rips the current memory address and returns a new pointer object.
 pointer = pointer:rip(offset)
 ```
 
-### `get_int()`
-
-Retrieves the value stored at the memory address as the specified type.
-
-- **Returns:**
-  - `number`: the value stored at the memory address as the specified type.
-
-**Example Usage:**
-```lua
-number = pointer:get_int()
-```
-
 ### `get_byte()`
 
 Retrieves the value stored at the memory address as the specified type.
@@ -97,6 +85,18 @@ Retrieves the value stored at the memory address as the specified type.
 **Example Usage:**
 ```lua
 number = pointer:get_word()
+```
+
+### `get_int()`
+
+Retrieves the value stored at the memory address as the specified type.
+
+- **Returns:**
+  - `number`: the value stored at the memory address as the specified type.
+
+**Example Usage:**
+```lua
+number = pointer:get_int()
 ```
 
 ### `get_dword()`
@@ -135,18 +135,6 @@ Retrieves the value stored at the memory address as the specified type.
 number = pointer:get_qword()
 ```
 
-### `set_int(value)`
-
-Sets the value at the memory address to the specified value of the given type.
-
-- **Parameters:**
-  - `value` (number): new value.
-
-**Example Usage:**
-```lua
-pointer:set_int(value)
-```
-
 ### `set_byte(value)`
 
 Sets the value at the memory address to the specified value of the given type.
@@ -169,6 +157,18 @@ Sets the value at the memory address to the specified value of the given type.
 **Example Usage:**
 ```lua
 pointer:set_word(value)
+```
+
+### `set_int(value)`
+
+Sets the value at the memory address to the specified value of the given type.
+
+- **Parameters:**
+  - `value` (number): new value.
+
+**Example Usage:**
+```lua
+pointer:set_int(value)
 ```
 
 ### `set_dword(value)`
@@ -341,6 +341,18 @@ Retrieves the memory address stored in the pointer object.
 **Example Usage:**
 ```lua
 number = pointer:get_address()
+```
+
+### `set_address(address)`
+
+Sets the memory address stored in the pointer object.
+
+- **Parameters:**
+  - `address` (integer): new address.
+
+**Example Usage:**
+```lua
+pointer:set_address(address)
 ```
 
 

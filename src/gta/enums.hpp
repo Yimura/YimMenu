@@ -1469,6 +1469,7 @@ enum class BlipColors
 
 enum BlipDisplayBits : uint32_t
 {
+	BlipIsFriendly           = (1 << 1),
 	BlipIsFlashing           = (1 << 2),
 	BlipIsGPSRoute           = (1 << 4),
 	BlipShowHeightMarker     = (1 << 5),
