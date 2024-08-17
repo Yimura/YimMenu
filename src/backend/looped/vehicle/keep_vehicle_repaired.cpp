@@ -18,9 +18,12 @@ namespace big
 				return;
 			}
 
-			if (!entity::take_control_of(veh, 0))
+			if (*g_pointers->m_gta.m_is_session_started)
 			{
-				return;
+				if (!entity::take_control_of(veh, 0))
+				{
+					return;
+				}
 			}
 
 			if (VEHICLE::GET_DOES_VEHICLE_HAVE_DAMAGE_DECALS(veh))
