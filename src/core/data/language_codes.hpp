@@ -16,6 +16,6 @@ namespace big
 	    {eGameLanguage::TRADITIONAL_CHINESE, "Chinese (Traditional)"},
 	    {eGameLanguage::JAPANESE, "Japanese"},
 	    {eGameLanguage::MEXICAN_SPANISH, "Spanish (Mexico)"},
-	    {eGameLanguage::SIMPLIFIED_CHINESE, "Chinese (Simpified)"},
+	    {eGameLanguage::SIMPLIFIED_CHINESE, "Chinese (Simplified)"},
 	};
 }
