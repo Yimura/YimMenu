@@ -23,13 +23,19 @@ Clear the tab of all its custom lua content that you own.
 tab:clear()
 ```
 
-### `add_tab()`
+### `add_tab(tab_name)`
 
 Add a sub tab to this tab.
 
+- **Parameters:**
+  - `tab_name` (string): Name of the tab to add.
+
+- **Returns:**
+  - `tab`: A tab instance which corresponds to the new tab in the GUI.
+
 **Example Usage:**
 ```lua
-tab:add_tab()
+tab = tab:add_tab(tab_name)
 ```
 
 ### `add_button(name, callback)`

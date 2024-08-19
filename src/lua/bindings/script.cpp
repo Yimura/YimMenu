@@ -188,8 +188,8 @@ namespace lua::script
 	// Param: script_name: string: The name of the script.
 	// Param: name: string: The name of the patch.
 	// Param: pattern: string: The pattern to scan for within the script.
-	// Param offset: integer: The position within the pattern.
-	// Param _patch: table: The bytes to be written into the script's bytecode.
+	// Param: offset: integer: The position within the pattern.
+	// Param: _patch: table: The bytes to be written into the script's bytecode.
 	// Adds a patch for the specified script.
 	// **Example Usage:**
 	// ```lua

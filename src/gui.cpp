@@ -1,5 +1,6 @@
 #include "gui.hpp"
 
+#include "lua/lua_manager.hpp"
 #include "natives.hpp"
 #include "renderer/renderer.hpp"
 #include "script.hpp"
@@ -21,6 +22,7 @@ namespace big
 		// medium priority
 		MENU = 0x1000,
 		VEHICLE_CONTROL,
+		LUA,
 
 		// high priority
 		INFO_OVERLAY = 0x2000,
@@ -53,6 +55,15 @@ namespace big
 		    },
 		    eRenderPriority::MENU);
 
+		g_renderer.add_dx_callback(
+		    [] {
+			    g_lua_manager->draw_always_draw_gui();
+		    },
+		    eRenderPriority::LUA);
+
+		g_renderer.add_wndproc_callback([](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+			g_lua_manager->trigger_event<menu_event::Wndproc>(hwnd, msg, wparam, lparam);
+		});
 		g_renderer.add_wndproc_callback([this](HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
 			wndproc(hwnd, msg, wparam, lparam);
 		});

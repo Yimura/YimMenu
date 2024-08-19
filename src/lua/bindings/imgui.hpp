@@ -1,4 +1,5 @@
 #pragma once
+#include "imgui.h"
 
 namespace lua::imgui
 {
@@ -416,6 +417,10 @@ namespace lua::imgui
 	inline void Separator()
 	{
 		ImGui::Separator();
+	}
+	inline void SeparatorText(const char* label)
+	{
+		ImGui::SeparatorText(label);
 	}
 	inline void SameLine()
 	{
@@ -1255,7 +1260,7 @@ namespace lua::imgui
 		float value[3] = {static_cast<float>(v1), static_cast<float>(v2), static_cast<float>(v3)};
 		bool used      = ImGui::SliderFloat3(label.c_str(), value, v_min, v_max);
 
-		sol::as_table_t float3 = sol::as_table(std::vector<float>{value[0], value[1], value[3]});
+		sol::as_table_t float3 = sol::as_table(std::vector<float>{value[0], value[1], value[2]});
 
 		return std::make_tuple(float3, used);
 	}
@@ -1267,7 +1272,7 @@ namespace lua::imgui
 		float value[3] = {static_cast<float>(v1), static_cast<float>(v2), static_cast<float>(v3)};
 		bool used      = ImGui::SliderFloat3(label.c_str(), value, v_min, v_max, format.c_str());
 
-		sol::as_table_t float3 = sol::as_table(std::vector<float>{value[0], value[1], value[3]});
+		sol::as_table_t float3 = sol::as_table(std::vector<float>{value[0], value[1], value[2]});
 
 		return std::make_tuple(float3, used);
 	}
@@ -1279,7 +1284,7 @@ namespace lua::imgui
 		float value[3] = {static_cast<float>(v1), static_cast<float>(v2), static_cast<float>(v3)};
 		bool used      = ImGui::SliderFloat3(label.c_str(), value, v_min, v_max, format.c_str(), flags);
 
-		sol::as_table_t float3 = sol::as_table(std::vector<float>{value[0], value[1], value[3]});
+		sol::as_table_t float3 = sol::as_table(std::vector<float>{value[0], value[1], value[2]});
 
 		return std::make_tuple(float3, used);
 	}
@@ -3338,6 +3343,7 @@ namespace lua::imgui
 
 #pragma region Cursor / Layout
 		ImGui.set_function("Separator", Separator);
+		ImGui.set_function("SeparatorText", SeparatorText);
 		ImGui.set_function("SameLine", sol::overload(sol::resolve<void()>(SameLine), sol::resolve<void(float)>(SameLine)));
 		ImGui.set_function("NewLine", NewLine);
 		ImGui.set_function("Spacing", Spacing);

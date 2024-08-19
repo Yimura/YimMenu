@@ -159,7 +159,7 @@ namespace big::entity
 
 	bool network_has_control_of_entity(rage::netObject* net_object)
 	{
-		return !net_object || !net_object->m_next_owner_id && (net_object->m_control_id == -1);
+		return !net_object || !net_object->m_is_remote && (net_object->m_wants_to_be_owner == -1);
 	}
 
 	bool take_control_of(Entity ent, int timeout)

@@ -10,4 +10,5 @@ enum class menu_event
     ScriptedGameEventReceived,
     MenuUnloaded,
     ScriptsReloaded,
+    Wndproc,
 };
