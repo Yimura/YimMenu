@@ -27,7 +27,6 @@ namespace big
 
 	static bool is_valid_weapon(rage::joaat_t hash)
 	{
-
 		for (const auto& info : g_pointers->m_gta.m_weapon_info_manager->m_item_infos)
 		{
 			if (info && info->m_name == hash && info->GetClassId() == "cweaponinfo"_J)
