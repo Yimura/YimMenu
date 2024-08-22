@@ -4,7 +4,7 @@ namespace lua::scr_patch
 {
 	struct scr_patch
 	{
-		std::string m_script_name;
+		rage::joaat_t m_script;
 		std::string m_patch_name;
 		std::string m_pattern;
 		int m_offset;

@@ -14,7 +14,6 @@ namespace big
 		script_data* get_data_for_script(rage::joaat_t script);
 		bool does_script_have_patches(rage::joaat_t script);
 		void create_data_for_script(rage::scrProgram* program);
-		void update_all_patches_for_script(rage::joaat_t script);
 
 	public:
 		script_patcher_service();
@@ -23,6 +22,7 @@ namespace big
 		void add_patch(script_patch&& patch);
 		void on_script_load(rage::scrProgram* program);
 		uint8_t** get_script_bytecode(rage::joaat_t script);
+		void update_all_patches_for_script(rage::joaat_t script);
 		void update();
 	};
 

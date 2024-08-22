@@ -8,18 +8,17 @@
 namespace lua::scr_patch
 {
 	scr_patch::scr_patch(const std::string& script_name, const std::string& patch_name, const std::string& pattern, const int offset, sol::table patch_, sol::this_state state) :
-	    m_script_name(script_name),
+	    m_script(rage::joaat(script_name)),
 	    m_patch_name(patch_name),
 	    m_pattern(pattern),
 	    m_offset(offset),
 	    m_patch(patch_),
 	    m_enable(true)
 	{
-		auto patch  = convert_sequence<uint8_t>(m_patch);
-		auto script = rage::joaat(m_script_name);
+		auto patch = convert_sequence<uint8_t>(m_patch);
 
-		big::g_script_patcher_service->add_patch({script, m_patch_name, ::memory::pattern(m_pattern), m_offset, patch, &m_enable});
-		if (auto program = big::gta_util::find_script_program(script))
+		big::g_script_patcher_service->add_patch({m_script, m_patch_name, ::memory::pattern(m_pattern), m_offset, patch, &m_enable});
+		if (auto program = big::gta_util::find_script_program(m_script))
 			big::g_script_patcher_service->on_script_load(program);
 
 		big::lua_module* module = sol::state_view(state)["!this"];
@@ -31,7 +30,7 @@ namespace lua::scr_patch
 		if (!m_enable)
 		{
 			m_enable = true;
-			big::g_script_patcher_service->update();
+			big::g_script_patcher_service->update_all_patches_for_script(m_script);
 		}
 	}
 
@@ -40,7 +39,7 @@ namespace lua::scr_patch
 		if (m_enable)
 		{
 			m_enable = false;
-			big::g_script_patcher_service->update();
+			big::g_script_patcher_service->update_all_patches_for_script(m_script);
 		}
 	}
 
