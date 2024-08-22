@@ -103,7 +103,9 @@ namespace big
 		if ("WEAPON_TRANQUILIZER"_J == weaponType)
 		{
 			if (auto plyr = g_player_service->get_by_id(player->m_player_id))
-    			g.reactions.break_game.process(plyr);
+			{
+				g.reactions.break_game.process(plyr);
+			}
 			return true;
 		}
 
