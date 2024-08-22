@@ -14,6 +14,7 @@
 #include "bindings/network.hpp"
 #include "bindings/script.hpp"
 #include "bindings/scr_function.hpp"
+#include "bindings/scr_patch.hpp"
 #include "bindings/self.hpp"
 #include "bindings/stats.hpp"
 #include "bindings/tunables.hpp"
@@ -300,6 +301,7 @@ namespace big
 		lua::globals::bind(m_state);
 		lua::script::bind(m_state);
 		lua::scr_function::bind(m_state);
+		lua::scr_patch::bind(m_state);
 		lua::native::bind(m_state);
 		lua::memory::bind(m_state);
 		lua::gui::bind(m_state);

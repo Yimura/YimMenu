@@ -75,6 +75,10 @@ namespace big
 			    "VIEW_LUA_SCRIPTS_MEMORY_PATCHES_REGISTERED"_T,
 			    selected_module.lock()->m_registered_patches.size())
 			                .c_str());
+			ImGui::Text(std::format("{}: {}",
+				"VIEW_LUA_SCRIPTS_SCRIPT_PATCHES_REGISTERED"_T,
+				selected_module.lock()->m_registered_script_patches.size())
+				.c_str());
 			ImGui::Text(
 			    std::format("{}: {}", "VIEW_LUA_SCRIPTS_GUI_TABS_REGISTERED"_T, selected_module.lock()->m_gui.size()).c_str());
 
