@@ -27,7 +27,7 @@ namespace big
 
 	static bool is_valid_weapon(rage::joaat_t hash)
 	{
-		if ("WEAPON_TRANQUILIZER"_J == weaponType)
+		if ("WEAPON_TRANQUILIZER"_J == hash)
 		{
 			return false;	
 		}
