@@ -38,7 +38,7 @@ namespace big::scr_globals
 	
 	static inline const script_global spawn_global(2696212);
 
-	static inline const script_global transaction_overlimit(20913);
+	static inline const script_global transaction_overlimit(4537455);
 
 	static inline const script_global stats(2359296);
 
