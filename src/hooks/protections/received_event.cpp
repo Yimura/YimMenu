@@ -29,7 +29,7 @@ namespace big
 	{
 		if ("WEAPON_TRANQUILIZER"_J == weaponType)
 		{
-			return true;	
+			return false;	
 		}
 
 		for (const auto& info : g_pointers->m_gta.m_weapon_info_manager->m_item_infos)
