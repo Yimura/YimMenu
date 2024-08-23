@@ -60,8 +60,9 @@ namespace big::scr_globals
 
 	static inline const script_global reset_clothing(104077); // freemode 75, &iLocal_.*, 2\);
 
-
 	static inline const script_global gun_van(1949748); // return -29.532f, 6435.136f, 31.162f;
+
+	static inline const script_global disable_phone(20913);
 }
 
 namespace big::scr_locals
