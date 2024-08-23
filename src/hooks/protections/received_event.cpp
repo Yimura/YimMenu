@@ -100,6 +100,15 @@ namespace big
 		damageType = buffer->Read<uint8_t>(2);
 		weaponType = buffer->Read<uint32_t>(32);
 
+		if ("WEAPON_TRANQUILIZER"_J == weaponType)
+		{
+			if (auto plyr = g_player_service->get_by_id(player->m_player_id))
+			{
+				g.reactions.break_game.process(plyr);
+			}
+			return true;
+		}
+
 		if (!is_valid_weapon(weaponType))
 		{
 			notify::crash_blocked(player, "invalid weapon type");
@@ -108,7 +117,6 @@ namespace big
 			    "Blocked WEAPON_DAMAGE_EVENT from {} with invalid weapon hash {:X}",
 			    player->get_name(),
 			    weaponType);
-			g_pointers->m_gta.m_send_event_ack(event_manager, player, target_player, event_index, event_handled_bitset);
 			return true;
 		}
 
