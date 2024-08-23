@@ -137,6 +137,10 @@ namespace lua::memory
 		{
 			return type_info_t::double_;
 		}
+		else if (s.contains("vector3"))
+		{
+			return type_info_t::vector3_;
+		}
 		else
 		{
 			return type_info_t::integer_;

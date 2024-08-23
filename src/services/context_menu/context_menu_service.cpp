@@ -137,7 +137,7 @@ namespace big
 	{
 		if (m_pointer && m_pointer->m_model_info)
 		{
-			switch (m_pointer->m_model_info->m_model_type)
+			switch (m_pointer->m_model_info->get_model_type())
 			{
 			case eModelType::Object:
 			{
@@ -147,7 +147,6 @@ namespace big
 				}
 				return &options.at(ContextEntityType::OBJECT);
 			}
-			case eModelType::OnlineOnlyPed:
 			case eModelType::Ped:
 			{
 				if (const auto ped = reinterpret_cast<CPed*>(m_pointer); ped)

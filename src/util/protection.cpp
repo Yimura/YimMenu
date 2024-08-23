@@ -11,7 +11,7 @@ namespace big::protection
 			return true;
 		if (!model_info::get_model(model))
 			return false;
-		if (!model_info::is_model_of_type(model, eModelType::Object, eModelType::Time, eModelType::Weapon, eModelType::Destructable, eModelType::WorldObject, eModelType::Sprinkler, eModelType::Unk65, eModelType::Plant, eModelType::LOD, eModelType::Unk132, eModelType::Building))
+		if (!model_info::is_model_of_type(model, eModelType::Object, eModelType::Time, eModelType::Weapon, eModelType::Destructable))
 			return true;	
 		return false;
 	}
@@ -21,7 +21,7 @@ namespace big::protection
 	{
 		if (crash_peds.contains(model))
 			return true;
-		if (!model_info::is_model_of_type(model, eModelType::Ped, eModelType::OnlineOnlyPed))
+		if (!model_info::is_model_of_type(model, eModelType::Ped))
 			return true;
 		return false;
 	}
@@ -31,7 +31,7 @@ namespace big::protection
 	{
 		if (crash_vehicles.contains(model))
 			return true;
-		if (!model_info::is_model_of_type(model, eModelType::Vehicle, eModelType::Unk133))
+		if (!model_info::is_model_of_type(model, eModelType::Vehicle))
 			return true;
 		return false;
 	}

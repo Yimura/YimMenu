@@ -107,7 +107,8 @@ namespace big
 		static eAckCode received_clone_sync(CNetworkObjectMgr* mgr, CNetGamePlayer* src, CNetGamePlayer* dst, eNetObjType object_type, uint16_t object_id, rage::datBitBuffer* bufer, uint16_t unk, uint32_t timestamp);
 		static bool can_apply_data(rage::netSyncTree* tree, rage::netObject* object);
 
-		static void invalid_mods_crash_detour(int64_t a1, int64_t a2, int a3, char a4);
+		static void update_sync_tree(rage::netSyncTree* _this, rage::netObject* object, uint32_t flags, uint32_t timestamp, bool a5);
+
 		static void invalid_decal(uintptr_t a1, int a2);
 		static int task_parachute_object(uint64_t _this, int a2, int a3);
 		static int task_ambient_clips(uint64_t _this, int a2, int a3);

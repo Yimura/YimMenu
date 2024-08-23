@@ -62,6 +62,11 @@ namespace lua::memory
 		return m_address;
 	}
 
+	void pointer::set_address(uint64_t address)
+	{
+		m_address = address;
+	}
+
 	// Lua API: Table
 	// Name: memory
 	// Table containing helper functions related to process memory.
@@ -625,12 +630,14 @@ namespace lua::memory
 		pointer_ut["add"]         = &pointer::add;
 		pointer_ut["sub"]         = &pointer::sub;
 		pointer_ut["rip"]         = &pointer::rip;
+		pointer_ut["get_int"]     = &pointer::get<int32_t>;
 		pointer_ut["get_byte"]    = &pointer::get<uint8_t>;
 		pointer_ut["get_word"]    = &pointer::get<uint16_t>;
 		pointer_ut["get_dword"]   = &pointer::get<uint32_t>;
 		pointer_ut["get_qword"]   = &pointer::get<uint64_t>;
 		pointer_ut["get_float"]   = &pointer::get<float>;
 		pointer_ut["get_string"]  = &pointer::get_string;
+		pointer_ut["set_int"]     = &pointer::set<int32_t>;
 		pointer_ut["set_byte"]    = &pointer::set<uint8_t>;
 		pointer_ut["set_word"]    = &pointer::set<uint16_t>;
 		pointer_ut["set_dword"]   = &pointer::set<uint32_t>;
@@ -645,6 +652,7 @@ namespace lua::memory
 		pointer_ut["is_valid"]    = &pointer::is_valid;
 		pointer_ut["deref"]       = &pointer::deref;
 		pointer_ut["get_address"] = &pointer::get_address;
+		pointer_ut["set_address"] = &pointer::set_address;
 
 		auto patch_ut       = ns.new_usertype<big::lua_patch>("patch", sol::no_constructor);
 		patch_ut["apply"]   = &big::lua_patch::apply;

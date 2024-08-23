@@ -10,7 +10,7 @@ namespace big
 
 		virtual void on_tick() override
 		{
-			teleport::to_blip((int)BlipIcons::Waypoint);
+			teleport::to_blip((int)BlipIcons::RADAR_WAYPOINT);
 		}
 	};
 

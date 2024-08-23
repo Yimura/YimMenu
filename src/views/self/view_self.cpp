@@ -105,8 +105,6 @@ namespace big
 			components::command_float_input<"superheroflyinitiallaunch">();
 		});
 
-		ImGui::Checkbox("DANCE_MODE"_T.data(), &g.self.dance_mode);
-
 		components::command_checkbox<"orbitaldrone">();
 		components::options_modal("VIEW_SELF_ORBITAL_DRONE"_T.data(), [] {
 			ImGui::Separator();

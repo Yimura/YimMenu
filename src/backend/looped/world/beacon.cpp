@@ -13,7 +13,7 @@ namespace big
 		{
 			Vector3 location;
 
-			if (blip::get_blip_location(location, (int)BlipIcons::Waypoint))
+			if (blip::get_blip_location(location, (int)BlipIcons::RADAR_WAYPOINT))
 			{
 				int color[3] = {0, 0, 0};
 

@@ -11,6 +11,13 @@ namespace lua::gui
 		module->m_independent_gui.push_back(std::move(element));
 	}
 
+	static void add_always_draw_element(lua_State* state, std::unique_ptr<lua::gui::gui_element> element)
+	{
+		big::lua_module* module = sol::state_view(state)["!this"];
+
+		module->m_always_draw_gui.push_back(std::move(element));
+	}
+
 	static void add_element(lua_State* state, uint32_t hash, std::unique_ptr<lua::gui::gui_element> element)
 	{
 		big::lua_module* module = sol::state_view(state)["!this"];
@@ -298,6 +305,35 @@ namespace lua::gui
 
 	// Lua API: Function
 	// Table: gui
+	// Name: toggle
+	// Param: toggle: boolean
+	// Opens and closes the gui.
+	static void toggle(bool toggle)
+	{
+		big::g_gui->toggle(toggle);
+	}
+
+
+	// Lua API: Function
+	// Table: gui
+	// Name: mouse_override
+	// Returns: bool: Returns true if the mouse is overridden.
+	static bool mouse_override()
+	{
+		return big::g_gui->mouse_override();
+	}
+
+	// Lua API: Function
+	// Table: gui
+	// Name: override_mouse
+	// Param: override: boolean
+	static void override_mouse(bool override)
+	{
+		big::g_gui->override_mouse(override);
+	}
+
+	// Lua API: Function
+	// Table: gui
 	// Name: add_imgui
 	// Param: imgui_rendering: function: Function that will be called every rendering frame, you can call ImGui functions in it, please check the ImGui.md documentation file for more info.
 	// Registers a function that will be called every rendering frame, you can call ImGui functions in it, please check the ImGui.md documentation file for more info.
@@ -323,17 +359,48 @@ namespace lua::gui
 		return el_ptr;
 	}
 
+	// Lua API: Function
+	// Table: gui
+	// Name: add_always_draw_imgui
+	// Param: imgui_rendering: function: Function that will be called every rendering frame, you can call ImGui functions in it, please check the ImGui.md documentation file for more info.
+	// Registers a function that will be called every rendering frame, you can call ImGui functions in it, please check the ImGui.md documentation file for more info. This function will be called even when the menu is closed.
+	// **Example Usage:**
+	// ```lua
+	// gui.add_always_draw_imgui(function()
+	//   if ImGui.Begin("My Custom Window") then
+	//       if ImGui.Button("Label") then
+	//         script.run_in_fiber(function(script)
+	//           -- call natives in there
+	//         end)
+	//       end
+	//
+	//       ImGui.End()
+	//   end
+	// end)
+	// ``
+	static lua::gui::raw_imgui_callback* add_always_draw_imgui(sol::protected_function imgui_rendering, sol::this_state state)
+	{
+		auto element = std::make_unique<lua::gui::raw_imgui_callback>(imgui_rendering);
+		auto el_ptr  = element.get();
+		add_always_draw_element(state, std::move(element));
+		return el_ptr;
+	}
+
 	void bind(sol::state& state)
 	{
-		auto ns            = state["gui"].get_or_create<sol::table>();
-		ns["get_tab"]      = get_tab;
-		ns["add_tab"]      = add_tab;
-		ns["show_success"] = show_success;
-		ns["show_message"] = show_message;
-		ns["show_warning"] = show_warning;
-		ns["show_error"]   = show_error;
-		ns["is_open"]      = is_open;
-		ns["add_imgui"]    = add_imgui;
+		auto ns                     = state["gui"].get_or_create<sol::table>();
+		ns["get_tab"]               = get_tab;
+		ns["add_tab"]               = add_tab;
+		ns["show_success"]          = show_success;
+		ns["show_message"]          = show_message;
+		ns["show_warning"]          = show_warning;
+		ns["show_error"]            = show_error;
+		ns["is_open"]               = is_open;
+		ns["toggle"]                = toggle;
+		ns["mouse_override"]        = mouse_override;
+		ns["override_mouse"]        = override_mouse;
+		ns["add_imgui"]             = add_imgui;
+		ns["add_always_draw_imgui"] = add_always_draw_imgui;
 
 		auto button_ut        = ns.new_usertype<lua::gui::button>("button");
 		button_ut["get_text"] = &lua::gui::button::get_text;

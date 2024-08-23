@@ -204,7 +204,7 @@ namespace big
 
 		const char* model_str = nullptr;
 
-		if (info->m_model_type == eModelType::Vehicle)
+		if (info->get_model_type() == eModelType::Vehicle)
 		{
 			for (auto& [name, data] : g_gta_data_service.vehicles())
 			{
@@ -215,7 +215,7 @@ namespace big
 				}
 			}
 		}
-		else if (info->m_model_type == eModelType::Ped || info->m_model_type == eModelType::OnlineOnlyPed)
+		else if (info->get_model_type() == eModelType::Ped)
 		{
 			for (auto& [name, data] : g_gta_data_service.peds())
 			{

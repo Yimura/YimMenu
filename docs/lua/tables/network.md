@@ -2,7 +2,7 @@
 
 Table containing helper functions for network related features.
 
-## Functions (17)
+## Functions (22)
 
 ### `trigger_script_event(bitset, _args)`
 
@@ -146,7 +146,7 @@ string = network.get_flagged_modder_reason(player_idx)
 Try to force ourself to be host for the given GTA Script. Needs to be called in the fiber pool or a loop.
 
 - **Parameters:**
-  - `script_name` (string): Name of the script
+  - `script_name` (string): Name of the script.
 
 **Example Usage:**
 ```lua
@@ -164,7 +164,7 @@ Forces the given GTA script to be started on a player. Needs to be called in the
 
 **Example Usage:**
 ```lua
-network.force_script_on_player(script_name)
+network.force_script_on_player(player_idx, script_name, instance_id)
 ```
 
 ### `send_chat_message(msg, team_only)`
@@ -198,14 +198,14 @@ network.send_chat_message_to_player(player_idx, msg)
 Call get_player_rank(playerID)
 
 - **Parameters:**
-  - `pid` (int)
+  - `pid` (integer): Index of the player.
 
 - **Returns:**
-  - `int`: Returns an integer which contains the players rank.
+  - `integer`: An integer which contains the players rank.
 
 **Example Usage:**
 ```lua
-network.get_player_rank(pid)
+integer = network.get_player_rank(pid)
 ```
 
 ### `get_player_rp(pid)`
@@ -213,14 +213,14 @@ network.get_player_rank(pid)
 Call get_player_rp(playerID)
 
 - **Parameters:**
-  - `pid` (int)
+  - `pid` (integer): Index of the player.
 
 - **Returns:**
-  - `int`: Returns an integer which contains the players rp.
+  - `integer`: An integer which contains the players rp.
 
 **Example Usage:**
 ```lua
-network.get_player_rp(pid)
+integer = network.get_player_rp(pid)
 ```
 
 ### `get_player_money(pid)`
@@ -228,14 +228,14 @@ network.get_player_rp(pid)
 Call get_player_money(playerID)
 
 - **Parameters:**
-  - `pid` (int)
+  - `pid` (integer): Index of the player.
 
 - **Returns:**
-  - `int`: Returns an integer which contains the players money.
+  - `integer`: An integer which contains the players money.
 
 **Example Usage:**
 ```lua
-network.get_player_money(pid)
+integer = network.get_player_money(pid)
 ```
 
 ### `get_player_wallet(pid)`
@@ -243,14 +243,14 @@ network.get_player_money(pid)
 Call get_player_wallet(playerID)
 
 - **Parameters:**
-  - `pid` (int)
+  - `pid` (integer): Index of the player.
 
 - **Returns:**
-  - `int`: Returns an integer which contains the players wallet.
+  - `integer`: An integer which contains the players wallet.
 
 **Example Usage:**
 ```lua
-network.get_player_wallet(pid)
+integer = network.get_player_wallet(pid)
 ```
 
 ### `get_player_bank(pid)`
@@ -258,14 +258,14 @@ network.get_player_wallet(pid)
 Call get_player_bank(playerID)
 
 - **Parameters:**
-  - `pid` (int)
+  - `pid` (integer): Index of the player.
 
 - **Returns:**
-  - `int`: Returns an integer which contains the players bank.
+  - `integer`: An integer which contains the players bank.
 
 **Example Usage:**
 ```lua
-network.get_player_bank(pid)
+integer = network.get_player_bank(pid)
 ```
 
 ### `get_player_language_id(pid)`
@@ -273,14 +273,14 @@ network.get_player_bank(pid)
 Call get_player_language_id(playerID)
 
 - **Parameters:**
-  - `pid` (int)
+  - `pid` (integer): Index of the player.
 
 - **Returns:**
-  - `int`: Returns an integer which contains the players language id.
+  - `integer`: An integer which contains the players language id.
 
 **Example Usage:**
 ```lua
-network.get_player_language_id(pid)
+integer = network.get_player_language_id(pid)
 ```
 
 ### `get_player_language_name(pid)`
@@ -288,12 +288,14 @@ network.get_player_language_id(pid)
 Call get_player_language_name(playerID)
 
 - **Parameters:**
-  - `pid` (int)
+  - `pid` (integer): Index of the player.
 
 - **Returns:**
-  - `string`: Returns a string which contains the players language name.
+  - `string`: A string which contains the players language name.
 
 **Example Usage:**
 ```lua
-network.get_player_language_name(pid)
+string = network.get_player_language_name(pid)
 ```
+
+

@@ -2,7 +2,7 @@
 
 Table containing all possible events to which you can respond.
 
-## Fields (8)
+## Fields (9)
 
 ### `PlayerLeave`
 
@@ -98,6 +98,19 @@ Event that is triggered when we reload the Lua scripts.
 ```lua
 event.register_handler(menu_event.ScriptsReloaded, function ()
     log.info("Scripts reloaded.")
+end)
+```
+
+- Type: `integer`
+
+### `Wndproc`
+
+Event that is triggered when Wndproc is called
+**Example Usage:**
+```lua
+event.register_handler(menu_event.Wndproc, function (hwnd, msg, wparam, lparam)
+    if msg == 132 then return end
+    log.debug("hwnd = " .. tostring(hwnd) .. ", msg = " .. tostring(msg) .. ", wparam = " .. tostring(wparam) .. ", lparam = " .. tostring(lparam))
 end)
 ```
 

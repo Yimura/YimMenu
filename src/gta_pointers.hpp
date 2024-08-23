@@ -154,6 +154,7 @@ namespace big
 		functions::get_sync_type_info m_get_sync_type_info;
 		functions::get_net_object m_get_net_object;
 		functions::read_bitbuffer_into_sync_tree m_read_bitbuffer_into_sync_tree;
+		PVOID m_update_sync_tree;
 		//Sync Signatures END
 
 		PVOID m_receive_net_message;
@@ -407,6 +408,9 @@ namespace big
 		uint32_t* m_game_lifetime;
 
 		functions::begin_scaleform m_begin_scaleform;
+
+		functions::is_ped_enemies_with m_is_ped_enemies_with;
+		functions::can_do_damage_to_ped m_can_do_damage_to_ped;
 	};
 #pragma pack(pop)
 	static_assert(sizeof(gta_pointers) % 8 == 0, "Pointers are not properly aligned");

@@ -8,13 +8,13 @@
 #include "pointers.hpp"
 #include "rage/rlSessionByGamerTaskResult.hpp"
 #include "script.hpp"
-#include "script_function.hpp"
 #include "services/api/api_service.hpp"
 #include "services/player_database/player_database_service.hpp"
 #include "services/players/player_service.hpp"
 #include "thread_pool.hpp"
 #include "util/globals.hpp"
 #include "util/misc.hpp"
+#include "script_function.hpp"
 
 #include <network/Network.hpp>
 #include <network/snConnectToPeerTask.hpp>
@@ -26,11 +26,6 @@ namespace big::session
 {
 	inline bool join_type(eSessionType session)
 	{
-		SCRIPT::REQUEST_SCRIPT_WITH_NAME_HASH("pausemenu_multiplayer"_J);
-
-		while (!SCRIPT::HAS_SCRIPT_WITH_NAME_HASH_LOADED("pausemenu_multiplayer"_J))
-			script::get_current()->yield();
-
 		*scr_globals::sctv_spectator.as<int*>() = (session == eSessionType::SC_TV ? 1 : 0); // If SCTV then enable spectator mode
 
 		if (session == eSessionType::LEAVE_ONLINE)
@@ -52,7 +47,7 @@ namespace big::session
 			*scr_globals::transition_state.as<eTransitionState*>() = eTransitionState::TRANSITION_STATE_RETURN_TO_SINGLEPLAYER;
 		}
 
-		scr_functions::reset_session_data({true, true});
+		scr_functions::reset_session_data.call<void>(true, true);
 		*scr_globals::session3.as<int*>() = 0;
 		*scr_globals::session4.as<int*>() = 1;
 		*scr_globals::session5.as<int*>() = 32;
@@ -64,7 +59,6 @@ namespace big::session
 			*scr_globals::session.as<int*>() = 0;
 		}
 
-		SCRIPT::SET_SCRIPT_WITH_NAME_HASH_AS_NO_LONGER_NEEDED("pausemenu_multiplayer"_J);
 		return true;
 	}
 

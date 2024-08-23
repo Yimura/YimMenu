@@ -37,10 +37,8 @@ namespace big::scr_globals
 	static inline const script_global freemode_global(2738934);
 	
 	static inline const script_global spawn_global(2696212);
-	
-	static inline const script_global dance_state(1943520);
 
-	static inline const script_global transaction_overlimit(20913);
+	static inline const script_global transaction_overlimit(4537455);
 
 	static inline const script_global stats(2359296);
 
@@ -106,16 +104,5 @@ namespace big::scr_locals
 		// first uLocal_ in this function call
 		// func_\d+\((&.Local_\d+(, )?){9}\);
 		inline static script_local mobile(19139);
-	}
-
-	namespace carmod_shop
-	{
-		inline static script_local maintainer(735); //P"4F ? ? 47 ? ? 73 58 ? ? 4F ? ? 25 ?" +1 W="maintainer" +3 W ="state"
-		inline static auto state = 446;
-		inline static script_local input_button(1867);  //P"51 ? ? 70 51 ? ? 50 ? ? 51 ? ?" +1 W="input_button"
-		inline static script_local enabled_state(2097); //P"51 ? ? 71 51 ? ? 71 51 ? ? 71 61 ? ? ?" +1 W="enabled_state"
-		inline static script_local ready(2048);         //P"51 ? ? 50 ? ? 2A" +1 W="ready"
-		inline static auto vehicle_state  = 638;        //P"4F ? ? 46 ? ? 4F ? ?" +4 W ="vehicle_state"
-		inline static auto vehicle_ent_id = 409;        //P"4F ? ? 47 ? ? 39 ? 55 ? ? 38 ? 73" +4 W ="vehicle_ent_id"
 	}
 }

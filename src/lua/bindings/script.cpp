@@ -3,10 +3,7 @@
 
 #include "lua/lua_manager.hpp"
 #include "gta_util.hpp"
-#include "script_function.hpp"
-#include "lua/bindings/network.hpp"
 #include "memory/pattern.hpp"
-#include "services/script_patcher/script_patcher_service.hpp"
 #include "util/scripts.hpp"
 
 namespace lua::script
@@ -185,49 +182,6 @@ namespace lua::script
 
 	// Lua API: function
 	// Table: script
-	// Name: add_patch
-	// Param: script_name: string: The name of the script.
-	// Param: name: string: The name of the patch.
-	// Param: pattern: string: The pattern to scan for within the script.
-	// Param offset: integer: The position within the pattern.
-	// Param _patch: table: The bytes to be written into the script's bytecode.
-	// Adds a patch for the specified script.
-	// **Example Usage:**
-	// ```lua
-	// script.add_patch("fm_content_xmas_truck", "Flickering Fix", "56 ? ? 4F ? ? 40 ? 5D ? ? ? 74", 0, {0x2B, 0x00, 0x00})
-	// ```
-	static void add_patch(const std::string& script_name, const std::string& name, const std::string& pattern, int offset, sol::table _patch)
-	{
-		auto patch = convert_sequence<uint8_t>(_patch);
-
-		big::g_script_patcher_service->add_patch({rage::joaat(script_name), name, ::memory::pattern(pattern), offset, patch, nullptr}); // TO-DO: Add toggle feature?
-		if (auto program = big::gta_util::find_script_program(rage::joaat(script_name)))
-			big::g_script_patcher_service->on_script_load(program);
-	}
-	
-	// Lua API: function
-	// Table: script
-	// Name: call_function
-	// Param: name: string: The name of the script function.
-	// Param: script_name: string: The name of the script.
-	// Param: pattern: string: The pattern to scan for within the script.
-	// Param offset: integer: The position within the pattern.
-	// Param _args: table: The arguments to pass to the script function.
-	// Calls a function from the specified script.
-	// **Example Usage:**
-	// ```lua
-	// script.call_function("Collect Collectible", "freemode", "2D 05 33 00 00", 0, {17, 0, 1, 1, 0})
-	// ```
-	static void call_function(const std::string& name, const std::string& script_name, const std::string& pattern, int offset, sol::table _args)
-	{
-		auto args = convert_sequence<uint64_t>(_args);
-
-		big::script_function script_function(name, rage::joaat(script_name), pattern, offset);
-		script_function(args);
-	}
-
-	// Lua API: function
-	// Table: script
 	// Name: start_launcher_script
 	// Param: script_name: string: The name of the script.
 	// Tries to start a launcher script. Needs to be called in the fiber pool or a loop.
@@ -249,8 +203,6 @@ namespace lua::script
 		ns["run_in_fiber"]          = run_in_fiber;
 		ns["is_active"]             = is_active;
 		ns["execute_as_script"]     = execute_as_script;
-		ns["add_patch"]             = add_patch;
-		ns["call_function"]         = call_function;
 		ns["start_launcher_script"] = start_launcher_script;
 
 		auto usertype = state.new_usertype<script_util>("script_util");

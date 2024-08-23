@@ -4,6 +4,7 @@
 #include "core/data/menu_event.hpp"
 #include "lua/bindings/runtime_func_t.hpp"
 #include "lua/bindings/type_info_t.hpp"
+#include "lua/bindings/scr_patch.hpp"
 #include "lua_patch.hpp"
 #include "services/gui/gui_service.hpp"
 
@@ -28,12 +29,14 @@ namespace big
 	public:
 		std::vector<std::unique_ptr<script>> m_registered_scripts;
 		std::vector<std::unique_ptr<lua_patch>> m_registered_patches;
+		std::vector<std::unique_ptr<lua::scr_patch::scr_patch>> m_registered_script_patches;
 
 		std::vector<big::tabs> m_owned_tabs;
 
 		std::unordered_map<big::tabs, std::vector<big::tabs>> m_tab_to_sub_tabs;
 
 		std::vector<std::unique_ptr<lua::gui::gui_element>> m_independent_gui;
+		std::vector<std::unique_ptr<lua::gui::gui_element>> m_always_draw_gui;
 		std::unordered_map<rage::joaat_t, std::vector<std::unique_ptr<lua::gui::gui_element>>> m_gui;
 		std::unordered_map<menu_event, std::vector<sol::protected_function>> m_event_callbacks;
 		std::vector<void*> m_allocated_memory;

@@ -107,9 +107,26 @@ namespace big
 		{
 			if (!memory::batch_runner::run(batch, mem_region))
 			{
-				const std::string error_message =
-				    std::string("Failed to find some patterns for ") + std::string(batch_name.str);
-				throw std::runtime_error(error_message);
+				auto message = std::format("Failed to find some patterns for {}", batch_name.str);
+
+				if (m_gta.m_online_version && m_gta.m_game_version)
+				{
+					auto gta_version = std::format("{}-{}", m_gta.m_online_version, m_gta.m_game_version);
+
+					if (gta_version != m_gta_version_target)
+						message = std::format("{} (Note: Found game version {} but this YimMenu version is for game version {})", message, gta_version, m_gta_version_target);
+				}
+
+				LOG(FATAL) << message;
+
+				if (!m_gta.m_is_session_started || !*m_gta.m_is_session_started) // AC not bypassed yet so exit directly when online
+				{
+					MessageBoxA(m_hwnd, message.c_str(), "YimMenu", MB_ICONWARNING | MB_TOPMOST);
+				}
+
+				Logger::FlushQueue();
+
+				std::exit(EXIT_FAILURE);
 			}
 		}
 
@@ -120,6 +137,8 @@ namespace big
 	private:
 		cache_file m_gta_pointers_cache;
 		cache_file m_sc_pointers_cache;
+
+		const char* m_gta_version_target;
 
 	public:
 		HWND m_hwnd{};

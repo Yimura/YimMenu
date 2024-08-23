@@ -91,23 +91,15 @@ namespace big
 			}
 		}
 
-		CVehicle* get_personal_vehicle()
-		{
-			Vehicle personal_vehicle = mobile::mechanic::get_personal_vehicle();
-			if (ENTITY::DOES_ENTITY_EXIST(personal_vehicle))
-			{
-				return reinterpret_cast<CVehicle*>(g_pointers->m_gta.m_handle_to_ptr(personal_vehicle));
-			}
-
-			return nullptr;
-		}
-
 		virtual void on_tick() override
 		{
 			if (g_local_player)
 			{
-				const auto personal_vehicle = get_personal_vehicle();
-				apply_godmode_to_vehicle(personal_vehicle, true);
+				const auto personal_vehicle = mobile::mechanic::get_personal_cvehicle();
+				if (personal_vehicle)
+				{
+					apply_godmode_to_vehicle(personal_vehicle, true);
+				}
 				apply_godmode_to_vehicle(g_local_player->m_vehicle, personal_vehicle == g_local_player->m_vehicle);	
 			}
 		}
@@ -119,8 +111,7 @@ namespace big
 				if (g_local_player->m_vehicle)
 					restore_original_vehicle_data(g_local_player->m_vehicle);
 
-				const auto personal_vehicle = get_personal_vehicle();
-				if (personal_vehicle)
+				if (const auto personal_vehicle = mobile::mechanic::get_personal_cvehicle())
 				{
 					restore_original_vehicle_data(personal_vehicle);
 				}

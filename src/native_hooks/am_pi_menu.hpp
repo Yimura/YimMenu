@@ -1,5 +1,4 @@
 #pragma once
-#include "script_function.hpp"
 
 namespace big
 {

@@ -52,7 +52,7 @@ namespace big
 			else if (current_destination == AutoDriveDestination::WAYPOINT)
 			{
 				to_waypoint         = true;
-				does_waypoint_exist = blip::get_blip_location(waypoint, (int)BlipIcons::Waypoint);
+				does_waypoint_exist = blip::get_blip_location(waypoint, (int)BlipIcons::RADAR_WAYPOINT);
 			}
 
 			if (does_waypoint_exist

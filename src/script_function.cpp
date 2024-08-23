@@ -1,136 +1,30 @@
 #include "script_function.hpp"
 
-#include "gta_util.hpp"
-#include "pointers.hpp"
-#include "util/scripts.hpp"
-
-#include <script/scrProgram.hpp>
-
 namespace big
 {
-	script_function::script_function(const std::string& name, const rage::joaat_t script, const std::string& pattern, int32_t offset) :
+	script_function::script_function(const std::string& name, const rage::joaat_t script, const std::string& pattern) :
 	    m_name(name),
 	    m_script(script),
 	    m_pattern(pattern),
-	    m_offset(offset),
 	    m_ip(0)
 	{
 	}
 
-	void script_function::populate_ip()
+	uint32_t script_function::get_ip(rage::scrProgram* program)
 	{
-		if (m_ip == 0)
+		if (m_ip != 0)
+			return m_ip;
+
+		if (auto location = scripts::get_code_location_by_pattern(program, m_pattern))
 		{
-			auto program = gta_util::find_script_program(m_script);
-
-			if (!program)
-				return;
-
-			auto location = scripts::get_code_location_by_pattern(program, m_pattern);
-
-			if (!location)
-				LOG(FATAL) << "Failed to find pattern " << m_name << " in script " << program->m_name;
-			else
-				LOG(VERBOSE) << "Found pattern " << m_name << " in script " << program->m_name;
-
-			m_ip = location.value() + m_offset;
+			m_ip = *location;
+			LOG(VERBOSE) << "Found pattern " << m_name << " at " << HEX_TO_UPPER(m_ip) << " in script " << program->m_name;
 		}
-	}
-
-	void script_function::call(rage::scrThread* thread, rage::scrProgram* program, const std::vector<uint64_t>& args)
-	{
-		auto tls_ctx   = rage::tlsContext::get();
-		auto stack     = (uint64_t*)thread->m_stack;
-		auto og_thread = tls_ctx->m_script_thread;
-
-		tls_ctx->m_script_thread           = thread;
-		tls_ctx->m_is_script_thread_active = true;
-
-		rage::scrThreadContext ctx = thread->m_context;
-
-		for (const auto& arg : args)
-			stack[ctx.m_stack_pointer++] = arg;
-
-		stack[ctx.m_stack_pointer++] = 0;
-		ctx.m_instruction_pointer    = m_ip;
-		ctx.m_state                  = rage::eThreadState::idle;
-
-		g_pointers->m_gta.m_script_vm(stack, g_pointers->m_gta.m_script_globals, program, &ctx);
-
-		tls_ctx->m_script_thread           = og_thread;
-		tls_ctx->m_is_script_thread_active = og_thread != nullptr;
-	}
-
-	void script_function::call_latent(rage::scrThread* thread, rage::scrProgram* program, const std::vector<uint64_t>& args, bool& done)
-	{
-		g_fiber_pool->queue_job([this, thread, program, args, &done] {
-			auto stack = (uint64_t*)thread->m_stack;
-
-			rage::eThreadState result = rage::eThreadState::idle;
-
-			rage::scrThreadContext ctx = thread->m_context;
-
-			for (const auto& arg : args)
-				stack[ctx.m_stack_pointer++] = arg;
-
-			stack[ctx.m_stack_pointer++] = 0;
-			ctx.m_instruction_pointer    = m_ip;
-			ctx.m_state                  = rage::eThreadState::idle;
-
-			while (result != rage::eThreadState::killed)
-			{
-				auto tls_ctx   = rage::tlsContext::get();
-				auto og_thread = tls_ctx->m_script_thread;
-
-				tls_ctx->m_script_thread           = thread;
-				tls_ctx->m_is_script_thread_active = true;
-
-				auto old_ctx      = thread->m_context;
-				thread->m_context = ctx;
-				result = g_pointers->m_gta.m_script_vm(stack, g_pointers->m_gta.m_script_globals, program, &thread->m_context);
-				thread->m_context = old_ctx;
-
-				tls_ctx->m_script_thread           = og_thread;
-				tls_ctx->m_is_script_thread_active = og_thread != nullptr;
-
-				script::get_current()->yield();
-			}
-
-			done = true;
-		});
-	}
-
-	void script_function::static_call(const std::vector<uint64_t>& args)
-	{
-		populate_ip();
-
-		rage::scrThread* thread = (rage::scrThread*)new uint8_t[sizeof(rage::scrThread)];
-		memcpy(thread, rage::tlsContext::get()->m_script_thread, sizeof(rage::scrThread));
-
-		void* stack                       = new uint64_t[25000];
-		thread->m_stack                   = (rage::scrValue*)stack;
-		thread->m_context.m_stack_size    = 25000;
-		thread->m_context.m_stack_pointer = 1;
-
-		call(thread, gta_util::find_script_program(m_script), args);
-
-		delete[] stack;
-		delete[] (uint8_t*)thread; // without the cast it ends up calling the destructor which leads to some pretty funny crashes
-	}
-
-	void script_function::operator()(const std::vector<uint64_t>& args)
-	{
-		populate_ip();
-
-		if (m_ip == 0)
-			return;
-
-		auto thread  = gta_util::find_script_thread(m_script);
-		auto program = gta_util::find_script_program(m_script);
-
-		if (thread && program)
+		else
 		{
-			call(thread, program, args);
+			LOG(FATAL) << "Failed to find pattern " << m_name << " in script " << program->m_name;
 		}
+
+		return m_ip;
 	}
 }

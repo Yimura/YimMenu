@@ -3,7 +3,6 @@
 #include "all_scripts.hpp"
 #include "am_launcher.hpp"
 #include "am_pi_menu.hpp"
-#include "carmod_shop.hpp"
 #include "creator.hpp"
 #include "freemode.hpp"
 #include "network_session_host.hpp"
@@ -103,11 +102,6 @@ namespace big
 		add_native_detour("shop_controller"_J, NativeIndex::IS_PED_SHOOTING, all_scripts::RETURN_FALSE); // prevent exploit reports
 		add_native_detour("shop_controller"_J, NativeIndex::SET_WARNING_MESSAGE_WITH_HEADER, shop_controller::SET_WARNING_MESSAGE_WITH_HEADER);
 		add_native_detour("shop_controller"_J, NativeIndex::SCALEFORM_MOVIE_METHOD_ADD_PARAM_INT, shop_controller::SCALEFORM_MOVIE_METHOD_ADD_PARAM_INT);
-
-		add_native_detour("carmod_shop"_J, NativeIndex::SET_ENTITY_COORDS, carmod_shop::SET_ENTITY_COORDS);
-		add_native_detour("carmod_shop"_J, NativeIndex::SET_ENTITY_HEADING, carmod_shop::SET_ENTITY_HEADING);
-		add_native_detour("carmod_shop"_J, NativeIndex::SET_VEHICLE_LIGHTS, carmod_shop::SET_VEHICLE_LIGHTS);
-		add_native_detour("carmod_shop"_J, NativeIndex::DISABLE_ALL_CONTROL_ACTIONS, carmod_shop::DISABLE_ALL_CONTROL_ACTIONS);
 
 		add_native_detour("freemode"_J, NativeIndex::GET_NUMBER_OF_THREADS_RUNNING_THE_SCRIPT_WITH_THIS_HASH, freemode::GET_NUMBER_OF_THREADS_RUNNING_THE_SCRIPT_WITH_THIS_HASH);
 		add_native_detour("freemode"_J, NativeIndex::STAT_GET_INT, freemode::STAT_GET_INT);

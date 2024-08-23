@@ -18,10 +18,12 @@ namespace big
 
 	void esp::draw_player(const player_ptr& plyr, ImDrawList* const draw_list)
 	{
-		if (!plyr->is_valid() || !plyr->get_ped() || !plyr->get_ped()->m_navigation)
+		auto ped = plyr->get_ped();
+
+		if (!ped || !ped->m_navigation)
 			return;
 
-		auto& player_pos = *plyr->get_ped()->m_navigation->get_position();
+		auto& player_pos = *ped->m_navigation->get_position();
 
 		float screen_x, screen_y;
 
@@ -31,7 +33,7 @@ namespace big
 		if (multplr == -1.f || g.esp.global_render_distance[0] > distance)
 			return;
 
-		uint32_t ped_damage_bits = plyr->get_ped()->m_damage_bits;
+		uint32_t ped_damage_bits = ped->m_damage_bits;
 
 		if (g_pointers->m_gta.m_get_screen_coords_for_world_coords(player_pos.data, &screen_x, &screen_y))
 		{
@@ -54,8 +56,8 @@ namespace big
 					esp_color = g.esp.enemy_near_color;
 			}
 
-			const auto armor_perc  = plyr->get_ped()->m_armor / 50.f;
-			const auto health_perc = plyr->get_ped()->m_health / (plyr->get_ped()->m_maxhealth + 0.001f);
+			const auto armor_perc  = ped->m_armor / 50.f;
+			const auto health_perc = ped->m_health / (ped->m_maxhealth + 0.001f);
 
 			if (distance < g.esp.tracer_render_distance[1] && distance > g.esp.tracer_render_distance[0] && g.esp.tracer)
 				draw_list->AddLine({(float)*g_pointers->m_gta.m_resolution_x * g.esp.tracer_draw_position[0],
@@ -100,8 +102,8 @@ namespace big
 					}
 				}
 
-				if (auto player_vehicle = plyr->get_current_vehicle(); player_vehicle && (plyr->get_ped()->m_ped_task_flag & (uint32_t)ePedTask::TASK_DRIVING)
-				    && (player_vehicle->m_damage_bits & (uint32_t)eEntityProofs::GOD))
+				if (auto player_vehicle = plyr->get_current_vehicle();
+				    player_vehicle && (ped->m_ped_task_flag & (uint32_t)ePedTask::TASK_DRIVING) && (player_vehicle->m_damage_bits & (uint32_t)eEntityProofs::GOD))
 				{
 					if (!mode_str.empty())
 						mode_str += ", ";
@@ -153,7 +155,7 @@ namespace big
 						    4);
 					}
 				}
-				if (g.esp.armor && plyr->get_ped()->m_armor > 0)
+				if (g.esp.armor && ped->m_armor > 0)
 				{
 					float offset = 5.f;
 					offset       = g.esp.health ? 10.f : 5.f;
@@ -177,11 +179,10 @@ namespace big
 		if (!g.esp.enabled)
 			return;
 
-		if (const auto draw_list = ImGui::GetBackgroundDrawList(); draw_list)
-		{
-			g_player_service->iterate([draw_list](const player_entry& entry) {
-				draw_player(entry.second, draw_list);
-			});
-		}
+		const auto draw_list = ImGui::GetBackgroundDrawList();
+
+		g_player_service->iterate([draw_list](const player_entry& entry) {
+			draw_player(entry.second, draw_list);
+		});
 	}
 }

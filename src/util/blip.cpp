@@ -50,19 +50,17 @@ namespace big::blip
 
 	bool get_objective_location(Vector3& location)
 	{
-		if (get_objective_location_iteration(location, {BlipIcons::Circle}, {BlipColors::YellowMission, BlipColors::YellowMission2, BlipColors::Mission}))
+		if (get_objective_location_iteration(location, {BlipIcons::RADAR_LEVEL}, {BlipColors::YellowMission, BlipColors::YellowMission2, BlipColors::Mission}))
 			return true;
-		if (get_objective_location_iteration(location, {BlipIcons::RaceFinish}, {BlipColors::None}))
+		if (get_objective_location_iteration(location, {BlipIcons::RADAR_RACEFLAG}, {BlipColors::None}))
 			return true;
-		if (get_objective_location_iteration(location, {BlipIcons::Circle}, {BlipColors::Green, BlipColors::Blue}))
-			return true;
-		if (get_objective_location_iteration(location, {BlipIcons::CrateDrop}))
+		if (get_objective_location_iteration(location, {BlipIcons::RADAR_LEVEL}, {BlipColors::Green, BlipColors::Blue}))
 			return true;
 
-		auto blip_icons = {0, 1, 2, 143, 144, 145, 146, 280, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 535, 536, 537, 538, 539, 540, 541, 542};
-		for (const auto& icon : blip_icons)
+		static const auto blip_icons = {BlipIcons::RADAR_OBJECTIVE_BLUE, BlipIcons::RADAR_OBJECTIVE_GREEN, BlipIcons::RADAR_OBJECTIVE_RED, BlipIcons::RADAR_OBJECTIVE_YELLOW, BlipIcons::RADAR_CRATEDROP, BlipIcons::RADAR_TARGET_A, BlipIcons::RADAR_TARGET_B, BlipIcons::RADAR_TARGET_C, BlipIcons::RADAR_TARGET_D, BlipIcons::RADAR_TARGET_E, BlipIcons::RADAR_TARGET_F, BlipIcons::RADAR_TARGET_G, BlipIcons::RADAR_TARGET_H, BlipIcons::RADAR_SM_CARGO, BlipIcons::RADAR_BAT_CARGO, BlipIcons::RADAR_DEAD_DROP_PACKAGE};
+		for (const auto icon : blip_icons)
 		{
-			if (get_blip_location_from_offset(location, icon))
+			if (get_blip_location_from_offset(location, (int)icon))
 				return true;
 		}
 
@@ -75,6 +73,19 @@ namespace big::blip
 		{
 			auto blip = g_pointers->m_gta.m_blip_list->m_Blips[i].m_pBlip;
 			if (blip && (blip->m_display_bits & BlipIsSelected))
+			{
+				return blip;
+			}
+		}
+		return nullptr;
+	}
+
+	rage::CBlip* get_blip_from_blip_id(Blip blip_id)
+	{
+		for (int i = 0; i < 1500; i++)
+		{
+			auto blip = g_pointers->m_gta.m_blip_list->m_Blips[i].m_pBlip;
+			if (blip && (blip->m_blip_array_index == blip_id))
 			{
 				return blip;
 			}

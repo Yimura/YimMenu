@@ -80,9 +80,6 @@ namespace big
 
 		rage::scrThread* m_hunt_the_beast_thread = nullptr;
 
-		rage::scrThread* m_dance_thread   = nullptr;
-		rage::scrProgram* m_dance_program = nullptr;
-
 		rage::scrThread* m_mission_creator_thread = nullptr;
 
 		struct script_block_opts
@@ -114,8 +111,7 @@ namespace big
 			bool enabled = false;
 		} cmd_executor{};
 
-		rage::scrThread* m_modshop_thread = nullptr;
-		bool in_script_vm                 = false;
+		bool in_script_vm = false;
 
 		struct debug
 		{
@@ -397,8 +393,6 @@ namespace big
 
 				NLOHMANN_DEFINE_TYPE_INTRUSIVE(hud, color_override, color_override_initialized, hud_color_overrides, hide_radar, hide_ammo, selected_hud_component, hud_components_states, force_show_hud_element, force_show_hud)
 			} hud{};
-			// do not save below entries
-			bool dance_mode = false;
 
 			struct super_hero_fly
 			{
@@ -414,7 +408,7 @@ namespace big
 				NLOHMANN_DEFINE_TYPE_INTRUSIVE(super_hero_fly, gradual, explosions, auto_land, charge, ptfx, fly_speed, initial_launch)
 			} super_hero_fly{};
 
-			NLOHMANN_DEFINE_TYPE_INTRUSIVE(self, ipls, ptfx_effects, clean_player, never_wanted, force_wanted_level, passive, free_cam, invisibility, local_visibility, no_ragdoll, noclip, noclip_aim_speed_multiplier, noclip_speed_multiplier, off_radar, super_run, no_collision, unlimited_oxygen, no_water_collision, wanted_level, god_mode, proof_bullet, proof_fire, proof_collision, proof_melee, proof_explosion, proof_steam, proof_water, proof_mask, mobile_radio, fast_respawn, auto_tp, super_jump, beast_jump, healthregen, healthregenrate, hud, superman, custom_weapon_stop, prompt_ambient_animations, persist_outfit, persist_outfits_mis, interaction_menu_freedom, super_hero_fly)
+			NLOHMANN_DEFINE_TYPE_INTRUSIVE(self, ipls, ptfx_effects, clean_player, never_wanted, force_wanted_level, passive, free_cam, invisibility, local_visibility, no_ragdoll, noclip, noclip_aim_speed_multiplier, noclip_speed_multiplier, off_radar, super_run, no_collision, unlimited_oxygen, no_water_collision, wanted_level, god_mode, proof_bullet, proof_fire, proof_collision, proof_melee, proof_explosion, proof_steam, proof_water, proof_mask, mobile_radio, fast_respawn, auto_tp, super_jump, beast_jump, healthregen, healthregenrate, hud, superman, custom_weapon_stop, prompt_ambient_animations, persist_outfit, persist_outfits_mis, interaction_menu_freedom, super_hero_fly, graceful_landing)
 
 		} self{};
 
@@ -807,7 +801,6 @@ namespace big
 			bool instant_brake                          = false;
 			bool infinite_veh_ammo					    = false;
 			bool block_homing                           = true;
-			bool ls_customs                             = false; // don't save this to disk
 			bool seatbelt                               = false;
 			bool turn_signals                           = false;
 			bool vehicle_jump                           = false;
@@ -905,6 +898,7 @@ namespace big
 				bool only_on_player      = false;
 				bool exclude_friends     = false;
 				bool only_on_enemy       = false;
+				bool only_on_threats     = false;
 				bool has_target          = false;
 				bool use_weapon_range    = false;
 				float fov                = 60.f;

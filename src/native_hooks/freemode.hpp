@@ -73,7 +73,7 @@ namespace big
 			{
 				if (SCRIPT::GET_HASH_OF_THIS_SCRIPT_NAME() == "freemode"_J && g.session.fast_join)
 				{
-					scr_functions::set_freemode_session_active({});
+					scr_functions::set_freemode_session_active.call<void>();
 					src->set_return_value<BOOL>(TRUE);
 				}
 				else

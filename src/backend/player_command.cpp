@@ -12,10 +12,14 @@ namespace big
 
 	void player_all_component::execute(const command_arguments& args, const std::shared_ptr<command_context> ctx)
 	{
-		g_fiber_pool->queue_job([this, args, &ctx] {
-			g_player_service->iterate([this, args, &ctx](const player_entry& player) {
-				m_parent->execute(player.second, args, ctx);
-			});
+		g_fiber_pool->queue_job([this, args, ctx] {
+			for (uint32_t i = 0; i < 32; ++i)
+			{
+				if (auto player = g_player_service->get_by_id(i); player && player->is_valid())
+				{
+					m_parent->execute(player, args, ctx);
+				}
+			}
 		});
 	}
 

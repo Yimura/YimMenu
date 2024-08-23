@@ -54,10 +54,6 @@ namespace big
 				DLC::ON_ENTER_SP();
 			});
 
-			components::button("START_LS_CUSTOMS"_T, [] {
-				g.vehicle.ls_customs = true;
-			});
-
 			components::button("SKIP_CUTSCENE"_T, [] {
 				CUTSCENE::STOP_CUTSCENE_IMMEDIATELY();
 			});

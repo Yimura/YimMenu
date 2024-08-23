@@ -16,4 +16,6 @@ namespace big::blip
 	bool get_objective_location(Vector3& location);
 
 	rage::CBlip* get_selected_blip();
+
+	rage::CBlip* get_blip_from_blip_id(Blip);
 }

@@ -13,7 +13,7 @@ namespace big
 		{
 			if (const auto table_idx = node->m_idx; table_idx < m_model_table->m_size)
 			{
-				if (const auto model = m_model_table->m_data[table_idx]; model && model->m_model_type == eModelType::Vehicle)
+				if (const auto model = m_model_table->m_data[table_idx]; model && model->get_model_type() == eModelType::Vehicle)
 				{
 
 				}
@@ -50,7 +50,7 @@ namespace big
 
 		static CVehicleModelInfo* get_vehicle_model(const rage::joaat_t hash)
 		{
-			if (const auto model = model_info::get_model<CVehicleModelInfo*>(hash); model && model->m_model_type == eModelType::Vehicle)
+			if (const auto model = model_info::get_model<CVehicleModelInfo*>(hash); model && model->get_model_type() == eModelType::Vehicle)
 				return model;
 			return nullptr;
 		}
@@ -61,10 +61,10 @@ namespace big
 			bool of_type = false;
 			if (const auto model = model_info::get_model(hash))
 			{
-				of_type = model->m_model_type == arg;
+				of_type = model->get_model_type() == arg;
 				(
 				    [&of_type, &model](eModelType type) {
-					    of_type |= model->m_model_type == type;
+					    of_type |= model->get_model_type() == type;
 				    }(args),
 				    ...);
 			}

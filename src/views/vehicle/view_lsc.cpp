@@ -2,7 +2,7 @@
 #include "fiber_pool.hpp"
 #include "natives.hpp"
 #include "script.hpp"
-#include "services/vehicle_helper/vehicle_helper.hpp"
+#include "script_function.hpp"
 #include "util/vehicle.hpp"
 #include "views/view.hpp"
 
@@ -24,6 +24,8 @@ namespace big
 
 		static int selected_slot         = -1;
 		static bool is_bennys            = false;
+		static bool has_clan_logo        = false; 
+		static bool vehicle_cannot_accept_clan_logo = false; 
 		static int front_wheel_stock_mod = -1;
 		static int rear_wheel_stock_mod  = -1;
 
@@ -77,7 +79,9 @@ namespace big
 				tmp_mod_display_names[MOD_WINDOW_TINT].insert(lsc_window_tint_types.begin(), lsc_window_tint_types.end());
 				tmp_mod_display_names[MOD_WHEEL_TYPE].insert(lsc_wheel_styles.begin(), lsc_wheel_styles.end());
 
-				is_bennys = owned_mods[MOD_WHEEL_TYPE] == WHEEL_TYPE_BENNYS_ORIGINAL || owned_mods[MOD_WHEEL_TYPE] == WHEEL_TYPE_BENNYS_BESPOKE || owned_mods[MOD_WHEEL_TYPE] == WHEEL_TYPE_OPEN_WHEEL || owned_mods[MOD_WHEEL_TYPE] == WHEEL_TYPE_STREET || owned_mods[MOD_WHEEL_TYPE] == WHEEL_TYPE_TRACK;
+				is_bennys     = owned_mods[MOD_WHEEL_TYPE] == WHEEL_TYPE_BENNYS_ORIGINAL || owned_mods[MOD_WHEEL_TYPE] == WHEEL_TYPE_BENNYS_BESPOKE || owned_mods[MOD_WHEEL_TYPE] == WHEEL_TYPE_OPEN_WHEEL || owned_mods[MOD_WHEEL_TYPE] == WHEEL_TYPE_STREET || owned_mods[MOD_WHEEL_TYPE] == WHEEL_TYPE_TRACK;
+				has_clan_logo = GRAPHICS::DOES_VEHICLE_HAVE_CREW_EMBLEM(player_vehicle, 0);
+				vehicle_cannot_accept_clan_logo = scr_functions::vehicle_cannot_accept_clan_logo.call<bool>(player_vehicle);
 
 				for (int slot = MOD_SPOILERS; slot <= MOD_LIGHTBAR; slot++)
 				{
@@ -260,26 +264,21 @@ namespace big
 				VEHICLE::TOGGLE_VEHICLE_MOD(player_vehicle, MOD_TYRE_SMOKE, owned_mods[MOD_TYRE_SMOKE]);
 			});
 		}
-		rage::fvector3 blank;
-		float scale;
-		if (GetVehicleInfoForClanLogo(model, blank, blank, blank, scale))
+		if (!vehicle_cannot_accept_clan_logo)
 		{
-			auto has_clan_logo = (bool*)&owned_mods[MOD_HAS_CLAN_LOGO];
-			if (ImGui::Checkbox("CLAN_LOGO"_T.data(), has_clan_logo))
+			if (ImGui::Checkbox("CLAN_LOGO"_T.data(), &has_clan_logo))
 			{
-				if (*has_clan_logo)
-				{
-					g_fiber_pool->queue_job([] {
-						vehicle_helper::add_clan_logo_to_vehicle(player_vehicle, self::ped);
-					});
-				}
-				else
-				{
-					g_fiber_pool->queue_job([] {
+				g_fiber_pool->queue_job([] {
+					if (has_clan_logo)
+					{
+						scr_functions::add_clan_logo_to_vehicle.call<bool>(&player_vehicle, self::id);
+					}
+					else
+					{
 						GRAPHICS::REMOVE_VEHICLE_CREW_EMBLEM(player_vehicle, 0);
 						GRAPHICS::REMOVE_VEHICLE_CREW_EMBLEM(player_vehicle, 1);
-					});
-				}
+					}
+				});
 			}
 		}
 
@@ -572,19 +571,19 @@ namespace big
 			if (ImGui::Selectable("PEARLESCENT"_T.data(), color_to_change == 2))
 			{
 				color_to_change = 2;
-				color_type      = 4;
+				color_type      = 6;
 			}
 
 			if (ImGui::Selectable("INTERIOR"_T.data(), color_to_change == 3))
 			{
 				color_to_change = 3;
-				color_type      = 6;
+				color_type      = 9;
 			}
 
 			if (ImGui::Selectable("DASHBOARD"_T.data(), color_to_change == 4))
 			{
 				color_to_change = 4;
-				color_type      = 7;
+				color_type      = 10;
 			}
 
 			if (!owned_mods[MOD_TYRE_SMOKE])
@@ -604,7 +603,7 @@ namespace big
 			if (ImGui::Selectable("WHEEL_COLOR"_T.data(), color_to_change == 6))
 			{
 				color_to_change = 6;
-				color_type      = 5;
+				color_type      = 7;
 			}
 
 			if (!owned_mods[MOD_XENON_LIGHTS])
@@ -615,7 +614,7 @@ namespace big
 			if (ImGui::Selectable("HEADLIGHT"_T.data(), color_to_change == 7))
 			{
 				color_to_change = 7;
-				color_type      = 9;
+				color_type      = 11;
 			}
 			ImGui::PopID();
 			if (!owned_mods[MOD_XENON_LIGHTS])
@@ -635,7 +634,7 @@ namespace big
 
 		if (color_to_change == 0 || color_to_change == 1)
 		{
-			if (color_type > 3)
+			if (color_type > 5)
 			{
 				color_type = 8;
 			}
@@ -679,6 +678,14 @@ namespace big
 				if (ImGui::Selectable("METALS"_T.data(), color_type == 3))
 				{
 					color_type = 3;
+				}
+				if (ImGui::Selectable("UTIL"_T.data(), color_type == 4))
+				{
+					color_type = 4;
+				}
+				if (ImGui::Selectable("WORN"_T.data(), color_type == 5))
+				{
+					color_type = 5;
 				}
 				ImGui::EndListBox();
 			}
@@ -800,16 +807,16 @@ namespace big
 			int selected_color = 0;
 			switch (color_type)
 			{
-			case 4: selected_color = owned_mods[MOD_PEARLESCENT_COL]; break;
-			case 5: selected_color = owned_mods[MOD_WHEEL_COL]; break;
-			case 6: selected_color = owned_mods[MOD_INTERIOR_COL]; break;
-			case 7: selected_color = owned_mods[MOD_DASHBOARD_COL]; break;
-			case 9: selected_color = owned_mods[MOD_XENON_COL]; break;
+			case 6: selected_color = owned_mods[MOD_PEARLESCENT_COL]; break;
+			case 7: selected_color = owned_mods[MOD_WHEEL_COL]; break;
+			case 9: selected_color = owned_mods[MOD_INTERIOR_COL]; break;
+			case 10: selected_color = owned_mods[MOD_DASHBOARD_COL]; break;
+			case 11: selected_color = owned_mods[MOD_XENON_COL]; break;
 			default:
 				selected_color = (color_to_change == 0) ? owned_mods[MOD_PRIMARY_COL] : owned_mods[MOD_SECONDARY_COL];
 			}
 
-			if (color_type != 9)
+			if (color_type != 11)
 			{
 				ImGui::SameLine();
 			}
@@ -909,7 +916,55 @@ namespace big
 					}
 					break;
 				}
-				case 4: //Pearlescent
+				case 4: //Util
+				{
+					for (const auto& [color, name] : lsc_util_colors)
+					{
+						if (ImGui::Selectable(name.c_str(), selected_color == color))
+						{
+							selected_color = color;
+
+							if (color_to_change == 0)
+							{
+								owned_mods[MOD_PRIMARY_COL] = color;
+							}
+							else
+							{
+								owned_mods[MOD_SECONDARY_COL] = color;
+							}
+
+							g_fiber_pool->queue_job([] {
+								VEHICLE::SET_VEHICLE_COLOURS(player_vehicle, owned_mods[MOD_PRIMARY_COL], owned_mods[MOD_SECONDARY_COL]);
+							});
+						}
+					}
+					break;
+				}	
+				case 5: //Worn
+				{
+					for (const auto& [color, name] : lsc_worn_colors)
+					{
+						if (ImGui::Selectable(name.c_str(), selected_color == color))
+						{
+							selected_color = color;
+
+							if (color_to_change == 0)
+							{
+								owned_mods[MOD_PRIMARY_COL] = color;
+							}
+							else
+							{
+								owned_mods[MOD_SECONDARY_COL] = color;
+							}
+
+							g_fiber_pool->queue_job([] {
+								VEHICLE::SET_VEHICLE_COLOURS(player_vehicle, owned_mods[MOD_PRIMARY_COL], owned_mods[MOD_SECONDARY_COL]);
+							});
+						}
+					}
+					break;
+				}
+				case 6: //Pearlescent
 				{
 					for (const auto& [color, name] : lsc_classic_colors)
 					{
@@ -925,7 +980,7 @@ namespace big
 					}
 					break;
 				}
-				case 5: //Wheel Color
+				case 7: //Wheel Color
 				{
 					for (const auto& [color, name] : lsc_classic_colors)
 					{
@@ -941,7 +996,7 @@ namespace big
 					}
 					break;
 				}
-				case 6: //Interior Color
+				case 9: //Interior Color
 				{
 					for (const auto& [color, name] : lsc_classic_colors)
 					{
@@ -957,7 +1012,7 @@ namespace big
 					}
 					break;
 				}
-				case 7: //Dashboard Color
+				case 10: //Dashboard Color
 				{
 					for (const auto& [color, name] : lsc_classic_colors)
 					{
@@ -973,7 +1028,7 @@ namespace big
 					}
 					break;
 				}
-				case 9: //Headlight Color
+				case 11: //Headlight Color
 				{
 					for (const auto& [color, name] : lsc_headlight_colors)
 					{

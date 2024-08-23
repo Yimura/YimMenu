@@ -21,7 +21,7 @@ namespace big::fuzzer
 
 	inline bool is_object_model(rage::joaat_t hash)
 	{
-		return model_info::is_model_of_type(hash, eModelType::Object, eModelType::Time, eModelType::Weapon, eModelType::Destructable, eModelType::WorldObject, eModelType::Sprinkler, eModelType::Unk65, eModelType::LOD, eModelType::Unk132, eModelType::Building);
+		return model_info::is_model_of_type(hash, eModelType::Object, eModelType::Time, eModelType::Weapon, eModelType::Destructable);
 	}
 
 	inline rage::joaat_t get_mismatched_model(rage::joaat_t original)
@@ -44,7 +44,7 @@ namespace big::fuzzer
 
 		if (is_object_model(original))
 			std::erase(models, "apa_heist_apart2_door"_J);
-		else if (info && info->m_model_type == eModelType::Vehicle)
+		else if (info && info->get_model_type() == eModelType::Vehicle)
 		{
 			if (veh_model->m_vehicle_type == eVehicleType::VEHICLE_TYPE_BIKE)
 				std::erase(models, "faggio"_J);
@@ -61,7 +61,7 @@ namespace big::fuzzer
 			else
 				std::erase(models, "zentorno"_J);
 		}
-		else if (info && (info->m_model_type == eModelType::Ped || info->m_model_type == eModelType::OnlineOnlyPed))
+		else if (info && (info->get_model_type() == eModelType::Ped))
 			std::erase(models, "player_zero"_J);
 
 		return models[math::rand(models.size())];
@@ -73,9 +73,9 @@ namespace big::fuzzer
 
 		if (is_object_model(original))
 			return "urbanweeds01"_J;
-		else if (info && (info->m_model_type == eModelType::Ped || info->m_model_type == eModelType::OnlineOnlyPed))
+		else if (info && (info->get_model_type() == eModelType::Ped))
 			return "slod_human"_J;
-		else if (info && info->m_model_type == eModelType::Vehicle)
+		else if (info && info->get_model_type() == eModelType::Vehicle)
 			return "arbitergt"_J;
 		else
 			return math::rand(2) ? "urbanweeds01"_J : "slod_human"_J;
@@ -126,9 +126,9 @@ namespace big::fuzzer
 
 		if (is_object_model(entity->m_model_info->m_hash))
 			return math::rand(2) ? get_first_ped_id() : get_first_veh_id();
-		else if (entity->m_model_info->m_model_type == eModelType::Ped || entity->m_model_info->m_model_type == eModelType::OnlineOnlyPed)
+		else if (entity->m_model_info->get_model_type() == eModelType::Ped)
 			return math::rand(2) ? get_first_obj_id() : get_first_veh_id();
-		else if (entity->m_model_info->m_model_type == eModelType::Vehicle)
+		else if (entity->m_model_info->get_model_type() == eModelType::Vehicle)
 			return math::rand(2) ? get_first_obj_id() : get_first_ped_id();
 
 		return math::rand(2) ? get_first_ped_id() : get_first_veh_id();

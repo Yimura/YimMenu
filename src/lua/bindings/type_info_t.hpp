@@ -10,6 +10,7 @@ namespace lua::memory
 		integer_,
 		ptr_,
 		float_,
-		double_
+		double_,
+		vector3_
 	};
 }

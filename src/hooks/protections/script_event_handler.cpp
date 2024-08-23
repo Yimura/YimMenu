@@ -9,8 +9,6 @@
 #include <network/CNetGamePlayer.hpp>
 #include <script/globals/GPBD_FM_3.hpp>
 #include <script/globals/GlobalPlayerBD.hpp>
-#include <script/CGameScriptHandlerNetComponent.hpp>
-
 
 namespace big
 {

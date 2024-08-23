@@ -17,14 +17,8 @@ namespace big
 		if (thread == g.m_hunt_the_beast_thread)
 			g.m_hunt_the_beast_thread = nullptr;
 
-		if (thread == g.m_dance_thread)
-			g.m_dance_thread = nullptr;
-
 		if (thread == g.m_mission_creator_thread)
 			g.m_mission_creator_thread = nullptr;
-
-		if (thread == g.m_modshop_thread)
-			g.m_modshop_thread = nullptr;
 
 		return result;
 	}

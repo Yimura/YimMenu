@@ -23,7 +23,7 @@ namespace big
 			if (PAD::IS_DISABLED_CONTROL_PRESSED(0, (int)ControllerInputs::INPUT_WEAPON_WHEEL_PREV))
 				dist += 5;
 
-			if (!entity::take_control_of(e))
+			if (!entity::take_control_of(e, 0))
 				return; // TODO: remove from vector
 
 			ENTITY::SET_ENTITY_COLLISION(e, false, false);
@@ -83,7 +83,7 @@ namespace big
 						}
 						else
 						{
-							if (entity::take_control_of(ent_to_add) && ENTITY::IS_ENTITY_A_PED(ent_to_add) && !PED::IS_PED_RAGDOLL(ent_to_add))
+							if (entity::take_control_of(ent_to_add, 0) && ENTITY::IS_ENTITY_A_PED(ent_to_add) && !PED::IS_PED_RAGDOLL(ent_to_add))
 							{
 								TASK::SET_HIGH_FALL_TASK(ent_to_add, 0, 0, 0);
 
@@ -107,7 +107,7 @@ namespace big
 		{
 			for (const Entity& e : ents)
 			{
-				if (entity::take_control_of(e))
+				if (entity::take_control_of(e, 0))
 				{
 					if (g.weapons.gravity_gun.launch_on_release)
 					{

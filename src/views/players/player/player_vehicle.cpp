@@ -20,6 +20,7 @@ namespace big
 
 		ImGui::BeginGroup();
 		components::player_command_button<"killengine">(g_player_service->get_selected(), {});
+		components::player_command_button<"cloneplayercar">(g_player_service->get_selected(), {});
 		components::player_command_button<"burstwheels">(g_player_service->get_selected(), {});
 		components::player_command_button<"smashwindows">(g_player_service->get_selected(), {});
 		components::player_command_button<"blacktint">(g_player_service->get_selected(), {});

@@ -102,6 +102,42 @@ namespace big
 		    || g.settings.hotkeys.is_mp_chat_active)
 			return;
 
+		switch (state)
+		{
+		case WM_LBUTTONUP:
+			state = eKeyState::RELEASE;
+			key   = VK_LBUTTON;
+			break;
+		case WM_RBUTTONUP:
+			state = eKeyState::RELEASE;
+			key   = VK_RBUTTON;
+			break;
+		case WM_MBUTTONUP:
+			state = eKeyState::RELEASE;
+			key   = VK_MBUTTON;
+			break;
+		case WM_XBUTTONUP:
+			state = eKeyState::RELEASE;
+			key   = GET_XBUTTON_WPARAM(key) == XBUTTON1 ? VK_XBUTTON1 : VK_XBUTTON2;
+			break;
+		case WM_LBUTTONDOWN:
+			state = eKeyState::DOWN;
+			key   = VK_LBUTTON;
+			break;
+		case WM_RBUTTONDOWN:
+			state = eKeyState::DOWN;
+			key   = VK_RBUTTON;
+			break;
+		case WM_MBUTTONDOWN:
+			state = eKeyState::DOWN;
+			key   = VK_MBUTTON;
+			break;
+		case WM_XBUTTONDOWN:
+			state = eKeyState::DOWN;
+			key   = GET_XBUTTON_WPARAM(key) == XBUTTON1 ? VK_XBUTTON1 : VK_XBUTTON2;
+			break;
+		}
+
 		if (state == eKeyState::RELEASE || state == eKeyState::DOWN)
 		{
 			auto& hotkey_map = m_hotkeys[state == eKeyState::RELEASE];

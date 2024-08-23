@@ -87,6 +87,30 @@ namespace big
 			else
 			{
 				exception_info->ContextRecord->Rip += opcode.len;
+
+				if (opcode.opcode == 0x8B && opcode.modrm_mod != 3) // MOV
+				{
+					uint8_t reg_id = opcode.rex_r << 3 | opcode.modrm_reg;
+					switch (reg_id)
+					{
+					case 0: exception_info->ContextRecord->Rax = 0; break;
+					case 1: exception_info->ContextRecord->Rcx = 0; break;
+					case 2: exception_info->ContextRecord->Rdx = 0; break;
+					case 3: exception_info->ContextRecord->Rbx = 0; break;
+					case 4: exception_info->ContextRecord->Rsp = 0; break;
+					case 5: exception_info->ContextRecord->Rbp = 0; break;
+					case 6: exception_info->ContextRecord->Rsi = 0; break;
+					case 7: exception_info->ContextRecord->Rdi = 0; break;
+					case 8: exception_info->ContextRecord->R8 = 0; break;
+					case 9: exception_info->ContextRecord->R9 = 0; break;
+					case 10: exception_info->ContextRecord->R10 = 0; break;
+					case 11: exception_info->ContextRecord->R11 = 0; break;
+					case 12: exception_info->ContextRecord->R12 = 0; break;
+					case 13: exception_info->ContextRecord->R13 = 0; break;
+					case 14: exception_info->ContextRecord->R14 = 0; break;
+					case 15: exception_info->ContextRecord->R15 = 0; break;
+					}
+				}
 			}
 		}
 

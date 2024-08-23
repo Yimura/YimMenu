@@ -6,6 +6,7 @@
 #include "util/pools.hpp"
 #include "services/friends/friends_service.hpp"
 #include "services/player_database/player_database_service.hpp"
+#include "util/ped.hpp"
 
 namespace big
 {
@@ -14,6 +15,9 @@ namespace big
 
 	bool_command g_aimbot_only_on_enemy("aimonlyatenemy", "BACKEND_LOOPED_WEAPONS_AIM_ONLY_AT_ENEMY", "BACKEND_LOOPED_WEAPONS_AIM_ONLY_AT_ENEMY_DESC",
 	    g.weapons.aimbot.only_on_enemy);
+
+	bool_command g_aimbot_only_on_threat("aimonlyatthreats", "BACKEND_LOOPED_WEAPONS_AIM_ONLY_AT_THREATS", "BACKEND_LOOPED_WEAPONS_AIM_ONLY_AT_THREATS_DESC",
+	    g.weapons.aimbot.only_on_threats);
 
 	class aimbot : looped_command
 	{
@@ -144,12 +148,17 @@ namespace big
 					continue;
 				}
 
+				const auto ped_handle = g_pointers->m_gta.m_ptr_to_handle(ped);
 				const bool is_not_a_player_and_we_target_only_players = g_aimbot_only_on_player.is_enabled() && !ped->m_player_info;
-				const bool we_in_the_same_vehicle = self::veh != 0 && ped->m_vehicle == g_player_service->get_self()->get_current_vehicle();
-				if (is_not_a_player_and_we_target_only_players || we_in_the_same_vehicle)
+				const bool are_we_in_the_same_vehicle = self::veh != 0 && self::veh == PED::GET_VEHICLE_PED_IS_IN(ped_handle, TRUE);
+				if (is_not_a_player_and_we_target_only_players || are_we_in_the_same_vehicle)
 				{
 					continue;
 				}
+
+				auto weapon_info = g_local_player->m_weapon_manager->m_weapon_info;
+				if (PED::GET_PED_CONFIG_FLAG(ped_handle, 9, TRUE) || !g_pointers->m_gta.m_can_do_damage_to_ped(g_local_player, weapon_info, ped)) //Can't do damage to them, skip.
+					continue;
 				
 				if (g.weapons.aimbot.exclude_friends && ped->m_player_info)
 				{
@@ -162,29 +171,14 @@ namespace big
 						continue;
 				}
 
-				const auto ped_handle = g_pointers->m_gta.m_ptr_to_handle(ped);
-
-				if (g_aimbot_only_on_enemy.is_enabled())
+				if (g_aimbot_only_on_enemy.is_enabled() && ped::is_ped_a_friend(ped_handle, ped))
 				{
-					bool is_hated_relationship = false;
-					bool is_in_combat          = PED::IS_PED_IN_COMBAT(ped_handle, self::ped);
-					auto blip_color            = HUD::GET_BLIP_HUD_COLOUR(HUD::GET_BLIP_FROM_ENTITY(ped_handle));
-					bool is_enemy = ((PED::GET_PED_CONFIG_FLAG(ped_handle, 38, TRUE) == TRUE) || (blip_color == HUD_COLOUR_RED));
+					continue;
+				}
 
-					switch (PED::GET_RELATIONSHIP_BETWEEN_PEDS(ped_handle, self::ped))
-					{
-						case Dislike:
-						case Wanted:
-						case Hate: is_hated_relationship = blip_color != HUD_COLOUR_BLUE;
-					}
-
-					if (!is_hated_relationship && !is_in_combat && !is_enemy)
-					{
-						continue;
-					}
-
-					/*if (PED::GET_PED_TYPE(ped_handle) != PED_TYPE_ANIMAL)
-						LOG(INFO) << " PED_TYPE " << PED::GET_PED_TYPE(ped_handle) << " hated " << is_hated_relationship << " combat " << is_in_combat << " enemy " << is_enemy << " blip_color " << blip_color;*/
+				if (g.weapons.aimbot.only_on_threats && WEAPON::HAS_PED_GOT_WEAPON(ped_handle, 1, 1) == FALSE)
+				{
+					continue;
 				}
 
 				if (is_a_ped_type_we_dont_care_about(ped_handle))

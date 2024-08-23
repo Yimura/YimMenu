@@ -2,7 +2,7 @@
 
 Table containing functions for modifying the menu GUI.
 
-## Functions (8)
+## Functions (12)
 
 ### `get_tab(tab_name)`
 
@@ -92,6 +92,38 @@ gui.show_error(title, message)
 bool = gui.is_open()
 ```
 
+### `toggle(toggle)`
+
+Opens and closes the gui.
+
+- **Parameters:**
+  - `toggle` (boolean)
+
+**Example Usage:**
+```lua
+gui.toggle(toggle)
+```
+
+### `mouse_override()`
+
+- **Returns:**
+  - `bool`: Returns true if the mouse is overridden.
+
+**Example Usage:**
+```lua
+bool = gui.mouse_override()
+```
+
+### `override_mouse(override)`
+
+- **Parameters:**
+  - `override` (boolean)
+
+**Example Usage:**
+```lua
+gui.override_mouse(override)
+```
+
 ### `add_imgui(imgui_rendering)`
 
 Registers a function that will be called every rendering frame, you can call ImGui functions in it, please check the ImGui.md documentation file for more info.
@@ -116,6 +148,32 @@ end)
 **Example Usage:**
 ```lua
 gui.add_imgui(imgui_rendering)
+```
+
+### `add_always_draw_imgui(imgui_rendering)`
+
+Registers a function that will be called every rendering frame, you can call ImGui functions in it, please check the ImGui.md documentation file for more info. This function will be called even when the menu is closed.
+**Example Usage:**
+```lua
+gui.add_always_draw_imgui(function()
+   if ImGui.Begin("My Custom Window") then
+       if ImGui.Button("Label") then
+         script.run_in_fiber(function(script)
+           -- call natives in there
+         end)
+       end
+
+       ImGui.End()
+   end
+end)
+``
+
+- **Parameters:**
+  - `imgui_rendering` (function): Function that will be called every rendering frame, you can call ImGui functions in it, please check the ImGui.md documentation file for more info.
+
+**Example Usage:**
+```lua
+gui.add_always_draw_imgui(imgui_rendering)
 ```
 
 
