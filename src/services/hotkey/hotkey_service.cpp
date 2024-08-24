@@ -94,7 +94,7 @@ namespace big
 		{
 			if (script && script->m_script_hash == "cellphone_flashhand"_J)
 			{
-				is_using_cellphone = script->m_context.m_state == rage::eThreadState::running;
+				is_using_cellphone = script->m_context.m_state == rage::eThreadState::idle;
 			}
 		}
 
