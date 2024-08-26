@@ -207,3 +207,4 @@
 [20:46:19.5971135][INFO/command.cpp:48] Command | player_db_auto_update_states | Auto Update Player Online States | Toggling this feature will automatically update the player online states every 5minutes. | 0
 [20:46:19.5971390][INFO/command.cpp:48] Command | vehiclecontrol | Vehicle controller | Enables/Disables the vehicle controller. | 0
 [20:46:19.5972044][INFO/command.cpp:48] Command | cmdexecutor | Toggle Command Executor | Toggles the command executor window | 0
+[20:46:19.5972044][INFO/command.cpp:48] Command | resetweaps | Reset Weapons | Resets your weapon loadout to default. | 0

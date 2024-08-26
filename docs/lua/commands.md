@@ -11,7 +11,7 @@ command.call_player(somePlayerIndex, "spawn", {joaat("adder")})
 
 For a complete list of available command functions, please refer to the command table documentation.
 
-## Command Count: 209
+## Command Count: 210
 
 ### breakup 
  BREAKUP_KICK_DESC 
@@ -849,3 +849,6 @@ Arg Count:  0
  Toggles the command executor window 
 Arg Count:  0
 
+### resetweaps
+ Resets your weapon loadout to default.
+Arg Count: 0

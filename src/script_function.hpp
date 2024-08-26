@@ -73,6 +73,7 @@ namespace big
 	{
 		inline script_function set_as_ceo("SAC", "freemode"_J, "2D 04 1D 00 00 5D");
 		inline script_function set_freemode_session_active("SFSA", "freemode"_J, "2D 00 02 00 00 75 5D ? ? ? 50");
+		inline script_function give_owned_freemode_weapons("GOFM", "freemode"_J, "2D 00 02 00 00 62 ? ? ? 72 57 ? ? 76");
 		inline script_function save_to_datafile("STD", "fm_race_creator"_J, "2D 01 03 00 00 71 2C");
 		inline script_function load_from_datafile("LFD", "fm_race_creator"_J, "2D 03 0C 00 00 71 2C");
 		inline script_function reset_session_data("RSD", "main_persistent"_J, "2D 02 7D 00 00");

@@ -10,6 +10,7 @@ namespace big
 
 		SELF,
 		WEAPONS,
+		WEAPONS_AMMUNATION,
 		TELEPORT,
 		CUSTOM_TELEPORT,
 		MOBILE,
@@ -91,7 +92,14 @@ namespace big
 				TAB_DECL(SELF),
 		            view::self,
 		            {
-						{TAB_DECL(WEAPONS), view::weapons}},
+						{
+							TAB_DECL(WEAPONS),
+								view::weapons,
+								{
+									{TAB_DECL(WEAPONS_AMMUNATION), view::ammunation}},
+								},
+							},
+						},
 						{TAB_DECL(MOBILE), view::mobile}},
 						{TAB_DECL(TELEPORT), view::teleport,
 						{
