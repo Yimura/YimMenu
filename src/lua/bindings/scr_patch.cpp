@@ -25,6 +25,12 @@ namespace lua::scr_patch
 		module->m_registered_script_patches.push_back(std::make_unique<scr_patch>(*this));
 	}
 
+	scr_patch::~scr_patch()
+	{
+		disable();
+		big::g_script_patcher_service->remove_patch(m_patch_name);
+	}
+
 	void scr_patch::enable()
 	{
 		if (!m_enable)
