@@ -103,6 +103,10 @@ namespace big
 				sol::lib::table,
 				sol::lib::bit32,
 				sol::lib::io,
+#if SOL_IS_ON(SOL_USE_LUAJIT)
+				sol::lib::ffi,
+				sol::lib::jit,
+#endif
 				sol::lib::utf8
 			);
 			// clang-format on
@@ -283,8 +287,13 @@ namespace big
 
 		// 1                   2               3            4
 		// {searcher_preload, searcher_Lua, searcher_C, searcher_Croot, NULL};
+#if SOL_LUA_VERSION_I_ < 502
+		m_state["package"]["loaders"][3] = not_supported_lua_function("package.loaders C");
+		m_state["package"]["loaders"][4] = not_supported_lua_function("package.loaders Croot");
+#else
 		m_state["package"]["searchers"][3] = not_supported_lua_function("package.searcher C");
 		m_state["package"]["searchers"][4] = not_supported_lua_function("package.searcher Croot");
+#endif
 
 		set_folder_for_lua_require(scripts_folder);
 	}

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
-project(YimMenu CXX ASM_MASM)
+project(YimMenu C CXX)
 
 if (NOT MSVC)
   message(FATAL_ERROR "Unsupported compiler used '${CMAKE_CXX_COMPILER_ID}', YimMenu only supports MSVC.")
@@ -60,10 +60,12 @@ target_include_directories(YimMenu PRIVATE
     "${imgui_SOURCE_DIR}"
     "${minhook_SOURCE_DIR}/src/hde"
     "${asmjit_SOURCE_DIR}/src"
+    "${luajit_SOURCE_DIR}/src"
+    "${luajit_BINARY_DIR}/src"
 )
 
 target_precompile_headers(YimMenu PRIVATE "${SRC_DIR}/common.hpp")
-target_link_libraries(YimMenu PRIVATE pugixml minhook AsyncLogger dbghelp imgui cpr lua_static asmjit::asmjit)
+target_link_libraries(YimMenu PRIVATE pugixml minhook AsyncLogger dbghelp imgui cpr libluajit asmjit::asmjit)
 
 # Warnings as errors
 set_property(TARGET YimMenu PROPERTY COMPILE_WARNING_AS_ERROR ON)

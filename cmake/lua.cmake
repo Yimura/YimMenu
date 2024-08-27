@@ -1,12 +1,15 @@
 include(FetchContent)
 
-message("Lua")
+message("LuaJIT")
+
+set(LUAJIT_BUILD_TOOL OFF)
+
 FetchContent_Declare(
-    Lua
-    GIT_REPOSITORY https://github.com/walterschell/Lua.git
-    GIT_TAG a2e0125df529894f5e25d7d477b2df4e37690e0f
+    luajit
+    GIT_REPOSITORY https://github.com/WohlSoft/LuaJIT.git
+    GIT_TAG 27878965958986687f8caaf8a2b6b73bc5df85e0
     GIT_PROGRESS TRUE
 )
-FetchContent_MakeAvailable(Lua)
 
-set_property(TARGET lua_static PROPERTY CXX_STANDARD 23)
+add_compile_definitions("_CRT_SECURE_NO_WARNINGS")
+FetchContent_MakeAvailable(luajit)
