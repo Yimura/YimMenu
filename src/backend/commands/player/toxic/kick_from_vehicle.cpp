@@ -15,15 +15,36 @@ namespace big
 
 		virtual void execute(player_ptr player, const command_arguments& _args, const std::shared_ptr<command_context> ctx) override
 		{
-			auto vehicle = player->get_current_vehicle();
+			int vehicle = PED::GET_VEHICLE_PED_IS_IN(PLAYER::GET_PLAYER_PED(player->id()), false);
 
-			if (!vehicle || !vehicle->m_net_object)
+			if (!vehicle)
 			{
-				// vehicle hasn't synced yet, use TSE
+				int playerMask = 0;
+				for (int i = 0; i < 32; ++i) {
+					int playerIndex = PLAYER::INT_TO_PLAYERINDEX(i);
+					if (PED::IS_PED_IN_ANY_VEHICLE(PLAYER::GET_PLAYER_PED(playerIndex), false)) {
+						int currentVehicle = PED::GET_VEHICLE_PED_IS_IN(PLAYER::GET_PLAYER_PED(playerIndex), false);
+						if (currentVehicle == vehicle) {
+							MISC::SET_BIT(&playerMask, i);
+						}
+					}
+				}
+				
 				const size_t arg_count  = 10;
-				int64_t args[arg_count] = {(int64_t)eRemoteEvent::VehicleKick, self::id, 1 << player->id(), 0, 0, 0, 0, 0, 0, 0};
+				int64_t args[arg_count] = {
+					(int64_t)eRemoteEvent::VehicleKick, 
+					self::id, 
+					0,
+					0,
+					0,
+					0,
+					-1,
+					MISC::GET_FRAME_COUNT(), //0xFC8202EFC642E6F2
+					0,
+					0
+				};
 
-				g_pointers->m_gta.m_trigger_script_event(1, args, arg_count, 1 << player->id(), (int)eRemoteEvent::VehicleKick);
+				g_pointers->m_gta.m_trigger_script_event(1, args, arg_count, playerMask, (int)eRemoteEvent::VehicleKick);
 			}
 			else
 			{
