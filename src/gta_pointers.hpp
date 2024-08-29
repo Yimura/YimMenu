@@ -22,6 +22,7 @@ class CGameScriptHandlerMgr;
 class CPedFactory;
 class GtaThread;
 class GameDataHash;
+class InputMethodEditor;
 
 namespace rage
 {
@@ -411,6 +412,9 @@ namespace big
 
 		functions::is_ped_enemies_with m_is_ped_enemies_with;
 		functions::can_do_damage_to_ped m_can_do_damage_to_ped;
+
+		bool* m_allow_keyboard_layout_change;
+		InputMethodEditor* m_ime;
 	};
 #pragma pack(pop)
 	static_assert(sizeof(gta_pointers) % 8 == 0, "Pointers are not properly aligned");

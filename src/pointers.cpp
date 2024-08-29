@@ -1958,6 +1958,16 @@ namespace big
             {
                 g_pointers->m_gta.m_can_do_damage_to_ped = ptr.add(1).rip().as<functions::can_do_damage_to_ped>();
             }
+        },
+        // Input Method Editor
+        {
+            "IME",
+            "75 25 89 44 24 28",
+            [](memory::handle ptr)
+            {
+                g_pointers->m_gta.m_allow_keyboard_layout_change = ptr.sub(4).rip().as<bool*>();
+                g_pointers->m_gta.m_ime = ptr.add(44).rip().sub(0x278 + 0x8).as<InputMethodEditor*>();
+            }
         }
         >(); // don't leave a trailing comma at the end
 

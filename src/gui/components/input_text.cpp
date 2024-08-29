@@ -1,6 +1,7 @@
 #include "fiber_pool.hpp"
 #include "gui/components/components.hpp"
 #include "misc/cpp/imgui_stdlib.h"
+#include "util/input_method_editor.hpp"
 
 namespace big
 {
@@ -15,7 +16,18 @@ namespace big
 		}
 
 		if (ImGui::IsItemActive())
+		{
 			g.self.hud.typing = TYPING_TICKS;
+
+			draw_input_method_editor();
+
+			*g_pointers->m_gta.m_allow_keyboard_layout_change = true;
+		}
+
+		if (ImGui::IsItemDeactivated())
+		{
+			*g_pointers->m_gta.m_allow_keyboard_layout_change = false;
+		}
 
 		return retval;
 	}
@@ -31,7 +43,18 @@ namespace big
 		}
 
 		if (ImGui::IsItemActive())
+		{
 			g.self.hud.typing = TYPING_TICKS;
+
+			draw_input_method_editor();
+
+			*g_pointers->m_gta.m_allow_keyboard_layout_change = true;
+		}
+
+		if (ImGui::IsItemDeactivated())
+		{
+			*g_pointers->m_gta.m_allow_keyboard_layout_change = false;
+		}
 
 		return retval;
 	}
