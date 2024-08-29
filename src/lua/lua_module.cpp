@@ -126,6 +126,7 @@ namespace big
 		{
 			std::lock_guard guard(m_registered_scripts_mutex);
 			m_registered_scripts.clear();
+			m_registered_script_patches.clear();
 		}
 
 		for (const auto owned_tab : m_owned_tabs)

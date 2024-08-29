@@ -28,6 +28,11 @@ namespace big
 			return m_script;
 		}
 
+		inline std::string get_name()
+		{
+			return m_name;
+		}
+
 		script_patch(rage::joaat_t script, std::string name, const memory::pattern pattern, int32_t offset, std::vector<uint8_t> patch, bool* enable_bool);
 		void update(script_data* data);
 	};

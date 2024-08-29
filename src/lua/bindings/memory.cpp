@@ -194,18 +194,16 @@ namespace lua::memory
 		}
 	}
 
-	static std::unordered_map<uintptr_t, std::unique_ptr<runtime_func_t>> target_func_ptr_to_hook;
-
 	static bool pre_callback(const runtime_func_t::parameters_t* params, const uint8_t param_count, runtime_func_t::return_value_t* return_value, const uintptr_t target_func_ptr)
 	{
-		const auto& dyn_hook = target_func_ptr_to_hook[target_func_ptr];
+		const auto& dyn_hook = big::g_lua_manager->m_target_func_ptr_to_dynamic_hook[target_func_ptr];
 		return big::g_lua_manager
 		    ->dynamic_hook_pre_callbacks(target_func_ptr, dyn_hook->m_return_type, return_value, dyn_hook->m_param_types, params, param_count);
 	}
 
 	static void post_callback(const runtime_func_t::parameters_t* params, const uint8_t param_count, runtime_func_t::return_value_t* return_value, const uintptr_t target_func_ptr)
 	{
-		const auto& dyn_hook = target_func_ptr_to_hook[target_func_ptr];
+		const auto& dyn_hook = big::g_lua_manager->m_target_func_ptr_to_dynamic_hook[target_func_ptr];
 		big::g_lua_manager->dynamic_hook_post_callbacks(target_func_ptr, dyn_hook->m_return_type, return_value, dyn_hook->m_param_types, params, param_count);
 	}
 
@@ -240,25 +238,9 @@ namespace lua::memory
 	// ```
 	static void dynamic_hook(const std::string& hook_name, const std::string& return_type, sol::table param_types_table, lua::memory::pointer& target_func_ptr_obj, sol::protected_function pre_lua_callback, sol::protected_function post_lua_callback, sol::this_state state_)
 	{
-		const auto target_func_ptr = target_func_ptr_obj.get_address();
-		if (!target_func_ptr_to_hook.contains(target_func_ptr))
+		if (!target_func_ptr_obj.is_valid())
 		{
-			std::vector<std::string> param_types;
-			for (const auto& [k, v] : param_types_table)
-			{
-				if (v.is<const char*>())
-				{
-					param_types.push_back(v.as<const char*>());
-				}
-			}
-
-			std::unique_ptr<runtime_func_t> runtime_func = std::make_unique<runtime_func_t>();
-			const auto jitted_func = runtime_func->make_jit_func(return_type, param_types, asmjit::Arch::kHost, pre_callback, post_callback, target_func_ptr);
-
-			target_func_ptr_to_hook.emplace(target_func_ptr, std::move(runtime_func));
-
-			// TODO: The detour_hook is never cleaned up on menu unload.
-			target_func_ptr_to_hook[target_func_ptr]->create_and_enable_hook(hook_name, target_func_ptr, jitted_func);
+			return;
 		}
 
 		big::lua_module* module = sol::state_view(state_)["!this"];
@@ -266,17 +248,55 @@ namespace lua::memory
 		{
 			return;
 		}
+
+		const auto target_func_ptr = target_func_ptr_obj.get_address();
+
+		bool need_hook = false;
 		if (pre_lua_callback.valid())
 		{
 			module->m_dynamic_hook_pre_callbacks[target_func_ptr].push_back(pre_lua_callback);
+			need_hook = true;
 		}
 		if (post_lua_callback.valid())
 		{
 			module->m_dynamic_hook_post_callbacks[target_func_ptr].push_back(post_lua_callback);
+			need_hook = true;
+		}
+
+		if (need_hook)
+		{
+			std::shared_ptr<runtime_func_t> runtime_func;
+
+			if (!big::g_lua_manager->m_target_func_ptr_to_dynamic_hook.contains(target_func_ptr))
+			{
+				std::vector<std::string> param_types;
+				for (const auto& [k, v] : param_types_table)
+				{
+					if (v.is<const char*>())
+					{
+						param_types.push_back(v.as<const char*>());
+					}
+				}
+
+				runtime_func = std::make_shared<runtime_func_t>();
+				const auto jitted_func = runtime_func->make_jit_func(return_type, param_types, asmjit::Arch::kHost, pre_callback, post_callback, target_func_ptr);
+
+				big::g_lua_manager->m_target_func_ptr_to_dynamic_hook[target_func_ptr] = runtime_func.get();
+
+				big::g_lua_manager->m_target_func_ptr_to_dynamic_hook[target_func_ptr]->create_and_enable_hook(hook_name, target_func_ptr, jitted_func);
+			}
+			else
+			{
+				// lua modules own and share the runtime_func_t object, such as when no module reference it anymore the hook detour get cleaned up.
+				runtime_func = big::g_lua_manager->get_existing_dynamic_hook(target_func_ptr);
+			}
+
+			if (runtime_func)
+			{
+				module->m_dynamic_hooks.push_back(runtime_func);
+			}
 		}
 	}
-
-	static std::unordered_map<uintptr_t, std::vector<uint8_t>> jitted_binded_funcs;
 
 	static std::string get_jitted_lua_func_global_name(uintptr_t function_to_call_ptr)
 	{
@@ -292,14 +312,8 @@ namespace lua::memory
 		}
 	};
 
-	static void jit_lua_binded_func(uintptr_t function_to_call_ptr, const asmjit::FuncSignature& function_to_call_sig, const asmjit::Arch& arch, std::vector<type_info_t> param_types, type_info_t return_type, lua_State* lua_state, const std::string& jitted_lua_func_global_name)
+	static std::unique_ptr<uint8_t[]> jit_lua_binded_func(uintptr_t function_to_call_ptr, const asmjit::FuncSignature& function_to_call_sig, const asmjit::Arch& arch, std::vector<type_info_t> param_types, type_info_t return_type, lua_State* lua_state, const std::string& jitted_lua_func_global_name)
 	{
-		const auto it = jitted_binded_funcs.find(function_to_call_ptr);
-		if (it != jitted_binded_funcs.end())
-		{
-			return;
-		}
-
 		asmjit::CodeHolder code;
 		auto env = asmjit::Environment::host();
 		env.setArch(arch);
@@ -324,9 +338,6 @@ namespace lua::memory
 		code.setLogger(&log);
 		asmjit_error_handler_t asmjit_error_handler;
 		code.setErrorHandler(&asmjit_error_handler);
-
-		// too small to really need it
-		func->frame().resetPreservedFP();
 
 		// map argument slots to registers, following abi.
 		std::vector<asmjit::x86::Reg> arg_registers;
@@ -444,7 +455,7 @@ namespace lua::memory
 		else
 		{
 			LOG(FATAL) << "Return val wider than 64bits not supported";
-			return;
+			return nullptr;
 		}
 		function_to_call_invoke_node->setRet(0, function_to_call_return_val_reg);
 
@@ -529,9 +540,9 @@ namespace lua::memory
 		size_t size = code.codeSize();
 
 		// Allocate a virtual memory (executable).
-		static std::vector<uint8_t> jit_function_buffer(size);
+		auto jit_function_buffer = std::make_unique<uint8_t[]>(size);
 		DWORD old_protect;
-		VirtualProtect(jit_function_buffer.data(), size, PAGE_EXECUTE_READWRITE, &old_protect);
+		VirtualProtect(jit_function_buffer.get(), size, PAGE_EXECUTE_READWRITE, &old_protect);
 
 		// if multiple sections, resolve linkage (1 atm)
 		if (code.hasUnresolvedLinks())
@@ -540,13 +551,15 @@ namespace lua::memory
 		}
 
 		// Relocate to the base-address of the allocated memory.
-		code.relocateToBase((uintptr_t)jit_function_buffer.data());
-		code.copyFlattenedData(jit_function_buffer.data(), size);
+		code.relocateToBase((uintptr_t)jit_function_buffer.get());
+		code.copyFlattenedData(jit_function_buffer.get(), size);
 
 		LOG(VERBOSE) << "JIT Stub: " << log.data();
 
-		lua_pushcfunction(lua_state, (lua_CFunction)jit_function_buffer.data());
+		lua_pushcfunction(lua_state, (lua_CFunction)jit_function_buffer.get());
 		lua_setglobal(lua_state, jitted_lua_func_global_name.c_str());
+
+		return jit_function_buffer;
 	}
 
 	// Lua API: Function
@@ -581,6 +594,17 @@ namespace lua::memory
 	// ```
 	static std::string dynamic_call(const std::string& return_type, sol::table param_types_table, lua::memory::pointer& target_func_ptr_obj, sol::this_state state_)
 	{
+		big::lua_module* module = sol::state_view(state_)["!this"];
+		if (!module)
+		{
+			return "";
+		}
+
+		if (!target_func_ptr_obj.is_valid())
+		{
+			return "";
+		}
+
 		const auto target_func_ptr = target_func_ptr_obj.get_address();
 
 		const auto jitted_lua_func_global_name = get_jitted_lua_func_global_name(target_func_ptr);
@@ -610,13 +634,25 @@ namespace lua::memory
 			param_types.push_back(get_type_info_from_string(s));
 		}
 
-		jit_lua_binded_func(target_func_ptr,
-		    sig,
-		    asmjit::Arch::kHost,
-		    param_types,
-		    get_type_info_from_string(return_type),
-		    state_.L,
-		    jitted_lua_func_global_name);
+		if (!module->m_dynamic_call_jit_functions.contains(target_func_ptr))
+		{
+			auto jitted_func = jit_lua_binded_func(target_func_ptr,
+			    sig,
+			    asmjit::Arch::kHost,
+			    param_types,
+			    get_type_info_from_string(return_type),
+			    state_.L,
+			    jitted_lua_func_global_name);
+
+			if (jitted_func)
+			{
+				module->m_dynamic_call_jit_functions.emplace(target_func_ptr, std::move(jitted_func));
+			}
+			else
+			{
+				return "";
+			}
+		}
 
 		return jitted_lua_func_global_name;
 	}

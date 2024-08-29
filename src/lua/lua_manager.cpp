@@ -414,4 +414,20 @@ namespace big
 		LOG(FATAL) << state["!module_name"].get<std::string_view>() << ": " << error.what();
 		Logger::FlushQueue();
 	}
+
+	std::shared_ptr<lua::memory::runtime_func_t> lua_manager::get_existing_dynamic_hook(const uintptr_t target_func_ptr)
+	{
+		for (const auto& mod : m_modules)
+		{
+			for (const auto& dyn_hook : mod->m_dynamic_hooks)
+			{
+				if (dyn_hook->get_target_func_ptr() == target_func_ptr)
+				{
+					return dyn_hook;
+				}
+			}
+		}
+
+		return nullptr;
+	}
 }
