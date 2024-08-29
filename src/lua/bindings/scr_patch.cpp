@@ -27,7 +27,6 @@ namespace lua::scr_patch
 
 	scr_patch::~scr_patch()
 	{
-		disable();
 		big::g_script_patcher_service->remove_patch(m_patch_name);
 	}
 
