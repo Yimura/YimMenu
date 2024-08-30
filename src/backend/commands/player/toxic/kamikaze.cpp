@@ -98,7 +98,7 @@ namespace big
 				string::operations::to_lower(item_name_lower);
 				if (item_name_lower.find(args_lower) != std::string::npos)
 				{
-					result.push(rage::joaat(item.first));
+					result.push(rage::joaat(item.second.m_name));
 					return result;
 				}
 			}

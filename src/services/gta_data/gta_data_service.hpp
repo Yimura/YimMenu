@@ -14,8 +14,8 @@ namespace big
 		UPDATING
 	};
 
-	using ped_map     = std::map<std::string, ped_item>;
-	using vehicle_map = std::map<std::string, vehicle_item>;
+	using ped_map     = std::map<uint32_t, ped_item>;
+	using vehicle_map = std::map<uint32_t, vehicle_item>;
 	using string_vec  = std::vector<std::string>;
 
 	class gta_data_service final
@@ -56,6 +56,11 @@ namespace big
 		std::map<std::string, weapon_component>& weapon_components()
 		{
 			return m_weapons_cache.weapon_components;
+		}
+
+		std::string get_vehicle_full_name(vehicle_item veh);
+		{
+			return std::format("{} {} {}", veh.m_vehicle_class, veh.m_display_manufacturer, veh.m_display_name);
 		}
 
 	private:

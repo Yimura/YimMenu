@@ -206,25 +206,15 @@ namespace big
 
 		if (info->get_model_type() == eModelType::Vehicle)
 		{
-			for (auto& [name, data] : g_gta_data_service.vehicles())
-			{
-				if (data.m_hash == model)
-				{
-					model_str = name.data();
-					break;
-				}
-			}
+			auto& vehicles = g_gta_data_service.vehicles();
+			if(auto it = vehicles.find(model); it != vehicles.end())
+				model_str = it->second.m_name;
 		}
 		else if (info->get_model_type() == eModelType::Ped)
 		{
-			for (auto& [name, data] : g_gta_data_service.peds())
-			{
-				if (data.m_hash == model)
-				{
-					model_str = name.data();
-					break;
-				}
-			}
+			auto& peds = g_gta_data_service.peds();
+			if(auto it = peds.find(model); it != peds.end())
+				model_str = it->second.m_name;
 		}
 
 		if (!model_str)

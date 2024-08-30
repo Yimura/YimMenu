@@ -72,17 +72,17 @@ namespace big
 	// innefficient getters, don't care to fix right now
 	const ped_item& gta_data_service::ped_by_hash(uint32_t hash)
 	{
-		for (const auto& [name, ped] : m_peds)
-			if (ped.m_hash == hash)
-				return ped;
+		if(auto it = m_peds.find(hash); it != m_peds.end())
+			return it->second;
+
 		return gta_data_service::empty_ped;
 	}
 
 	const vehicle_item& gta_data_service::vehicle_by_hash(uint32_t hash)
 	{
-		for (const auto& [name, veh] : m_vehicles)
-			if (veh.m_hash == hash)
-				return veh;
+		if(auto it = m_vehicles.find(hash); it != m_vehicles.end())
+			return it->second;
+
 		return gta_data_service::empty_vehicle;
 	}
 
@@ -181,7 +181,7 @@ namespace big
 			const auto ped = cached_peds[i];
 
 			add_if_not_exists(m_ped_types, ped.m_ped_type);
-			m_peds.insert({ped.m_name, ped});
+			m_peds.insert({ped.m_hash, ped});
 		}
 
 		std::sort(m_ped_types.begin(), m_ped_types.end());
@@ -203,7 +203,7 @@ namespace big
 			const auto vehicle = cached_vehicles[i];
 
 			add_if_not_exists(m_vehicle_classes, vehicle.m_vehicle_class);
-			m_vehicles.insert({vehicle.m_name, vehicle});
+			m_vehicles.insert({vehicle.m_hash, vehicle});
 		}
 
 		std::sort(m_vehicle_classes.begin(), m_vehicle_classes.end());
