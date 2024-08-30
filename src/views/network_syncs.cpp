@@ -1,4 +1,4 @@
-#include "core/var/misc.hpp"
+#include "core/var/sync_lists.hpp"
 #include "services/players/player_service.hpp"
 #include "view.hpp"
 
@@ -19,12 +19,12 @@ namespace big
 	}
 
 	static const std::unordered_map<std::string_view, sync_list*> all_special_views = {
-	    {"ped", &g_misc_data.ped_sync_list},
-	    {"vehicle", &g_misc_data.vehicle_sync_list},
-	    {"object", &g_misc_data.object_sync_list},
-	    {"pickup", &g_misc_data.pickup_sync_list},
-	    {"explosion", &g_misc_data.explosion_sync_list},
-	    {"ptfx", &g_misc_data.ptfx_sync_list},
+	    {"ped", &g_sync_lists.peds},
+	    {"vehicle", &g_sync_lists.vehicles},
+	    {"object", &g_sync_lists.objects},
+	    {"pickup", &g_sync_lists.pickups},
+	    {"explosion", &g_sync_lists.explosions},
+	    {"ptfx", &g_sync_lists.ptfxs},
 	};
 
 	void view::network_syncs()

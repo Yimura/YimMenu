@@ -1,5 +1,5 @@
 #include "core/data/bullet_impact_types.hpp"
-#include "core/var/misc.hpp"
+#include "core/var/sync_lists.hpp"
 #include "fiber_pool.hpp"
 #include "gta/enums.hpp"
 #include "gta/net_game_event.hpp"
@@ -399,7 +399,7 @@ namespace big
 		if (plyr)
 		{
 			auto exp_type_itr = BULLET_IMPACTS.find(explosionType);
-			g_misc_data.explosion_sync_list.add_sync_data_to_list(plyr,
+			g_sync_lists.explosions.add_sync_data(plyr,
 			    std::format("(Dist- {}, {})",
 			        math::distance_between_vectors(*plyr->get_ped()->get_position(), {posX, posY, posZ}),
 			        exp_type_itr != BULLET_IMPACTS.end() ? exp_type_itr->second : "?"));

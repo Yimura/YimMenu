@@ -169,7 +169,7 @@ namespace big
 		            },
 		        },
 		    },
-			{
+		    {
 		        TAB_DECL(NETWORK_SYNCS),
 		            view::network_syncs
 		        },

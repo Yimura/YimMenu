@@ -159,7 +159,7 @@ namespace big
 			    ImGui::Checkbox("VIEW_PLAYER_INFO_BLOCK_CLONE_CREATE"_T.data(), &g_player_service->get_selected()->block_clone_create);
 			    ImGui::Checkbox("VIEW_PLAYER_INFO_BLOCK_CLONE_SYNC"_T.data(), &g_player_service->get_selected()->block_clone_sync);
 			    ImGui::Checkbox("VIEW_PLAYER_INFO_BLOCK_NETWORK_EVENTS"_T.data(), &g_player_service->get_selected()->block_net_events);
-				ImGui::Checkbox("VIEW_PLAYER_INFO_BLOCK_PTFX_EVENTS"_T.data(), &g_player_service->get_selected()->block_ptfx);
+			    ImGui::Checkbox("VIEW_PLAYER_INFO_BLOCK_PTFX_EVENTS"_T.data(), &g_player_service->get_selected()->block_ptfx);
 			    ImGui::Checkbox("VIEW_PLAYER_INFO_LOG_CLONES"_T.data(), &g_player_service->get_selected()->log_clones);
 
 			    ImGui::Separator();
@@ -248,7 +248,7 @@ namespace big
 				if (CVehicleModelInfo* vehicle_model_info = static_cast<CVehicleModelInfo*>(vehicle->m_model_info))
 				{
 					auto vehicle_item = g_gta_data_service.vehicles()[vehicle_model_info->m_hash];
-					vehicle_name = g_gta_data_service.get_vehicle_full_name(vehicle_item);
+					vehicle_name      = g_gta_data_service.get_vehicle_full_name(vehicle_item);
 				}
 
 				if (veh_damage_bits & (uint32_t)eEntityProofs::GOD)
