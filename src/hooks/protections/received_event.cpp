@@ -1,4 +1,5 @@
 #include "core/data/bullet_impact_types.hpp"
+#include "core/var/misc.hpp"
 #include "fiber_pool.hpp"
 #include "gta/enums.hpp"
 #include "gta/net_game_event.hpp"
@@ -395,27 +396,13 @@ namespace big
 			return;
 		}
 
-		// logs all type of explosion including owned one, fire, water hydrant etc, one without damage but camerashake, npcs shooting explosive ammo from planes from source client etc
-		if (g.debug.logs.explosion_event && plyr)
+		if (plyr)
 		{
-			static player_ptr last_exp_player  = nullptr;
-			static eExplosionTag last_exp_type = eExplosionTag::DONTCARE;
-			std::chrono::system_clock::time_point last_exp_time{};
-
-			auto time_now = std::chrono::system_clock::now();
-			if (last_exp_player != plyr || last_exp_type != explosionType || (time_now - last_exp_time < 1s))
-			{
-				auto exp_type_itr = BULLET_IMPACTS.find(explosionType);
-				LOGF(WARNING,
-				    "EXPLOSION_EVENT from {} (Distance- {} Type- {})",
-				    player->get_name(),
-				    math::distance_between_vectors(*plyr->get_ped()->get_position(), {posX, posY, posZ}),
-				    exp_type_itr != BULLET_IMPACTS.end() ? exp_type_itr->second : "?");
-			}
-
-			last_exp_player = plyr;
-			last_exp_type   = explosionType;
-			last_exp_time   = time_now;
+			auto exp_type_itr = BULLET_IMPACTS.find(explosionType);
+			g_misc_data.explosion_sync_list.add_sync_data_to_list(plyr,
+			    std::format("(Dist- {}, {})",
+			        math::distance_between_vectors(*plyr->get_ped()->get_position(), {posX, posY, posZ}),
+			        exp_type_itr != BULLET_IMPACTS.end() ? exp_type_itr->second : "?"));
 		}
 
 		if (g.session.explosion_karma && g_local_player

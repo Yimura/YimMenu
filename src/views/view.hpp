@@ -78,6 +78,7 @@ namespace big
 		static void gta_cache();
 		static void lua_scripts();
 		static void vfx();
+		static void network_syncs();
 
 		static void onboarding();
 

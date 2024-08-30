@@ -58,6 +58,8 @@ namespace big
 		TRANSLATION_SETTINGS,
 		PROXY_SETTINGS,
 		DEBUG,
+		
+		NETWORK_SYNCS,
 
 		PLAYER,
 
@@ -165,6 +167,11 @@ namespace big
 						{TAB_DECL(PROXY_SETTINGS), view::proxy_settings}},
 						{TAB_DECL(DEBUG), nullptr}},
 		            },
+		        },
+		    },
+			{
+		        TAB_DECL(NETWORK_SYNCS),
+		            view::network_syncs
 		        },
 		    },
 		    {

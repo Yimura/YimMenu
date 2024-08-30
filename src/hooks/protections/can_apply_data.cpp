@@ -70,6 +70,7 @@
 #include "util/sync_trees.hpp"
 #include "vehicle/CTrainConfig.hpp"
 #include "vehicle/CVehicleModelInfo.hpp"
+#include "core/var/misc.hpp"
 
 
 namespace big
@@ -1205,6 +1206,10 @@ namespace big
 
 				veh_creation_model = creation_node->m_model;
 
+				auto& vehs = g_gta_data_service.vehicles();
+				auto it    = vehs.find(creation_node->m_model);
+				g_misc_data.vehicle_sync_list.add_sync_data_to_list(sender_plyr, (it != vehs.end() ? g_gta_data_service.get_vehicle_full_name(it->second) : "?"));
+
 				break;
 			}
 			case sync_node_id("CDoorCreationDataNode"):
@@ -1235,6 +1240,8 @@ namespace big
 						return true;
 					}
 				}
+
+				g_misc_data.pickup_sync_list.add_sync_data_to_list(sender_plyr, "");
 				break;
 			}
 			case sync_node_id("CPhysicalAttachDataNode"):
@@ -1289,6 +1296,12 @@ namespace big
 					notify::crash_blocked(sender, "invalid ped prop model");
 					return true;
 				}
+
+				auto& peds = g_gta_data_service.peds();
+				auto it    = peds.find(creation_node->m_model);
+				g_misc_data.ped_sync_list.add_sync_data_to_list(sender_plyr,
+				    std::format("{}, {}", it != peds.end() ? it->second.m_name : "?", it != peds.end() ? it->second.m_ped_type : "?"));
+
 				break;
 			}
 			case sync_node_id("CPedAttachDataNode"):
@@ -1318,6 +1331,8 @@ namespace big
 					notify::crash_blocked(sender, "invalid object model");
 					return true;
 				}
+
+				g_misc_data.object_sync_list.add_sync_data_to_list(sender_plyr, std::to_string(creation_node->m_model));
 				break;
 			}
 			case sync_node_id("CPlayerAppearanceDataNode"):
