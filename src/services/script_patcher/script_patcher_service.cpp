@@ -87,11 +87,13 @@ namespace big
 
 	void script_patcher_service::on_script_load(rage::scrProgram* program)
 	{
-		if (get_data_for_script(program->m_name_hash) == nullptr && does_script_have_patches(program->m_name_hash))
-		{
+		if (!does_script_have_patches(program->m_name_hash))
+			return;
+
+		if (get_data_for_script(program->m_name_hash) == nullptr)
 			create_data_for_script(program);
-			update_all_patches_for_script(program->m_name_hash);
-		}
+
+		update_all_patches_for_script(program->m_name_hash);
 	}
 
 	uint8_t** script_patcher_service::get_script_bytecode(rage::joaat_t script)
