@@ -55,7 +55,7 @@ namespace big
 
 			stack[ctx.m_stack_pointer++] = 0;
 			ctx.m_instruction_pointer    = ip;
-			ctx.m_state                  = rage::eThreadState::idle;
+			ctx.m_state                  = rage::eThreadState::running;
 
 			g_pointers->m_gta.m_script_vm(stack, g_pointers->m_gta.m_script_globals, program, &ctx);
 

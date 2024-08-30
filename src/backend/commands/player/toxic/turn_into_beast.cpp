@@ -117,7 +117,7 @@ namespace big
 			if (!stack || !net_component)
 				return;
 
-			thread->m_context.m_state = rage::eThreadState::unk_3;
+			thread->m_context.m_state = rage::eThreadState::paused;
 			g.m_hunt_the_beast_thread = thread;
 
 			for (int i = 0; i < 15; i++)

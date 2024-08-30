@@ -369,7 +369,7 @@ namespace big
 								mp_weapons_thread_id = SYSTEM::START_NEW_SCRIPT_WITH_NAME_HASH(script_hash, 1424);
 								auto thread          = gta_util::find_script_thread_by_id(mp_weapons_thread_id);
 								if (thread)
-									thread->m_context.m_state = rage::eThreadState::unk_3;
+									thread->m_context.m_state = rage::eThreadState::paused;
 								else
 									LOG(FATAL) << "Failed to find MP_Weapons script!";
 								SCRIPT::SET_SCRIPT_WITH_NAME_HASH_AS_NO_LONGER_NEEDED(script_hash);

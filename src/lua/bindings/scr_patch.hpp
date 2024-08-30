@@ -2,7 +2,7 @@
 
 namespace lua::scr_patch
 {
-	struct scr_patch
+	class scr_patch
 	{
 		rage::joaat_t m_script;
 		std::string m_patch_name;
@@ -21,6 +21,7 @@ namespace lua::scr_patch
 		// Param: patch_: table: The bytes to be written into the script's bytecode.
 		// Adds a patch for the specified script.
 		explicit scr_patch(const std::string& script_name, const std::string& patch_name, const std::string& pattern, const int offset, sol::table patch_, sol::this_state state);
+		~scr_patch();
 
 		// Lua API: Function
 		// Class: scr_patch

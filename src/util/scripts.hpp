@@ -127,7 +127,7 @@ namespace big::scripts
 				return;
 			}
 
-			launcher->m_context.m_state = rage::eThreadState::unk_3; // prevent bad things from happening to the thread in the meantime
+			launcher->m_context.m_state = rage::eThreadState::paused; // prevent bad things from happening to the thread in the meantime
 
 			// 3) Remove players from that annoying waiting stage
 			if (check_players_in_state(launcher, 5))

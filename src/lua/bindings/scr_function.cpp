@@ -161,7 +161,7 @@ namespace lua::scr_function
 
 		stack[ctx.m_stack_pointer++] = 0;
 		ctx.m_instruction_pointer    = instruction_pointer;
-		ctx.m_state                  = rage::eThreadState::idle;
+		ctx.m_state                  = rage::eThreadState::running;
 
 		big::g_pointers->m_gta.m_script_vm(stack, big::g_pointers->m_gta.m_script_globals, program, &ctx);
 
@@ -313,7 +313,7 @@ namespace lua::scr_function
 
 		stack[ctx.m_stack_pointer++] = 0;
 		ctx.m_instruction_pointer    = instruction_pointer;
-		ctx.m_state                  = rage::eThreadState::idle;
+		ctx.m_state                  = rage::eThreadState::running;
 
 		big::g_pointers->m_gta.m_script_vm(stack, big::g_pointers->m_gta.m_script_globals, program, &ctx);
 

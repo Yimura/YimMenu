@@ -5,11 +5,8 @@
 namespace big::scr_globals
 {
 	static inline const script_global gsbd(2648938);
-	static inline const script_global gsbd_fm(1845281);
 	static inline const script_global gsbd_kicking(1877252);
 	static inline const script_global gsbd_fm_events(1916617);
-	static inline const script_global gsbd_block_c(2652592);
-	static inline const script_global gsbd_property_instances(1936863);
 
 	static inline const script_global globalplayer_bd(2657971);
 	static inline const script_global gpbd_fm_3(1887305);
@@ -18,11 +15,7 @@ namespace big::scr_globals
 
 	static inline const script_global launcher_global(2699171);
 
-	static inline const script_global sp(114370); // check flow_controller
-	static inline const script_global mission_definition(92160); // standard_global_init (66, "agency_heist1", "AH1", 230, 1, 1, -1, -1, 8192)
-
 	// creator globals usually remain the same after updates
-	static inline const script_global creator_job_metadata(4718592);
 	static inline const script_global terminate_creator(1574607); // NETWORK::NETWORK_BAIL(1, 0, 0); fm_*_creator
 	static inline const script_global switch_struct(1574633);
 	static inline const script_global mission_creator_radar_follows_camera(2621443);
@@ -60,8 +53,9 @@ namespace big::scr_globals
 
 	static inline const script_global reset_clothing(104077); // freemode 75, &iLocal_.*, 2\);
 
-
 	static inline const script_global gun_van(1949748); // return -29.532f, 6435.136f, 31.162f;
+
+	static inline const script_global disable_phone(20913);
 }
 
 namespace big::scr_locals

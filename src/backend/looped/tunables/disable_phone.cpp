@@ -10,12 +10,12 @@ namespace big
 
 		virtual void on_tick() override
 		{
-			*scr_globals::transaction_overlimit.as<PBOOL>() = TRUE;
+			*scr_globals::disable_phone.as<PBOOL>() = TRUE;
 		}
 
 		virtual void on_disable() override
 		{
-			*scr_globals::transaction_overlimit.as<PBOOL>() = FALSE;
+			*scr_globals::disable_phone.as<PBOOL>() = FALSE;
 		}
 	};
 
