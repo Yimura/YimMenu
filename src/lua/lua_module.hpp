@@ -3,8 +3,8 @@
 #include "bindings/gui/gui_element.hpp"
 #include "core/data/menu_event.hpp"
 #include "lua/bindings/runtime_func_t.hpp"
-#include "lua/bindings/type_info_t.hpp"
 #include "lua/bindings/scr_patch.hpp"
+#include "lua/bindings/type_info_t.hpp"
 #include "lua_patch.hpp"
 #include "services/gui/gui_service.hpp"
 
@@ -41,8 +41,12 @@ namespace big
 		std::unordered_map<menu_event, std::vector<sol::protected_function>> m_event_callbacks;
 		std::vector<void*> m_allocated_memory;
 
+		// lua modules own and share the runtime_func_t object, such as when no module reference it anymore the hook detour get cleaned up.
+		std::vector<std::shared_ptr<lua::memory::runtime_func_t>> m_dynamic_hooks;
 		std::unordered_map<uintptr_t, std::vector<sol::protected_function>> m_dynamic_hook_pre_callbacks;
 		std::unordered_map<uintptr_t, std::vector<sol::protected_function>> m_dynamic_hook_post_callbacks;
+
+		std::unordered_map<uintptr_t, std::unique_ptr<uint8_t[]>> m_dynamic_call_jit_functions;
 
 		lua_module(const std::filesystem::path& module_path, folder& scripts_folder, bool disabled = false);
 		~lua_module();

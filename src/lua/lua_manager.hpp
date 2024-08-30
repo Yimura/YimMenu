@@ -1,4 +1,5 @@
 #pragma once
+#include "bindings/runtime_func_t.hpp"
 #include "lua_module.hpp"
 
 namespace big
@@ -42,6 +43,9 @@ namespace big
 		{
 			return m_scripts_config_folder;
 		}
+
+		// non owning map
+		std::unordered_map<uintptr_t, lua::memory::runtime_func_t*> m_target_func_ptr_to_dynamic_hook;
 
 		std::weak_ptr<lua_module> get_module(rage::joaat_t module_id);
 		std::weak_ptr<lua_module> get_disabled_module(rage::joaat_t module_id);
@@ -100,6 +104,8 @@ namespace big
 			if constexpr (!std::is_void_v<Return>)
 				return std::nullopt;
 		}
+
+		std::shared_ptr<lua::memory::runtime_func_t> get_existing_dynamic_hook(const uintptr_t target_func_ptr);
 
 		inline void for_each_module(auto func)
 		{
