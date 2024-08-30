@@ -104,6 +104,7 @@ namespace big::protection
 	    {"ggsm_arcade"_J, script_block_state::BLOCK_ALWAYS}, // Space Monkey?
 	    {"puzzle"_J, script_block_state::BLOCK_ALWAYS},     // Qub3d?
 	    {"camhedz_arcade"_J, script_block_state::BLOCK_ALWAYS},
+	    {"fm_content_ufo_abduction"_J, script_block_state::BLOCK_ALWAYS},
 	    {"SCTV"_J, script_block_state::BLOCK_ALWAYS}}
 	};
 
