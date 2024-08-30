@@ -965,6 +965,16 @@ namespace big
 			buffer->Seek(0);
 			break;
 		}
+		case eNetworkEvents::NETWORK_PTFX_EVENT:
+		{
+			if (plyr && plyr->block_ptfx)
+			{
+				g_pointers->m_gta.m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
+				return;
+			}
+
+			break;
+		}
 		}
 
 		return g_hooking->get_original<received_event>()(event_manager, source_player, target_player, event_id, event_index, event_handled_bitset, buffer_size, buffer);
