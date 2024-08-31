@@ -1499,7 +1499,7 @@ namespace big
 				{
 					const auto migration_node = (CVehicleProximityMigrationDataNode*)(node);
 
-					if (!g_local_player->m_vehicle || !g_local_player->m_vehicle->m_net_object
+					if (g.protections.request_control && !g_local_player->m_vehicle || !g_local_player->m_vehicle->m_net_object
 					    || g_local_player->m_vehicle->m_net_object->m_object_id != object->m_object_id
 					    || !is_in_vehicle(g_local_player, g_local_player->m_vehicle))
 					{
