@@ -4,8 +4,11 @@ namespace big
 {
 	static inline void set_all_protections(bool state)
 	{
-		for (size_t i = (size_t)&g.protections; i <= (size_t) & (g.protections.kick_rejoin); i++)
-			*(bool*)i = state;
+		auto start = reinterpret_cast<bool*>(&g.protections);
+		auto end   = reinterpret_cast<bool*>(reinterpret_cast<std::byte*>(start) + sizeof(g.protections));
+
+		for (auto* i = start; i < end; ++i)
+			*i = state;
 	}
 
 	static inline void reset_protections()
