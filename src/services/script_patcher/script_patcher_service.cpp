@@ -70,6 +70,21 @@ namespace big
 		m_script_patches.push_back(std::move(patch));
 	}
 
+	void script_patcher_service::remove_patch(std::string_view patch_name)
+	{
+		for (auto it = m_script_patches.begin(); it != m_script_patches.end();)
+		{
+			if (it->get_name() == patch_name)
+			{
+				it = m_script_patches.erase(it);
+			}
+			else
+			{
+				++it;
+			}
+		}
+	}
+
 	void script_patcher_service::on_script_load(rage::scrProgram* program)
 	{
 		if (get_data_for_script(program->m_name_hash) == nullptr && does_script_have_patches(program->m_name_hash))
