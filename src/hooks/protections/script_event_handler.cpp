@@ -220,7 +220,7 @@ namespace big
 				return true;
 			}
 
-			if (g.protections.script_events.sound_spam && static_cast<eRemoteEvent>(args[3]) == eRemoteEvent::TSECommandSound)
+			if (g.protections.sound_spam && static_cast<eRemoteEvent>(args[3]) == eRemoteEvent::TSECommandSound)
 			{
 				if (!plyr || plyr->m_play_sound_rate_limit_tse.process())
 				{
@@ -286,7 +286,7 @@ namespace big
 		}
 		case eRemoteEvent::SoundSpam:
 		{
-			if (g.protections.script_events.sound_spam && (!plyr || plyr->m_invites_rate_limit.process()))
+			if (g.protections.sound_spam && (!plyr || plyr->m_invites_rate_limit.process()))
 			{
 				if (plyr->m_invites_rate_limit.exceeded_last_process())
 					g.reactions.sound_spam.process(plyr);

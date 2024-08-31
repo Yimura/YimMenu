@@ -43,7 +43,7 @@ namespace big
 				g.reactions.turn_into_beast.process(plyr);
 		}
 
-		if ((array->m_array >= scr_globals::globalplayer_bd.as<uint8_t*>()
+		if (g.protections.remote_wanted_level && (array->m_array >= scr_globals::globalplayer_bd.as<uint8_t*>()
 		        && array->m_array <= scr_globals::globalplayer_bd.at(31, sizeof(GlobalPlayerBDEntry) / 8).as<uint8_t*>())
 		    && scr_globals::globalplayer_bd.as<GlobalPlayerBD*>()->Entries[sender->m_player_id].RemoteWantedLevelPlayer != -1)
 		{

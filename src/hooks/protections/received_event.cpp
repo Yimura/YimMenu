@@ -499,7 +499,7 @@ namespace big
 			return false;
 		}();
 
-		if (should_block)
+		if (g.protections.sound_spam && should_block)
 		{
 			LOGF(stream::net_events, WARNING, "Blocked NETWORK_PLAY_SOUND_EVENT from {} with is_entity: {}, ref_hash: {:X}, sound_hash: {:X}, sound_id: {}, script_hash: {:X}", plyr->get_name(), is_entity ? "T" : "F", ref_hash, sound_hash, sound_id, script_hash);
 		}
@@ -626,7 +626,8 @@ namespace big
 		{
 			int net_id = buffer->Read<int>(13);
 
-			if (g_local_player && g_local_player->m_net_object && g_local_player->m_net_object->m_object_id == net_id)
+			if (g.protections.clear_ped_tasks && g_local_player && g_local_player->m_net_object
+			    && g_local_player->m_net_object->m_object_id == net_id)
 			{
 				g_pointers->m_gta.m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
 				g.reactions.clear_ped_tasks.process(plyr);
@@ -640,7 +641,7 @@ namespace big
 		{
 			int net_id = buffer->Read<int>(13);
 
-			if (g_local_player && g_local_player->m_net_object && g_local_player->m_net_object->m_object_id == net_id)
+			if (g.protections.ragdoll && g_local_player && g_local_player->m_net_object && g_local_player->m_net_object->m_object_id == net_id)
 			{
 				g_pointers->m_gta.m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
 				g.reactions.remote_ragdoll.process(plyr);
@@ -681,8 +682,8 @@ namespace big
 		case eNetworkEvents::REQUEST_CONTROL_EVENT:
 		{
 			auto net_id = buffer->Read<int>(13);
-			if (g_local_player && g_local_player->m_vehicle && g_local_player->m_vehicle->m_net_object
-			    && g_local_player->m_vehicle->m_net_object->m_object_id == net_id) //The request is for a vehicle we are currently in.
+			if (g.protections.request_control && g_local_player && g_local_player->m_vehicle
+			    && g_local_player->m_vehicle->m_net_object && g_local_player->m_vehicle->m_net_object->m_object_id == net_id) //The request is for a vehicle we are currently in.
 			{
 				Vehicle personal_vehicle = mobile::mechanic::get_personal_vehicle();
 				Vehicle veh              = g_pointers->m_gta.m_ptr_to_handle(g_local_player->m_vehicle);
@@ -848,23 +849,25 @@ namespace big
 		}
 		case eNetworkEvents::NETWORK_PLAY_SOUND_EVENT:
 		{
-			if (plyr && plyr->m_play_sound_rate_limit.process())
+			if (g.protections.sound_spam)
 			{
-				if (plyr->m_play_sound_rate_limit.exceeded_last_process())
+				if (plyr && plyr->m_play_sound_rate_limit.process())
 				{
-					//notify::crash_blocked(source_player, "sound spam"); --- false positives
+					if (plyr->m_play_sound_rate_limit.exceeded_last_process())
+					{
+						//notify::crash_blocked(source_player, "sound spam"); --- false positives
+					}
+					g_pointers->m_gta.m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
+					return;
 				}
-				g_pointers->m_gta.m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
-				return;
-			}
 
-			if (plyr && scan_play_sound_event(plyr, *buffer))
-			{
-				g.reactions.sound_spam.process(plyr);
-				g_pointers->m_gta.m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
-				return;
+				if (plyr && scan_play_sound_event(plyr, *buffer))
+				{
+					g.reactions.sound_spam.process(plyr);
+					g_pointers->m_gta.m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
+					return;
+				}
 			}
-
 			break;
 		}
 		case eNetworkEvents::EXPLOSION_EVENT:
@@ -891,7 +894,7 @@ namespace big
 		{
 			int16_t net_id = buffer->Read<int16_t>(13);
 
-			if (is_local_vehicle(net_id))
+			if (g.protections.vehicle_special_ability && is_local_vehicle(net_id))
 			{
 				g_pointers->m_gta.m_send_event_ack(event_manager, source_player, target_player, event_index, event_handled_bitset);
 				return;

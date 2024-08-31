@@ -292,7 +292,6 @@ namespace big
 				bool rotate_cam                 = true;
 				bool send_to_cutscene           = true;
 				bool send_to_location           = true;
-				bool sound_spam                 = true;
 				bool spectate                   = true;
 				bool give_collectible           = true;
 				bool vehicle_kick               = true;
@@ -309,6 +308,12 @@ namespace big
 			bool force_relay_connections = false;
 			bool stop_traffic            = true;
 			bool desync_kick             = false;
+			bool remote_wanted_level     = true;
+			bool clear_ped_tasks         = true;
+			bool ragdoll                 = true;
+			bool request_control         = true;
+			bool vehicle_special_ability = true;
+			bool sound_spam              = true;		
 
 			NLOHMANN_DEFINE_TYPE_INTRUSIVE(protections, script_events, rid_join, receive_pickup, admin_check, kick_rejoin, force_relay_connections, stop_traffic, desync_kick)
 		} protections{};
