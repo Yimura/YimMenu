@@ -3,40 +3,27 @@
 #include "pointers.hpp"
 
 #include <imgui_internal.h>
-
-#pragma pack(push, 8)
-class InputMethodEditor
-{
-public:
-	uint32_t m_count; //0x0000
-	uint32_t m_selected_index; //0x0004
-	wchar_t m_composition_string[31]; //0x0008
-	wchar_t m_candidate_list[9][31]; //0x0046
-	bool m_active; //0x0274
-	char pad_0275[3]; //0x0275
-}; //Size: 0x0278
-static_assert(sizeof(InputMethodEditor) == 0x278);
-#pragma pack(pop)
+#include <misc/InputMethodEditor.hpp>
 
 namespace
 {
 	// https://github.com/ocornut/imgui/blob/864a2bf6b824f9c1329d8493386208d4b0fd311c/imgui_widgets.cpp#L3948
-	static bool STB_TEXTEDIT_INSERTCHARS(ImGuiInputTextState* obj, int pos, const ImWchar* new_text, int new_text_len)
+	static void insert_into_input_text(ImGuiInputTextState* obj, const ImWchar* new_text, int new_text_len)
 	{
 		const bool is_resizable = (obj->Flags & ImGuiInputTextFlags_CallbackResize) != 0;
+		const int pos           = obj->Stb.cursor;
 		const int text_len      = obj->CurLenW;
-		IM_ASSERT(pos <= text_len);
 
 		const int new_text_len_utf8 = ImTextCountUtf8BytesFromStr(new_text, new_text + new_text_len);
 		if (!is_resizable && (new_text_len_utf8 + obj->CurLenA + 1 > obj->BufCapacityA))
-			return false;
+			return;
 
 		// Grow internal buffer if needed
 		if (new_text_len + text_len + 1 > obj->TextW.Size)
 		{
 			if (!is_resizable)
-				return false;
-			IM_ASSERT(text_len < obj->TextW.Size);
+				return;
+
 			obj->TextW.resize(text_len + ImClamp(new_text_len * 4, 32, ImMax(256, new_text_len)) + 1);
 		}
 
@@ -50,7 +37,35 @@ namespace
 		obj->CurLenA += new_text_len_utf8;
 		obj->TextW[obj->CurLenW] = '\0';
 
-		return true;
+		obj->Stb.cursor += new_text_len;
+		obj->Stb.has_preferred_x = 0;
+
+		obj->CursorFollow = true;
+	}
+
+	static void char16_to_char(char* out, const char16_t* in)
+	{
+		while (*in)
+		{
+			char16_t c = *in++;
+
+			if (c < 0x80)
+			{
+				*out++ = static_cast<char>(c);
+			}
+			else if (c < 0x800)
+			{
+				*out++ = static_cast<char>(0xC0 | (c >> 6));
+				*out++ = static_cast<char>(0x80 | (c & 0x3F));
+			}
+			else
+			{
+				*out++ = static_cast<char>(0xE0 | (c >> 12));
+				*out++ = static_cast<char>(0x80 | ((c >> 6) & 0x3F));
+				*out++ = static_cast<char>(0x80 | (c & 0x3F));
+			}
+		}
+		*out = '\0';
 	}
 }
 
@@ -65,16 +80,10 @@ namespace big
 
 		auto context = ImmGetContext(g_pointers->m_hwnd);
 
-		wchar_t buf[31]{};
-		int len = ImmGetCompositionStringW(context, GCS_RESULTSTR, buf, sizeof(buf) - 1) / 2;
+		ImWchar buf[31]{};
+		int len = ImmGetCompositionStringW(context, GCS_RESULTSTR, buf, sizeof(buf) - 1) / sizeof(ImWchar);
 
-		if (STB_TEXTEDIT_INSERTCHARS(state, state->Stb.cursor, (ImWchar*)buf, len))
-		{
-			state->Stb.cursor += len;
-			state->Stb.has_preferred_x = 0;
-
-			state->CursorFollow = true;
-		}
+		insert_into_input_text(state, buf, len);
 
 		ImmReleaseContext(g_pointers->m_hwnd, context);
 	}
@@ -84,16 +93,15 @@ namespace big
 		if (!g_pointers->m_gta.m_ime->m_active)
 			return;
 
-		std::string text;
+		constexpr size_t buf_size = ARRAYSIZE(InputMethodEditor::m_composition_string) * 3;
+		char buf[buf_size];
+		char16_to_char(buf, g_pointers->m_gta.m_ime->m_composition_string);
 
-		char buf[62];
-		ImTextStrToUtf8(buf, sizeof(buf), (ImWchar*)g_pointers->m_gta.m_ime->m_composition_string, nullptr);
-
-		text += buf;
+		std::string text = buf;
 
 		for (uint32_t i = 0; i < g_pointers->m_gta.m_ime->m_count; ++i)
 		{
-			ImTextStrToUtf8(buf, sizeof(buf), (ImWchar*)g_pointers->m_gta.m_ime->m_candidate_list[i], nullptr);
+			char16_to_char(buf, g_pointers->m_gta.m_ime->m_candidate_list[i]);
 
 			text += '\n';
 			text += (i == g_pointers->m_gta.m_ime->m_selected_index ? '>' : ' ');
