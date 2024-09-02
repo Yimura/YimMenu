@@ -289,6 +289,23 @@ namespace big
 			return std::find(arr.begin(), arr.end(), val) != arr.end();
 		};
 
+		constexpr Hash script_hash = "MP_Weapons"_J;
+		if (!SCRIPT::GET_NUMBER_OF_THREADS_RUNNING_THE_SCRIPT_WITH_THIS_HASH(script_hash))
+		{
+			while (!SCRIPT::HAS_SCRIPT_WITH_NAME_HASH_LOADED(script_hash))
+			{
+				SCRIPT::REQUEST_SCRIPT_WITH_NAME_HASH(script_hash);
+				script::get_current()->yield(10ms);
+			}
+			mp_weapons_thread_id = SYSTEM::START_NEW_SCRIPT_WITH_NAME_HASH(script_hash, 1424);
+			auto thread          = gta_util::find_script_thread_by_id(mp_weapons_thread_id);
+			if (thread)
+				thread->m_context.m_state = rage::eThreadState::paused;
+			else
+				LOG(FATAL) << "Failed to find MP_Weapons script!";
+			SCRIPT::SET_SCRIPT_WITH_NAME_HASH_AS_NO_LONGER_NEEDED(script_hash);
+		}
+
 		LOG(INFO) << "Rebuilding cache started...";
 		yim_fipackfile::add_wrapper_call_back([&](yim_fipackfile& rpf_wrapper, std::filesystem::path path) -> void {
 			if (path.filename() == "vehicles.meta")
@@ -358,23 +375,6 @@ namespace big
 
 						if (LocName.ends_with("INVALID"))
 						{
-							constexpr Hash script_hash = "MP_Weapons"_J;
-							if (!SCRIPT::GET_NUMBER_OF_THREADS_RUNNING_THE_SCRIPT_WITH_THIS_HASH(script_hash))
-							{
-								while (!SCRIPT::HAS_SCRIPT_WITH_NAME_HASH_LOADED(script_hash))
-								{
-									SCRIPT::REQUEST_SCRIPT_WITH_NAME_HASH(script_hash);
-									script::get_current()->yield(10ms);
-								}
-								mp_weapons_thread_id = SYSTEM::START_NEW_SCRIPT_WITH_NAME_HASH(script_hash, 1424);
-								auto thread          = gta_util::find_script_thread_by_id(mp_weapons_thread_id);
-								if (thread)
-									thread->m_context.m_state = rage::eThreadState::paused;
-								else
-									LOG(FATAL) << "Failed to find MP_Weapons script!";
-								SCRIPT::SET_SCRIPT_WITH_NAME_HASH_AS_NO_LONGER_NEEDED(script_hash);
-							}
-
 							Hash weapon_hash = 0;
 							if (name.starts_with("COMPONENT_KNIFE"))
 								weapon_hash = "WEAPON_KNIFE"_J;
@@ -432,10 +432,15 @@ namespace big
 						if (std::strcmp(human_name_hash, "WT_INVALID") == 0 || std::strcmp(human_name_hash, "WT_VEHMINE") == 0)
 							continue;
 
+						std::string desc = scr_functions::get_weapon_desc_string.call<const char*>(hash, false);
+						if (desc.ends_with("INVALID"))
+							desc.clear();
+
 						auto weapon = weapon_item_parsed{};
 
-						weapon.m_name = name;
+						weapon.m_name         = name;
 						weapon.m_display_name = human_name_hash;
+						weapon.m_display_desc = desc;
 						weapon.rpf_file_type  = determine_file_type(file_str, rpf_wrapper.get_name());
 
 						auto weapon_flags = std::string(item.child("WeaponFlags").text().as_string());
@@ -568,6 +573,9 @@ namespace big
 			for (auto& item : weapons)
 			{
 				item.second.m_display_name = HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(item.second.m_display_name.c_str());
+				item.second.m_display_desc = HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(item.second.m_display_desc.c_str());
+				if (item.second.m_display_desc == "NULL")
+					item.second.m_display_desc.clear();
 			}
 			for (auto& item : weapon_components)
 			{

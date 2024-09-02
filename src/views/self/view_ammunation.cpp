@@ -106,6 +106,14 @@ namespace big
 						selected_attachment_hash = 0;
 						selected_tint            = 0;
 					}
+					if (ImGui::IsItemHovered() && !weapon.second.m_display_desc.empty())
+					{
+						ImGui::BeginTooltip();
+						ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35);
+						ImGui::TextUnformatted(weapon.second.m_display_desc.c_str());
+						ImGui::PopTextWrapPos();
+						ImGui::EndTooltip();
+					}
 				}
 			}
 			if (!found_match)
@@ -141,7 +149,7 @@ namespace big
 						selected_attachment      = attachment_name;
 						selected_attachment_hash = attachment_hash;
 					}
-					if (ImGui::IsItemHovered() && attachment_component.m_display_desc != "NULL")
+					if (ImGui::IsItemHovered() && !attachment_component.m_display_desc.empty())
 					{
 						ImGui::SetTooltip(attachment_component.m_display_desc.c_str());
 					}
