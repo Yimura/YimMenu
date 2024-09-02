@@ -57,7 +57,7 @@ namespace big::blip
 		if (get_objective_location_iteration(location, {BlipIcons::RADAR_LEVEL}, {BlipColors::Green, BlipColors::Blue}))
 			return true;
 
-		static const auto blip_icons = {BlipIcons::RADAR_OBJECTIVE_BLUE, BlipIcons::RADAR_OBJECTIVE_GREEN, BlipIcons::RADAR_OBJECTIVE_RED, BlipIcons::RADAR_OBJECTIVE_YELLOW, BlipIcons::RADAR_CRATEDROP, BlipIcons::RADAR_TARGET_A, BlipIcons::RADAR_TARGET_B, BlipIcons::RADAR_TARGET_C, BlipIcons::RADAR_TARGET_D, BlipIcons::RADAR_TARGET_E, BlipIcons::RADAR_TARGET_F, BlipIcons::RADAR_TARGET_G, BlipIcons::RADAR_TARGET_H, BlipIcons::RADAR_SM_CARGO, BlipIcons::RADAR_BAT_CARGO, BlipIcons::RADAR_DEAD_DROP_PACKAGE};
+		static const auto blip_icons = {BlipIcons::RADAR_OBJECTIVE_BLUE, BlipIcons::RADAR_OBJECTIVE_GREEN, BlipIcons::RADAR_OBJECTIVE_RED, BlipIcons::RADAR_OBJECTIVE_YELLOW, BlipIcons::RADAR_CRATEDROP, BlipIcons::RADAR_TARGET_A, BlipIcons::RADAR_TARGET_B, BlipIcons::RADAR_TARGET_C, BlipIcons::RADAR_TARGET_D, BlipIcons::RADAR_TARGET_E, BlipIcons::RADAR_TARGET_F, BlipIcons::RADAR_TARGET_G, BlipIcons::RADAR_TARGET_H, BlipIcons::RADAR_SM_CARGO, BlipIcons::RADAR_BAT_CARGO};
 		for (const auto icon : blip_icons)
 		{
 			if (get_blip_location_from_offset(location, (int)icon))
