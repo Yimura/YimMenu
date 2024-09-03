@@ -2807,3 +2807,11 @@ enum HudColors : int //https://docs.fivem.net/docs/game-references/hud-colors/
 	HUD_COLOUR_PLACEHOLDER_10,
 	HUD_COLOUR_JUNK_ENERGY
 };
+
+enum KeyboardState : int32_t
+{
+	INVALID = -1,
+	ACTIVE,
+	COMPLETED,
+	CANCELED
+};

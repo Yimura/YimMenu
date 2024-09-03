@@ -579,7 +579,7 @@ namespace big
 
 	void view::cmd_executor()
 	{
-		if (!g.cmd_executor.enabled)
+		if (!g.cmd_executor.enabled || g_pointers->m_gta.m_get_last_keyboard_state() == KeyboardState::ACTIVE)
 			return;
 
 		float screen_x = (float)*g_pointers->m_gta.m_resolution_x;

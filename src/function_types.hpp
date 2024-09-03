@@ -228,4 +228,6 @@ namespace big::functions
 
 	using is_ped_enemies_with = bool (*)(CPedIntelligence* from, CPed* target, bool check_relationship, bool skip_friend_check, bool skip_combat_task_check);
 	using can_do_damage_to_ped = bool (*)(CPed* from, CWeaponInfo* current_weapon, CPed* target);
+
+	using get_last_keyboard_state = int32_t (*)();
 }

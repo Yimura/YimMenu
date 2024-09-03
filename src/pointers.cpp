@@ -1968,6 +1968,15 @@ namespace big
                 g_pointers->m_gta.m_allow_keyboard_layout_change = ptr.sub(4).rip().as<bool*>();
                 g_pointers->m_gta.m_ime = ptr.add(44).rip().sub(0x278 + 0x8).as<InputMethodEditor*>();
             }
+        },
+        // Get Last Keyboard State
+        {
+            "GLKS",
+            "33 C9 38 0D ? ? ? ? 74 ? 8B 05 ? ? ? ? 38 0D",
+            [](memory::handle ptr)
+            {
+                g_pointers->m_gta.m_get_last_keyboard_state = ptr.as<functions::get_last_keyboard_state>();
+            }
         }
         >(); // don't leave a trailing comma at the end
 

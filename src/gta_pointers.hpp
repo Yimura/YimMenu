@@ -415,6 +415,8 @@ namespace big
 
 		bool* m_allow_keyboard_layout_change;
 		InputMethodEditor* m_ime;
+
+		functions::get_last_keyboard_state m_get_last_keyboard_state;
 	};
 #pragma pack(pop)
 	static_assert(sizeof(gta_pointers) % 8 == 0, "Pointers are not properly aligned");
