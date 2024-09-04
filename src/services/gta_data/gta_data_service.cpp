@@ -271,19 +271,26 @@ namespace big
 
 	void gta_data_service::rebuild_cache()
 	{
+		static bool completed = false;
+
+		if (completed == true)
+		{
+			return;
+		}
+
 		using hash_array = std::vector<uint32_t>;
-		hash_array mapped_peds;
-		hash_array mapped_vehicles;
-		hash_array mapped_weapons;
-		hash_array mapped_components;
+		hash_array mapped_peds{};
+		hash_array mapped_vehicles{};
+		hash_array mapped_weapons{};
+		hash_array mapped_components{};
 
 		int mp_weapons_thread_id = 0;
 
-		std::vector<ped_item> peds;
-		std::vector<vehicle_item> vehicles;
+		std::vector<ped_item> peds{};
+		std::vector<vehicle_item> vehicles{};
 		//std::vector<weapon_item> weapons;
-		std::unordered_map<Hash, weapon_item_parsed> weapons;
-		std::vector<weapon_component> weapon_components;
+		std::unordered_map<Hash, weapon_item_parsed> weapons{};
+		std::vector<weapon_component> weapon_components{};
 
 		constexpr auto exists = [](const hash_array& arr, uint32_t val) -> bool {
 			return std::find(arr.begin(), arr.end(), val) != arr.end();
@@ -675,6 +682,8 @@ namespace big
 			LOG(INFO) << "Finished writing cache to disk.";
 
 			load_data();
+
+			completed = true; //Prevent repeat calls.
 		});
 	}
 }
