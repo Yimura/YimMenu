@@ -11,6 +11,7 @@ namespace big
 			static const char* options[]{"OFF"_T.data(), "ALL"_T.data(), "FILTERS"_T.data()};
 			ImGui::Combo("DEBUG_LOG_METRICS"_T.data(), (int*)&g.debug.logs.metric_logs, options, IM_ARRAYSIZE(options));
 			ImGui::Combo("VIEW_DEBUG_LOGS_LOG_PACKETS"_T.data(), (int*)&g.debug.logs.packet_logs, options, IM_ARRAYSIZE(options));
+			ImGui::Checkbox("DEBUG_LOG_HTTP_START_REQUESTS"_T.data(), &g.debug.logs.http_start_request_logs);
 			ImGui::Checkbox("DEBUG_LOG_NATIVE_SCRIPT_HOOKS"_T.data(), &g.debug.logs.script_hook_logs);
 
 			if (ImGui::TreeNode("DEBUG_LOG_TREE_SCRIPT_EVENT"_T.data()))
