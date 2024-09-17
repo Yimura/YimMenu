@@ -4,19 +4,19 @@
 
 namespace
 {
-	static std::array<std::uint32_t, 15> orig_hash;
+	static std::array<std::uint32_t, 16> orig_hash;
 
-	void store_data(std::array<std::uint32_t, 15>& data)
+	void store_data(std::array<std::uint32_t, 16>& data)
 	{
-		for (int i = 0; i < 15; i++)
+		for (int i = 0; i < 16; i++)
 		{
 			data[i] = (*big::g_pointers->m_gta.m_game_data_hash)->m_data[i];
 		}
 	}
 
-	void load_data(const std::array<std::uint32_t, 15>& data)
+	void load_data(const std::array<std::uint32_t, 16>& data)
 	{
-		for (int i = 0; i < 15; i++)
+		for (int i = 0; i < 16; i++)
 		{
 			(*big::g_pointers->m_gta.m_game_data_hash)->m_data[i] = data[i];
 		}

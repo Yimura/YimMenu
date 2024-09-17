@@ -731,7 +731,7 @@ namespace big
 			bool voice_chat_audio = false;
 
 			bool spoof_game_data_hash = false;
-			std::array<std::uint32_t, 15> game_data_hash{};
+			std::array<std::uint32_t, 16> game_data_hash{};
 			bool spoof_dlc_hash = false;
 			std::uint32_t dlc_hash;
 

@@ -747,7 +747,7 @@ namespace big
         // Serialize Join Request Message 2
         {
             "SJRM2",
-            "E8 ? ? ? ? 48 8D 8D 08 01 00 00 8A D8",
+            "E8 ? ? ? ? 48 8D 8D 18 01 00 00 8A D8",
             [](memory::handle ptr)
             {
                 g_pointers->m_gta.m_serialize_join_request_message_2 = ptr.add(1).rip().as<PVOID>();
@@ -1817,7 +1817,7 @@ namespace big
         // Session Request Patch
         {
             "SRP",
-            "48 8B BD 70 01 00 00 E9 FF 00 00 00",
+            "48 8B BD 80 01 00 00 E9 FF 00 00 00",
             [](memory::handle ptr)
             {
                 g_pointers->m_gta.m_session_request_patch = ptr.add(0x13).as<PVOID>();
