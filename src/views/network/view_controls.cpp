@@ -179,7 +179,9 @@ namespace big
 
 		if (g.session.spoof_host_token_type != 0)
 		{
+			ImGui::BeginDisabled();
 			ImGui::Checkbox("KICK_HOST_ON_JOIN"_T.data(), &g.session.kick_host_when_forcing_host);
+			ImGui::EndDisabled();
 
 			if (g.session.kick_host_when_forcing_host)
 			{
