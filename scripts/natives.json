@@ -50884,6 +50884,16 @@
 				"_GET_ONLINE_VERSION"
 			]
 		},
+		"0x7F7E8401F81CB65B": {
+			"name": "_GET_BATTLEYE_INIT_STATE",
+			"jhash": "",
+			"comment": "",
+			"params": [],
+			"return_type": "int",
+			"build": "3323",
+			"old_names": [
+			]
+		},
 		"0x054354A99211EB96": {
 			"name": "NETWORK_IS_SIGNED_IN",
 			"jhash": "0xADD0B40F",

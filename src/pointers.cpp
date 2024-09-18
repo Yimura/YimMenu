@@ -1977,6 +1977,15 @@ namespace big
             {
                 g_pointers->m_gta.m_get_last_keyboard_state = ptr.as<functions::get_last_keyboard_state>();
             }
+        },
+        // Network Can Access Multiplayer
+        {
+            "NCAM",
+            "E8 ? ? ? ? 8B 54 24 30 89 13",
+            [](memory::handle ptr)
+            {
+                g_pointers->m_gta.m_network_can_access_multiplayer = ptr.add(1).rip().as<PVOID>();
+            }
         }
         >(); // don't leave a trailing comma at the end
 

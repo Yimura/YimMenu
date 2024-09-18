@@ -138,6 +138,9 @@ namespace big
 		{
 			for (int i = 0; i < token_spoof_types.size(); i++)
 			{
+				if (i == 0)
+					ImGui::BeginDisabled(); // this is now required due to battleye
+
 				if (ImGui::Selectable(g_translation_service.get_translation(token_spoof_types[i]).data(), i == g.session.spoof_host_token_type))
 				{
 					g.session.spoof_host_token_type = i;
@@ -145,6 +148,9 @@ namespace big
 						g.session.spoof_host_token_dirty = true;
 					}); // this part gets a bit racy so we're setting it in a fiber pool
 				}
+
+				if (i == 0)
+					ImGui::EndDisabled();
 
 				if (i == g.session.spoof_host_token_type)
 				{

@@ -35,6 +35,8 @@ namespace big
 
 		// TODO: the logic is incorrect
 
+		attributes->m_param_values[0] = -0x22F37A9E;
+
 		if (g.spoofing.spoof_session_bad_sport_status == 1)
 			attributes->m_param_values[0] |= (1 << 14); // Bad Sport
 

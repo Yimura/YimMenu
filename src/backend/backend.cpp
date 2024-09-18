@@ -15,10 +15,31 @@
 #include "services/vehicle/xml_vehicles_service.hpp"
 #include "services/xml_maps/xml_map_service.hpp"
 
+#include <game_files/GameDataHash.hpp>
+
 namespace big
 {
+	void bypass_battleye()
+	{
+		auto old = g.session.spoof_host_token_type;
+		g.session.spoof_host_token_type = std::max(old, 1);
+		if (old != g.session.spoof_host_token_type)
+			g.session.spoof_host_token_dirty = true;
+		g.session.kick_host_when_forcing_host = true;
+
+		constexpr std::array<std::uint32_t, 16> valid_hashes = {1410389794, 967, 1523678325, 472, 0, 0, 1323039495, 0, 0, 1731098795, 2256610353, 17956, 414639110, 307143837, 3443181821, 0};
+
+		if (auto hashes = *g_pointers->m_gta.m_game_data_hash)
+		{
+			for (int i = 0; i < valid_hashes.size(); i++)
+				hashes->m_data[i] = valid_hashes[i];
+		}
+	}
+
 	void backend::loop()
 	{
+		bypass_battleye();
+
 		for (auto& command : g_bool_commands)
 			command->refresh();
 
@@ -32,6 +53,8 @@ namespace big
 
 		while (g_running)
 		{
+			bypass_battleye();
+
 			looped::system_self_globals();
 			looped::system_update_pointers();
 			looped::system_update_desync_kick();

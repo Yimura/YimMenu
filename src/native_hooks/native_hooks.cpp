@@ -98,6 +98,7 @@ namespace big
 		add_native_detour(NativeIndex::UNREGISTER_SCRIPT_VARIABLE, all_scripts::DO_NOTHING);
 		add_native_detour(NativeIndex::FORCE_CHECK_SCRIPT_VARIABLES, all_scripts::DO_NOTHING);
 		add_native_detour(NativeIndex::NETWORK_CONCEAL_PLAYER, all_scripts::NETWORK_CONCEAL_PLAYER);
+		add_native_detour(NativeIndex::_GET_BATTLEYE_INIT_STATE, all_scripts::RETURN_FALSE); 
 
 		add_native_detour("shop_controller"_J, NativeIndex::IS_PED_SHOOTING, all_scripts::RETURN_FALSE); // prevent exploit reports
 		add_native_detour("shop_controller"_J, NativeIndex::SET_WARNING_MESSAGE_WITH_HEADER, shop_controller::SET_WARNING_MESSAGE_WITH_HEADER);

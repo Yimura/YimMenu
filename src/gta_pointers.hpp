@@ -417,6 +417,8 @@ namespace big
 		InputMethodEditor* m_ime;
 
 		functions::get_last_keyboard_state m_get_last_keyboard_state;
+
+		PVOID m_network_can_access_multiplayer;
 	};
 #pragma pack(pop)
 	static_assert(sizeof(gta_pointers) % 8 == 0, "Pointers are not properly aligned");

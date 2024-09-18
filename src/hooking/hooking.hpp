@@ -213,6 +213,8 @@ namespace big
 		static void error_packet_memmove(void* dst, void* src, int size);
 
 		static void* create_pool_item(GenericPool* pool);
+
+		static bool network_can_access_multiplayer(void* a1, int* error);
 	};
 
 	class minhook_keepalive

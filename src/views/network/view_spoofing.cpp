@@ -179,16 +179,11 @@ namespace big
 				{
 					ImGui::PushID(i);
 					ImGui::SetNextItemWidth(200);
-					if (ImGui::InputScalar("##data_hash_value", ImGuiDataType_U32, &g.spoofing.game_data_hash[i], nullptr, nullptr, "%08X", ImGuiInputTextFlags_CharsHexadecimal | ImGuiInputTextFlags_CharsUppercase))
+					if (ImGui::InputScalar(std::to_string(i).data(), ImGuiDataType_U32, &g.spoofing.game_data_hash[i], nullptr, nullptr, "%08X", ImGuiInputTextFlags_CharsHexadecimal | ImGuiInputTextFlags_CharsUppercase))
 					{
 						g.spoofing.game_data_hash_dirty = true;
 					}
 					ImGui::PopID();
-
-					if (((i - 1) % 3) != 0 && i != 14)
-					{
-						ImGui::SameLine();
-					}
 				}
 				ImGui::TreePop();
 			}
