@@ -53,11 +53,15 @@ namespace big
 		{
 			from_json(m_options, *this);
 		}
-		catch (const nlohmann::detail::type_error& e)
+		catch (const std::exception& e)
 		{
-			LOG(WARNING) << e.what();
+			file.close();
 
-			return false;
+			LOG(WARNING) << "Detected incompatible settings, writing default config: " << e.what();
+
+			write_default_config();
+
+			return load();
 		}
 
 		if (should_save)
@@ -98,6 +102,12 @@ namespace big
 					should_save = true;
 			}
 			else if (!current_settings[key].is_object() && e.value().is_object())
+			{
+				current_settings[key] = e.value();
+
+				should_save = true;
+			}
+			else if (current_settings[key].size() < e.value().size())
 			{
 				current_settings[key] = e.value();
 
