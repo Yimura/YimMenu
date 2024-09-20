@@ -370,7 +370,7 @@ namespace big
 		}
 		case rage::eNetMessage::MsgKickPlayer:
 		{
-			KickReason reason = buffer.Read<KickReason>(3);
+			KickReason reason = buffer.Read<KickReason>(5);
 
 			if (!is_host_of_session(gta_util::get_network()->m_game_session_ptr, event->m_peer_id))
 			{
@@ -378,13 +378,16 @@ namespace big
 				return true;
 			}
 
+			LOGF(stream::net_messages, VERBOSE, "{} sent us a MsgKickPlayer, reason = {}", peer->m_info.name, (int)reason);
+
 			if (reason == KickReason::VOTED_OUT)
 			{
 				g_notification_service.push_warning("PROTECTIONS"_T.data(), "YOU_HAVE_BEEN_KICKED"_T.data());
 				return true;
 			}
 
-			LOGF(stream::net_messages, VERBOSE, "{} sent us a MsgKickPlayer, reason = {}", peer->m_info.name, (int)reason);
+			if (reason == KickReason::BATTLEYE_KICK || reason == KickReason::BATTLEYE_BAN)
+				return true;
 			break;
 		}
 		case rage::eNetMessage::MsgRadioStationSyncRequest:

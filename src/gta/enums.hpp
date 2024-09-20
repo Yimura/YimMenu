@@ -534,6 +534,9 @@ enum class KickReason : uint8_t
 	NAT_TYPE,
 	SCADMIN,
 	SCADMIN_BLACKLIST,
+	UNK,
+	BATTLEYE_KICK,
+	BATTLEYE_BAN,
 	NUM_REASONS
 };
 
