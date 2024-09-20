@@ -13,7 +13,7 @@ namespace big::scr_globals
 	static inline const script_global gpbd_fm_1(1845281);
 	static inline const script_global interiors(1943520);
 
-	static inline const script_global launcher_global(2699171);
+	static inline const script_global launcher_global(2699172);
 
 	// creator globals usually remain the same after updates
 	static inline const script_global terminate_creator(1574607); // NETWORK::NETWORK_BAIL(1, 0, 0); fm_*_creator
@@ -22,12 +22,12 @@ namespace big::scr_globals
 	static inline const script_global mission_creator_exited(1574530);
 
 	static inline const script_global transition_state(1575011);
-	static inline const script_global sctv_spectator(2697731); // pausemenu_multiplayer function 0xE49C42EC
+	static inline const script_global sctv_spectator(2697732); // pausemenu_multiplayer function 0xE49C42EC
 
 	static inline const script_global vehicle_global(1586521);
 
 	static inline const script_global freemode_properties(2672855);
-	static inline const script_global freemode_global(2738934);
+	static inline const script_global freemode_global(2738935);
 	
 	static inline const script_global spawn_global(2696212);
 
@@ -42,9 +42,9 @@ namespace big::scr_globals
 	static inline const script_global session5(1575010);
 	static inline const script_global session6(2696130); // freemode -> if (NETWORK::NETWORK_IS_GAME_IN_PROGRESS() && !NETWORK::NETWORK_IS_ACTIVITY_SESSION())
 
-	static inline const script_global interaction_menu_access(2710429); // am_pi_menu -> if (NETWORK::NETWORK_IS_SIGNED_ONLINE()) first global after that
+	static inline const script_global interaction_menu_access(2710430); // am_pi_menu -> if (NETWORK::NETWORK_IS_SIGNED_ONLINE()) first global after that
 
-	static inline const script_global disable_wasted_sound(2707679); // freemode -> AUDIO::PLAY_SOUND_FRONTEND(-1, "Wasted", "POWER_PLAY_General_Soundset", true);
+	static inline const script_global disable_wasted_sound(2707680); // freemode -> AUDIO::PLAY_SOUND_FRONTEND(-1, "Wasted", "POWER_PLAY_General_Soundset", true);
 	
 	static inline const script_global passive(1574582); // if (((!PED::IS_PED_IN_ANY_VEHICLE(PLAYER::GET_PLAYER_PED(bVar1), false) || Global_
 
