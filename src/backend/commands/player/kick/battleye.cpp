@@ -27,7 +27,7 @@ namespace big
 			msg.write<int>(0, 32);
 			msg.write<bool>(false, 1);
 
-			auto msg_id = g_player_service->get_selected()->get_session_player()->m_msg_id;
+			auto msg_id = player->get_session_player()->m_msg_id;
 			msg.send(msg_id);
 		}
 	};
@@ -50,7 +50,7 @@ namespace big
 			msg.write<int>(0, 32);
 			msg.write<bool>(false, 1);
 
-			auto msg_id = g_player_service->get_selected()->get_session_player()->m_msg_id;
+			auto msg_id = player->get_session_player()->m_msg_id;
 			msg.send(msg_id);
 		}
 	};
