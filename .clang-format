@@ -33,6 +33,7 @@ IncludeBlocks: Regroup
 IndentCaseLabels: 'false'
 IndentPPDirectives: BeforeHash
 IndentWidth: '4'
+InsertBraces: true
 TabWidth: 4
 IndentWrappedFunctionNames: 'true'
 KeepEmptyLinesAtTheStartOfBlocks: 'false'

@@ -103,7 +103,9 @@ namespace big
 		{
 			LOGF(WARNING, "BattlEye wants us to kick {} for {}", plyr->get_name(), reason);
 			if (!plyr->tampered_with_be)
+			{
 				session::add_infraction(plyr, Infraction::TRIGGERED_ANTICHEAT);
+			}
 		}
 	}
 
@@ -141,7 +143,9 @@ namespace big
 			{
 				std::lock_guard lock(m_mutex);
 				if (is_running() && !m_battleye_api.m_run())
+				{
 					LOG(WARNING) << "BE::Run failed";
+				}
 			}
 
 			std::this_thread::yield();
@@ -162,7 +166,9 @@ namespace big
 		std::lock_guard lock(m_mutex);
 
 		if (is_running())
+		{
 			return;
+		}
 
 		auto handle = LoadLibraryA("BattlEye\\BEServer_x64.dll");
 
@@ -201,7 +207,9 @@ namespace big
 		std::lock_guard lock(m_mutex);
 
 		if (!is_running())
+		{
 			return;
+		}
 
 		m_battleye_api.m_shutdown();
 		memset(&m_battleye_api, 0, sizeof(CApi));
@@ -212,7 +220,9 @@ namespace big
 		std::lock_guard lock(m_mutex);
 
 		if (!is_running() || !g_player_service->get_self()->is_host())
+		{
 			return;
+		}
 
 		char string[32]{};
 
@@ -230,7 +240,9 @@ namespace big
 		std::lock_guard lock(m_mutex);
 
 		if (!is_running())
+		{
 			return;
+		}
 
 		m_battleye_api.m_set_player_state(token, -1);
 	}
@@ -240,7 +252,9 @@ namespace big
 		std::lock_guard lock(m_mutex);
 
 		if (!is_running())
+		{
 			return;
+		}
 
 		m_battleye_api.m_receive_message(token, const_cast<const void*>(message), size);
 	}
