@@ -8,13 +8,13 @@ namespace big
 	class packet
 	{
 	public:
-		char m_data[0x400]{};
+		char m_data[0x480]{};
 		rage::datBitBuffer m_buffer;
 
 		packet();
-		void send(uint32_t msg_id);
+		void send(uint32_t msg_id, bool unk_flag = false);
 		void send(player_ptr player, int connection_id);
-		void send(int peer_id, int connection_id);
+		void send_direct(int peer_id, int connection_id);
 
 		inline operator rage::datBitBuffer&()
 		{

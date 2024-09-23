@@ -28,5 +28,7 @@ namespace big
 		components::player_command_button<"endkick">(g_player_service->get_selected());
 		ImGui::SameLine();	
 		components::player_command_button<"desync">(g_player_service->get_selected());
+		ImGui::SameLine();	
+		components::player_command_button<"battleupdate">(g_player_service->get_selected());
 	}
 }

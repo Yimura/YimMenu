@@ -1986,6 +1986,15 @@ namespace big
             {
                 g_pointers->m_gta.m_network_can_access_multiplayer = ptr.add(1).rip().as<PVOID>();
             }
+        },
+        // Base 64 Encode
+        {
+            "B64E",
+            "8D 2C 95 01 00 00 00",
+            [](memory::handle ptr)
+            {
+                g_pointers->m_gta.m_base_64_encode = ptr.sub(0x4F).as<functions::base_64_encode>();
+            }
         }
         >(); // don't leave a trailing comma at the end
 

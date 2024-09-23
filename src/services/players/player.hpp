@@ -103,6 +103,8 @@ namespace big
 
 		int spectating_player = -1;
 
+		bool tampered_with_be = false;
+
 		menu_settings::script_block_opts script_block_opts{};
 	protected:
 		bool equals(const CNetGamePlayer* net_game_player) const;

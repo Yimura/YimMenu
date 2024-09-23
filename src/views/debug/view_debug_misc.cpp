@@ -5,6 +5,12 @@
 #include "util/system.hpp"
 #include "view_debug.hpp"
 #include "network/CNetworkPlayerMgr.hpp"
+#include "thread_pool.hpp"
+#include "packet.hpp"
+#include "script_mgr.hpp"
+#include "util/session.hpp"
+
+#include <network/snSession.hpp>
 
 namespace big
 {
@@ -12,6 +18,7 @@ namespace big
 	{
 		if (ImGui::BeginTabItem("DEBUG_TAB_MISC"_T.data()))
 		{
+			components::command_checkbox<"battleyeserver">();
 			components::command_checkbox<"external_console">();
 
 			components::command_checkbox<"windowhook">("VIEW_DEBUG_MISC_DISABLE_GTA_WINDOW_HOOK"_T);

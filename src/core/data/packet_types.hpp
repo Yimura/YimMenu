@@ -114,8 +114,9 @@ inline const static constexpr std::pair<const char*, uint32_t> packet_types[] = 
     {"Msg_0x89", 0x89},
     {"Msg_0x86", 0x86},
     {"MsgDtlsCxnCommand", 0x8A},
-    {"MsgSetKickVote", 0x8E}, 
-    {"MsgTransitionHandshake", 0x8D}, 
+    {"MsgSetKickVote", 0x8E},
+    {"MsgTransitionHandshake", 0x8D},
     {"MsgDidInvitePlayerRequest", 0x8B},
     {"MsgDidInvitePlayerResponse", 0x8C},
+    {"MsgBattlEyeCmd", 0x8F},
 };

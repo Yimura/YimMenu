@@ -2,6 +2,7 @@
 #include "hooking/hooking.hpp"
 #include "lua/lua_manager.hpp"
 #include "services/players/player_service.hpp"
+#include "services/battleye/battleye_service.hpp"
 
 #include <network/CNetworkPlayerMgr.hpp>
 
@@ -25,6 +26,14 @@ namespace big
 
 	void hooks::network_player_mgr_shutdown(CNetworkPlayerMgr* _this)
 	{
+		for (auto& [_, player] : g_player_service->players())
+		{
+			if (player->is_valid())
+			{
+				g_battleye_service.remove_player(player->get_net_game_player()->get_host_token());
+			}
+		}
+
 		g_player_service->do_cleanup();
 		self::spawned_vehicles.clear();
 

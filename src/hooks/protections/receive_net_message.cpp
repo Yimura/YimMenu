@@ -8,6 +8,7 @@
 #include "lua/lua_manager.hpp"
 #include "natives.hpp"
 #include "services/players/player_service.hpp"
+#include "services/battleye/battleye_service.hpp"
 #include "util/chat.hpp"
 #include "util/session.hpp"
 #include "gta/net_object_mgr.hpp"
@@ -738,6 +739,24 @@ namespace big
 			}
 
 			return true;
+		}
+		case rage::eNetMessage::MsgBattlEyeCmd:
+		{
+			char data[1028]{};
+			int size = buffer.Read<int>(11);
+			bool client = buffer.Read<bool>(1);
+			buffer.SeekForward(4); // normalize before we read
+
+			buffer.ReadArray(&data, size * 8);
+
+			LOGF(stream::net_messages, VERBOSE, "Got MsgBattlEyeCmd from {} with size={}, client={}", peer->m_info.name, size, client ? "true" : "false");
+
+			if (client && player)
+			{
+				g_battleye_service.recieve_message(player->get_net_game_player()->get_host_token(), &data, size);
+			}
+
+			break;
 		}
 		default:
 		{

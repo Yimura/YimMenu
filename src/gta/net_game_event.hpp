@@ -443,6 +443,7 @@ namespace rage
 		Msg_0x45             = 0x45,
 		Msg_0x89             = 0x89,
 		Msg_0x86             = 0x86,
+		MsgBattlEyeCmd       = 0x8F,
 	};
 
 	enum class eEventNetworkType : int64_t

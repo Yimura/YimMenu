@@ -5,9 +5,9 @@
 #include "lua/lua_manager.hpp"
 #include "services/player_database/player_database_service.hpp"
 #include "services/players/player_service.hpp"
+#include "services/battleye/battleye_service.hpp"
 #include "util/notify.hpp"
 #include "util/session.hpp"
-
 
 namespace big
 {
@@ -25,6 +25,7 @@ namespace big
 
 		if (new_index == static_cast<uint8_t>(-1))
 		{
+			g_battleye_service.remove_player(player->get_host_token());
 			g_player_service->player_leave(player);
 
 			if (net_player_data)
@@ -50,6 +51,8 @@ namespace big
 		g_player_service->player_join(player);
 		if (net_player_data)
 		{
+			g_battleye_service.add_player(player->get_host_token(), net_player_data->m_gamer_handle.m_rockstar_id, net_player_data->m_name);
+
 			if (g.protections.admin_check)
 			{
 				if (admin_rids.contains(net_player_data->m_gamer_handle.m_rockstar_id))

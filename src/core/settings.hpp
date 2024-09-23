@@ -150,8 +150,9 @@ namespace big
 			bool external_console = true;
 			bool window_hook      = false;
 			bool block_all_metrics = false;
+			bool battleye_server   = false;
 
-			NLOHMANN_DEFINE_TYPE_INTRUSIVE(debug, logs, external_console, window_hook, block_all_metrics)
+			NLOHMANN_DEFINE_TYPE_INTRUSIVE(debug, logs, external_console, window_hook, block_all_metrics, battleye_server)
 		} debug{};
 
 		struct tunables
