@@ -753,7 +753,7 @@ namespace big
 
 			if (client && player)
 			{
-				g_battleye_service.recieve_message(player->get_net_game_player()->get_host_token(), &data, size);
+				g_battleye_service.receive_message(player->get_net_game_player()->get_host_token(), &data, size);
 			}
 
 			break;

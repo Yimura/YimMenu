@@ -419,8 +419,6 @@ namespace big
 		functions::get_last_keyboard_state m_get_last_keyboard_state;
 
 		PVOID m_network_can_access_multiplayer;
-
-		functions::base_64_encode m_base_64_encode;
 	};
 #pragma pack(pop)
 	static_assert(sizeof(gta_pointers) % 8 == 0, "Pointers are not properly aligned");

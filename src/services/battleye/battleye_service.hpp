@@ -50,7 +50,7 @@ namespace big
 		void stop();
 		void add_player(std::uint64_t token, std::uint64_t rockstar_id, const char* name);
 		void remove_player(std::uint64_t token);
-		void recieve_message(std::uint64_t token, void* message, int size);
+		void receive_message(std::uint64_t token, void* message, int size);
 		void send_message(std::uint64_t token, void* message, int size);
 		void kick_player(std::uint64_t token, const char* reason);
 		void script_func();

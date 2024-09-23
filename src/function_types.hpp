@@ -230,6 +230,4 @@ namespace big::functions
 	using can_do_damage_to_ped = bool (*)(CPed* from, CWeaponInfo* current_weapon, CPed* target);
 
 	using get_last_keyboard_state = KeyboardState (*)();
-
-	using base_64_encode = bool(*)(void* in, int in_size, char* out, int out_size, int* bytes_written);
 }
