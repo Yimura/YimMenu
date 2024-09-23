@@ -174,7 +174,7 @@ namespace big
 
 		m_battleye_user_data.m_game_name = "paradise";
 		m_battleye_user_data.m_log_func  = [](const char* message, int level) {
-            LOGF(INFO, "BattlEye: {}", message);
+			LOG(INFO) << "BattlEye: " << message;
 		};
 		m_battleye_user_data.m_kick_player = [](std::uint64_t player, const char* reason) {
 			g_battleye_service.kick_player(player, reason);
