@@ -749,8 +749,6 @@ namespace big
 
 			buffer.ReadArray(&data, size * 8);
 
-			LOGF(stream::net_messages, VERBOSE, "Got MsgBattlEyeCmd from {} with size={}, client={}", peer->m_info.name, size, client ? "true" : "false");
-
 			if (client && player)
 			{
 				g_battleye_service.receive_message(player->get_net_game_player()->get_host_token(), &data, size);
